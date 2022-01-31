@@ -1,0 +1,201 @@
+<Restaurante>
+	<Empleados>
+		<empleado id="1" name="Marvin N'gabu García">
+			<asignaciones>
+				<asignacion fechaHORA="30/06/2022 13:00" mesa="13" />
+			</asignaciones>
+		</empleado>
+		<empleado id="2" name="Daniel Cabrera Cabrera">
+			<asignaciones>
+				<asignacion fechaHora="29/06/2022 21:00" mesa="14" />
+			</asignaciones>
+		</empleado>
+		<empleado id="3" name="Rubén Pablo Jorge Díaz">
+			<asignaciones>
+				<asignacion fechaHora="25/06/2022 14:00" mesa="15" />
+			</asignaciones>
+		</empleado>
+	</Empleados>
+
+	<Mesas>
+		<mesa num="1" cantPersonas="3" />
+		<mesa num="2" cantPersonas="4" />
+		<mesa num="3" cantPersonas="2" />
+		<mesa num="4" cantPersonas="2" />
+		<mesa num="5" cantPersonas="5" />
+		<mesa num="6" cantPersonas="3" />
+		<mesa num="7" cantPersonas="2" />
+		<mesa num="8" cantPersonas="5" />
+		<mesa num="9" cantPersonas="4" />
+		<mesa num="10" cantPersonas="12" />
+		<mesa num="11" cantPersonas="15" />
+		<mesa num="12" cantPersonas="3" />
+		<mesa num="13" cantPersonas="3" />
+		<mesa num="14" cantPersonas="10" />
+		<mesa num="15" cantPersonas="4" />
+	</Mesas>
+
+	<Alergenos>
+		<alergeno id="1" nombre="Pescados blancos y rojos" />
+		<alergeno id="2" nombre="Crustáceos, mariscos" />
+		<alergeno id="3" nombre="Apio" />
+		<alergeno id="4" nombre="Mostaza" />
+		<alergeno id="5" nombre="Huevos" />
+		<alergeno id="6" nombre="Semillas de sésamo" />
+		<alergeno id="7" nombre="Cereales con gluten o trigo" />
+		<alergeno id="8" nombre="Moluscos, caracoles" />
+		<alergeno id="9" nombre="Cacahuetes" />
+		<alergeno id="10" nombre="Altramuces" />
+		<alergeno id="11" nombre="Frutos secos" />
+		<alergeno id="12" nombre="Lácteos" />
+		<alergeno id="13" nombre="Sulfitos" />
+		<alergeno id="14" nombre="Soja" />
+	</Alergenos>
+
+	<Cartas>
+		<Carta tipo="Vegetariano">
+			<Platos>
+				<plato name="Hamburguesa Tofu">
+					<alergenos>
+						<alergeno id="14" />
+						<alergeno id="7" />
+					</alergenos>
+					<ingredientes>
+						<ingrediente>Tofu</ingrediente>
+						<ingrediente>Garbanzos cocidos</ingrediente>
+						<ingrediente>Cebolla</ingrediente>
+						<ingrediente>Zanahoria</ingrediente>
+						<ingrediente>Ajo</ingrediente>
+						<ingrediente>Salsa de soja</ingrediente>
+						<ingrediente>Jengibre</ingrediente>
+						<ingrediente>Pimienta negra</ingrediente>
+						<ingrediente>Pan rallado</ingrediente>
+					</ingredientes>
+				</plato>
+				<plato name="Lasaña de espinacas">
+					<alergenos>
+						<alergeno id="12" />
+					</alergenos>
+					<ingredientes>
+						<ingrediente>Pasta</ingrediente>
+						<ingrediente>Espinacas</ingrediente>
+						<ingrediente>Tomate</ingrediente>
+						<ingrediente>Orégano</ingrediente>
+						<ingrediente>Queso mozzarella</ingrediente>
+						<ingrediente>Salsa bechamel</ingrediente>
+					</ingredientes>
+
+				</plato>
+				<plato name="Crema de calabacín y puerro">
+					<alergenos>
+						<alergeno id="13" />
+					</alergenos>
+					<ingrediente>Calabacín</ingrediente>
+					<ingrediente>Puerros</ingrediente>
+					<ingrediente>Papas</ingrediente>
+					<ingrediente>Vino blanco</ingrediente>
+				</plato>
+				<plato name="Ensalada de verduras grande">
+					<ingrediente>Lechuga</ingrediente>
+					<ingrediente>Zanahorias</ingrediente>
+					<ingrediente>Alcachofas</ingrediente>
+					<ingrediente>Tomate</ingrediente>
+					<ingrediente>Aceitunas></ingrediente>
+					<ingrediente>Vinagre</ingrediente>
+					<ingrediente>Aceite de oliva</ingrediente>
+					<ingrediente>Orégano</ingrediente>
+				</plato>
+			</Platos>
+		</Carta>
+
+		<Carta tipo="Completa">
+			<Entrantes>
+				<entrante name="Croquetas de pollo y zanahoria">
+					<alergenos>
+						<alergeno id="12" />
+						<alergeno id="5" />
+					</alergenos>
+					<ingrediente>Pollo</ingrediente>
+					<ingrediente>Aceite de oliva</ingrediente>
+					<ingrediente>Zanahoria</ingrediente>
+					<ingrediente>Huevos</ingrediente>
+				</entrante>
+				<entrante name="Nuggets de pollo" />
+				<entrante name="Pimientos de padrón" />
+				<entrante name="Garbanzos" />
+			</Entrantes>
+
+			<Platos>
+				<plato></plato>
+			</Platos>
+
+			<Postres>
+				<postre id="1" name="Tarta de fresa" />
+				<postre id="2" nombre="Tarta de zanahoria con helado">
+					<alergenos>
+						<alergeno id="5" />
+						<alergeno id="12" />
+					</alergenos>
+
+					<ingredientes>
+						<ingrediente>Zanahoria</ingrediente>
+						<ingrediente>Huevo</ingrediente>
+						<ingrediente>Harina</ingrediente>
+						<ingrediente>Mantequilla</ingrediente>
+					</ingredientes>
+				</postre>
+
+
+				<postre id="3" nombre="Brownie con helado de vainilla">
+					<alergenos>
+						<alergeno id="5" />
+						<alergeno id="12" />
+					</alergenos>
+
+					<ingredientes>
+						<ingrediente>Chocolate negro 70%</ingrediente>
+						<ingrediente>Huevos</ingrediente>
+						<ingrediente>Azúcar</ingrediente>
+						<ingrediente>Mantequilla</ingrediente>
+					</ingredientes>
+				</postre>
+
+				<postre id="3"
+					nombre="Crema de yogur con mermelada de fresa y almendras">
+					<alergenos>
+						<alergeno id="5" />
+						<alergeno id="11" />
+						<alergeno id="12" />
+					</alergenos>
+
+					<ingredientes>
+						<ingrediente>Yogur</ingrediente>
+						<ingrediente>Huevo</ingrediente>
+						<ingrediente>Azúcar</ingrediente>
+						<ingrediente>Mermelada</ingrediente>
+						<ingrediente>Almendras</ingrediente>
+					</ingredientes>
+				</postre>
+
+				<postre id="4" nombre="Helado 2 bolas">
+					<alergenos>
+						<alergeno id="5" />
+						<alergeno id="12" />
+					</alergenos>
+
+					<ingredientes>
+						<ingrediente>Leche</ingrediente>
+						<ingrediente>Azúcar</ingrediente>
+						<ingrediente>Huevo</ingrediente>
+						<ingrediente>Fresa</ingrediente>
+					</ingredientes>
+				</postre>
+			</Postres>
+		</Carta>
+	</Cartas>
+
+
+	<Bebidas>
+
+	</Bebidas>
+</Restaurante>
