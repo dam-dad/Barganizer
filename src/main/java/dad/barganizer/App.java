@@ -22,6 +22,7 @@ public class App extends Application {
 		 
 		
 		Scene scene = new Scene(mainController.getView());
+		scene.getStylesheets().setAll("/css/mainView.css");
 		
 		primaryStage.setTitle("Barganizer");
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.png")));
