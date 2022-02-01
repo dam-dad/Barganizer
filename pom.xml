@@ -11,7 +11,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- <exec.mainClass>dad.barganizer.Main</exec.mainClass> -->
 	</properties>
-	
+
 	<dependencies>
 		<!-- Dependencias FXML -->
 		<dependency>
@@ -52,6 +52,12 @@
 			<artifactId>jdom2</artifactId>
 			<version>2.0.6.1</version>
 		</dependency>
-		
+
+		<!-- Dependencia de iconos FontawesomeFX -->
+		<dependency>
+			<groupId>de.jensd</groupId>
+			<artifactId>fontawesomefx-fontawesome</artifactId>
+			<version>4.7.0-9.1.2</version>
+		</dependency>
 	</dependencies>
 </project>

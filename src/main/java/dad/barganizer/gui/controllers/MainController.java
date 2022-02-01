@@ -29,11 +29,13 @@ import javafx.scene.layout.VBox;
 
 public class MainController implements Initializable {
 	
-	
 	public static final double TILE_WIDTH = 300;
     public static final double TILE_HEIGHT = 150;
     
     private Tile clockTile;
+    
+    // CONTROLADORES
+    private InicioController inicioController = new InicioController();
     
     //VISTA
     
@@ -99,6 +101,7 @@ public class MainController implements Initializable {
 		widgetBox.getChildren().addAll(clockTile);
 		
 		empleadoImageView.setImage(new Image(getClass().getResourceAsStream("/images/unknown_person.jpg")));
+		root.setCenter(inicioController.getView());
 
 	}
 	

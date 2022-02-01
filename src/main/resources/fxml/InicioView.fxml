@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="view" spacing="5.0" style="-fx-background-color: #FFC371;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="CENTER_LEFT" spacing="5.0" style="-fx-background-color: #FFC371;">
+         <children>
+            <Label alignment="TOP_LEFT" text="Seleccione carta" />
+            <JFXComboBox fx:id="cartaCombo" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+      <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
+        <items>
+            <TabPane tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab fx:id="bebidasTab" text="BEBIDAS">
+                  <content>
+                    <FlowPane fx:id="bebidasFlow" prefHeight="200.0" prefWidth="200.0"/>
+                  </content>
+                     <graphic>
+                        <FontAwesomeIconView fill="#63bfae" glyphName="GLASS" />
+                     </graphic>
+                     <content>
+                        <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                     <content>
+                        <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                     <content>
+                        <FlowPane fx:id="bebidasFlow" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                </Tab>
+                <Tab fx:id="entrantesTab" text="ENTRANTES">
+                     <graphic>
+                        <FontAwesomeIconView fill="#c2656b" glyphName="SPOON" />
+                     </graphic>
+                     <content>
+                        <FlowPane fx:id="entrantesFlow" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                </Tab>
+                  <Tab fx:id="platosTab" text="PLATOS">
+                     <graphic>
+                        <FontAwesomeIconView fill="#39a153" glyphName="CUTLERY" />
+                     </graphic>
+                     <content>
+                        <FlowPane fx:id="platosFlow" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+                  <Tab fx:id="postresTab" text="POSTRES">
+                    <content>
+                      <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                    </content>
+                     <graphic>
+                        <FontAwesomeIconView fill="#e8816a" glyphName="COFFEE" />
+                     </graphic>
+                     <content>
+                        <FlowPane fx:id="postresFlow" prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+            <TabPane tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab fx:id="mesasTab" text="MESAS">
+                     <graphic>
+                        <FontAwesomeIconView fill="#430a0a" glyphName="TH_LARGE" selectionFill="#f5f0f0" />
+                     </graphic>
+                     <content>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <FlowPane fx:id="mesasFlow" prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Label" />
+                                    <Label text="Label" />
+                                    <Label text="Label" />
+                                 </children>
+                              </FlowPane>
+                              <JFXTreeTableView />
+                           </children></VBox>
+                     </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+        </items>
+      </SplitPane>
+   </children>
+</VBox>
