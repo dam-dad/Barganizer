@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
+         <items>
+            <VBox SplitPane.resizableWithParent="false">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <children>
+                  <Label text="Lista de empleados:">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </Label>
+                  <ListView VBox.vgrow="ALWAYS" />
+                  <HBox alignment="CENTER" spacing="5.0">
+                     <children>
+                        <Button fx:id="anadirButton" defaultButton="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnActionAnadir">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="USER_PLUS" size="20" />
+                           </graphic></Button>
+                        <Button fx:id="eliminarButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#OnEliminarAction">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="USER_TIMES" size="20" />
+                           </graphic></Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+            <BorderPane>
+               <center>
+                  <Label text="No ha seleccionado empleado" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+         </items>
+      </SplitPane>
+   </children>
+</VBox>
