@@ -58,4 +58,20 @@ public class Mesa {
 		this.activa = activa;
 	}
 
+	public List<Comanda> getComandasList() {
+		return comandasList;
+	}
+
+	public void setComandasList(List<Comanda> comandasList) {
+		this.comandasList = comandasList;
+	}
+
+	public List<Reserva> getReservasList() {
+		return reservasList;
+	}
+
+	public void setReservasList(List<Reserva> reservasList) {
+		this.reservasList = reservasList;
+	}
+
 }

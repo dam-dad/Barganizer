@@ -42,4 +42,45 @@ public class Reserva {
     @JoinColumn(name = "emp")
     private Empleado empleadoReserva;
 
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public LocalDateTime getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(LocalDateTime fecha) {
+		this.fecha = fecha;
+	}
+
+	public int getCantPersonas() {
+		return cantPersonas;
+	}
+
+	public void setCantPersonas(int cantPersonas) {
+		this.cantPersonas = cantPersonas;
+	}
+
+	public Mesa getMesaReserva() {
+		return mesaReserva;
+	}
+
+	public void setMesaReserva(Mesa mesaReserva) {
+		this.mesaReserva = mesaReserva;
+	}
+
+	public Empleado getEmpleadoReserva() {
+		return empleadoReserva;
+	}
+
+	public void setEmpleadoReserva(Empleado empleadoReserva) {
+		this.empleadoReserva = empleadoReserva;
+	}
+    
+    
 }
