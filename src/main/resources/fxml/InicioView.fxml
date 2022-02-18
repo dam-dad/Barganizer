@@ -5,6 +5,7 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -29,7 +30,7 @@
               <tabs>
                 <Tab fx:id="bebidasTab" text="BEBIDAS">
                   <content>
-                    <FlowPane fx:id="bebidasFlow" prefHeight="200.0" prefWidth="200.0"/>
+                    <FlowPane fx:id="bebidasFlow" prefHeight="200.0" prefWidth="200.0" />
                   </content>
                      <graphic>
                         <FontAwesomeIconView fill="#63bfae" glyphName="GLASS" />
@@ -41,7 +42,15 @@
                         <FlowPane prefHeight="200.0" prefWidth="200.0" />
                      </content>
                      <content>
-                        <FlowPane fx:id="bebidasFlow" prefHeight="200.0" prefWidth="200.0" />
+                        <ScrollPane fitToHeight="true" fitToWidth="true">
+                           <content>
+                              <FlowPane fx:id="bebidasFlow" hgap="5.0" vgap="5.0">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </FlowPane>
+                           </content>
+                        </ScrollPane>
                      </content>
                 </Tab>
                 <Tab fx:id="entrantesTab" text="ENTRANTES">
