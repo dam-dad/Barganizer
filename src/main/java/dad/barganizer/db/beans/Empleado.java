@@ -93,4 +93,14 @@ public class Empleado {
 		this.id = id;
 	}
 
+	public List<Reserva> getReservasList() {
+		return reservasList;
+	}
+
+	public void setReservasList(List<Reserva> reservasList) {
+		this.reservasList = reservasList;
+	}
+	
+	
+
 }

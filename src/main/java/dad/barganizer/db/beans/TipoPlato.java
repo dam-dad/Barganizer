@@ -51,6 +51,4 @@ public class TipoPlato {
 	public void setPlatosTipo(List<Plato> platosTipo) {
 		this.platosTipo = platosTipo;
 	}
-	
-	
 }
