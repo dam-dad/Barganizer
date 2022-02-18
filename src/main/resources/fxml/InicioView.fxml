@@ -89,15 +89,20 @@
                         <FontAwesomeIconView fill="#430a0a" glyphName="TH_LARGE" selectionFill="#f5f0f0" />
                      </graphic>
                      <content>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
+                        <VBox spacing="5.0">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
                            <children>
-                              <FlowPane fx:id="mesasFlow" prefHeight="200.0" prefWidth="200.0">
-                                 <children>
-                                    <Label text="Label" />
-                                    <Label text="Label" />
-                                    <Label text="Label" />
-                                 </children>
-                              </FlowPane>
+                              <ScrollPane fitToHeight="true" fitToWidth="true">
+                                 <content>
+                                    <FlowPane fx:id="mesasFlow" hgap="5.0" vgap="5.0">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </FlowPane>
+                                 </content>
+                              </ScrollPane>
                               <JFXTreeTableView />
                            </children></VBox>
                      </content>

@@ -13,6 +13,7 @@ public class App extends Application {
 	
 	private static BarganizerDB BARGANIZERDB = new BarganizerDB();
 	
+	
 	@Override
 	public void init() throws Exception {
 		super.init();
