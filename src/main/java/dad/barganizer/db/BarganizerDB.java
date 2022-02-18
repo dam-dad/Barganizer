@@ -1,6 +1,12 @@
 package dad.barganizer.db;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import dad.barganizer.db.beans.Plato;
 
 /** 
  * Representa la sesión general de la aplicación.
@@ -37,4 +43,6 @@ public class BarganizerDB {
 		this.ses=s;
 	}
 	
+	
+
 }
