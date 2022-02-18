@@ -31,37 +31,5 @@ public class Comanda {
     @ManyToOne
     @JoinColumn(name = "mesa")
     private Mesa mesa;
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public int getPlato() {
-		return plato;
-	}
-
-	public void setPlato(int plato) {
-		this.plato = plato;
-	}
-
-	public int getCantidad() {
-		return cantidad;
-	}
-
-	public void setCantidad(int cantidad) {
-		this.cantidad = cantidad;
-	}
-
-	public Mesa getMesa() {
-		return mesa;
-	}
-
-	public void setMesa(Mesa mesa) {
-		this.mesa = mesa;
-	}
     
 }

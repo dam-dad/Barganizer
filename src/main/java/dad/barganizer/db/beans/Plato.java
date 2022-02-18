@@ -83,15 +83,6 @@ public class Plato {
 	public void setPrecio(double precio) {
 		this.precio = precio;
 	}
-
-	public List<Alergeno> getAlergenos() {
-		return alergenos;
-	}
-
-	public void setAlergenos(List<Alergeno> alergenos) {
-		this.alergenos = alergenos;
-	}
-	
 	
 	
 }

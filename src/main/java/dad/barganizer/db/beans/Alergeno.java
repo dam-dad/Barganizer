@@ -52,14 +52,6 @@ public class Alergeno {
 	public void setIcono(byte[] icono) {
 		this.icono = icono;
 	}
-
-	public List<Plato> getPlatos() {
-		return platos;
-	}
-
-	public void setPlatos(List<Plato> platos) {
-		this.platos = platos;
-	}
 	
 	
 }

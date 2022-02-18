@@ -48,14 +48,6 @@ public class Bebida {
 	public void setPrecio(double precio) {
 		this.precio = precio;
 	}
-
-	public byte[] getFoto() {
-		return foto;
-	}
-
-	public void setFoto(byte[] foto) {
-		this.foto = foto;
-	}
 	
 	
 }
