@@ -19,6 +19,9 @@ public class Bebida {
 	@Column(name = "nombre", nullable = false, columnDefinition = "VARCHAR(80)")
 	private String nombre;
 	
+	@Column(name = "foto", nullable = true, columnDefinition = "MEDIUMBLOB")
+	private byte[] foto;
+	
 	@Column(name = "precio", nullable = false, columnDefinition = "DECIMAL(6,2)")
 	private double precio;
 
