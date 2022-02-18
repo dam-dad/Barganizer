@@ -11,13 +11,12 @@ public class App extends Application {
 
 	MainController mainController;
 	
-	private static BarganizerDB CONEXION_DB;
+	private static BarganizerDB BARGANIZERDB = new BarganizerDB();
 	
 	@Override
 	public void init() throws Exception {
 		super.init();
 		mainController = new MainController();
-		CONEXION_DB = new BarganizerDB();
 	}
 	
 	@Override
@@ -39,14 +38,15 @@ public class App extends Application {
 	@Override
 	public void stop() throws Exception {
 		super.stop();
+		BARGANIZERDB.cerrar();
 	}
 	
 	public static void main(String[] args) {
 		launch(args);
 	}
 
-	public static BarganizerDB getCONEXION_DB() {
-		return CONEXION_DB;
+	public static BarganizerDB getBARGANIZERDB() {
+		return BARGANIZERDB;
 	}
 	
 	

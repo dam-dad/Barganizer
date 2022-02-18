@@ -3,6 +3,7 @@ package dad.barganizer.db;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+
 import java.util.List;
 
 import org.hibernate.Session;
@@ -16,6 +17,8 @@ import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Plato;
 import dad.barganizer.db.beans.Reserva;
 import dad.barganizer.db.beans.TipoPlato;
+
+import dad.barganizer.db.beans.Bebida;
 
 /** 
  * Representa la sesión general de la aplicación.
@@ -52,6 +55,7 @@ public class BarganizerDB {
 		this.ses=s;
 	}
 	
+
 	public List MostrarPlatos() {
 
 		try {
@@ -290,4 +294,3 @@ public class BarganizerDB {
 	}
 
 }
-
