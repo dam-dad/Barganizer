@@ -96,7 +96,7 @@ public class InicioController implements Initializable {
 			@Override
 			protected ObservableList<Bebida> call() throws Exception {
 				App.getBARGANIZERDB().getSes().beginTransaction();
-				List<Bebida> listaBebidas = App.getBARGANIZERDB().MostrarBebidas();
+				List<Bebida> listaBebidas = App.getBARGANIZERDB().listarBebidas();
 				App.getBARGANIZERDB().getSes().getTransaction().commit();
 				
 				return FXCollections.observableArrayList(listaBebidas);

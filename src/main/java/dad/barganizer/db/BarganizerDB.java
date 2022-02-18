@@ -20,21 +20,20 @@ import dad.barganizer.db.beans.TipoPlato;
 
 import dad.barganizer.db.beans.Bebida;
 
-/** 
- * Representa la sesión general de la aplicación.
- * Esta clase es un encapsulado de una Sesión de Hibernate,
- * y cuyos métodos
- * **/
+/**
+ * Representa la sesión general de la aplicación. Esta clase es un encapsulado
+ * de una Sesión de Hibernate, y cuyos métodos
+ **/
 public class BarganizerDB {
-	
-	/** Sesión de Hibernate que representará la conexión con la base de datos.**/
+
+	/** Sesión de Hibernate que representará la conexión con la base de datos. **/
 	private Session ses;
-	
+
 	/** Constructor vacío que inicializa la sesión **/
 	public BarganizerDB() {
-		this.ses=HibernateUtil.getSessionFactory().getCurrentSession();
+		this.ses = HibernateUtil.getSessionFactory().getCurrentSession();
 	}
-	
+
 	/** Método para cerrar la sesión **/
 	public void cerrar() {
 		try {
@@ -44,19 +43,18 @@ public class BarganizerDB {
 			e.printStackTrace();
 		}
 	}
-	
-	/** Getter que nos devuelve la hibernate session**/
+
+	/** Getter que nos devuelve la hibernate session **/
 	public Session getSes() {
 		return this.ses;
 	}
-	
+
 	/** Setter para cambiar la sesión si es deseado **/
 	public void setSes(Session s) {
-		this.ses=s;
+		this.ses = s;
 	}
-	
 
-	public List MostrarPlatos() {
+	public List<Plato> listarPlatos() {
 
 		try {
 
@@ -72,11 +70,11 @@ public class BarganizerDB {
 		}
 
 	}
-	
-	public List MostrarBebidas() {
+
+	public List<Bebida> listarBebidas() {
 
 		try {
-			
+
 			Query consulta = ses.createQuery("from Bebida");
 			List<Bebida> bebidasList = consulta.getResultList();
 
@@ -89,11 +87,11 @@ public class BarganizerDB {
 		}
 
 	}
-	
-	public List MostrarAlergenos() {
+
+	public List<Alergeno> listarAlergenos() {
 
 		try {
-			
+
 			Query consulta = ses.createQuery("from Alergeno");
 			List<Alergeno> alergList = consulta.getResultList();
 
@@ -106,11 +104,11 @@ public class BarganizerDB {
 		}
 
 	}
-	
-	public List MostrarComandas() {
+
+	public List<Comanda> listarComandas() {
 
 		try {
-			
+
 			Query consulta = ses.createQuery("from Comanda");
 			List<Comanda> comandasList = consulta.getResultList();
 
@@ -123,11 +121,11 @@ public class BarganizerDB {
 		}
 
 	}
-	
-	public List MostrarEmpleados() {
+
+	public List<Empleado> listarEmpleados() {
 
 		try {
-			
+
 			Query consulta = ses.createQuery("from Empleado");
 			List<Empleado> empleadoList = consulta.getResultList();
 
@@ -140,11 +138,11 @@ public class BarganizerDB {
 		}
 
 	}
-	
-	public List MostrarMesas() {
+
+	public List<Mesa> listarMesas() {
 
 		try {
-			
+
 			Query consulta = ses.createQuery("from Mesa");
 			List<Mesa> mesasList = consulta.getResultList();
 
@@ -157,11 +155,11 @@ public class BarganizerDB {
 		}
 
 	}
-	
-	public List MostrarReservas() {
+
+	public List<Reserva> listarReservas() {
 
 		try {
-			
+
 			Query consulta = ses.createQuery("from Reserva");
 			List<Reserva> reservasList = consulta.getResultList();
 
@@ -174,11 +172,11 @@ public class BarganizerDB {
 		}
 
 	}
-	
-	public List MostrarTipo() {
+
+	public List<TipoPlato> listarTipo() {
 
 		try {
-			
+
 			Query consulta = ses.createQuery("from TipoPlato");
 			List<TipoPlato> tiposList = consulta.getResultList();
 
@@ -191,11 +189,13 @@ public class BarganizerDB {
 		}
 
 	}
-	
-	public void InsertarPlato(String nombre, TipoPlato tipo, Double precio, byte[] foto, List<Alergeno> alergenos) {
+
+
+
+	public void insertarPlato(String nombre, TipoPlato tipo, Double precio, byte[] foto, List<Alergeno> alergenos) {
 
 		try {
- 
+
 			ses.beginTransaction();
 
 			Plato plato = new Plato();
@@ -212,11 +212,11 @@ public class BarganizerDB {
 			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
 		}
 	}
-	
-	public void InsertarBebida(String nombre, byte[] foto, Double precio) {
+
+	public void insertarBebida(String nombre, byte[] foto, Double precio) {
 
 		try {
- 
+
 			ses.beginTransaction();
 
 			Bebida bebida = new Bebida();
@@ -231,17 +231,17 @@ public class BarganizerDB {
 			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
 		}
 	}
-	
-	public void InsertarAlergeno(String nombre, byte[] foto, Double precio) {
+
+	public void insertarAlergeno(String nombre, byte[] foto, Double precio) {
 
 		try {
- 
+
 			ses.beginTransaction();
 
 			Alergeno alergeno = new Alergeno();
 			alergeno.setNombre(nombre);
 			alergeno.setIcono(foto);
-			
+
 			ses.persist(alergeno);
 			ses.getTransaction().commit();
 
@@ -249,19 +249,18 @@ public class BarganizerDB {
 			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
 		}
 	}
-	
-	
-	public void InsertarComanda(Mesa mesa, int plato, int cantidad) {
+
+	public void insertarComanda(Mesa mesa, int plato, int cantidad) {
 
 		try {
- 
+
 			ses.beginTransaction();
 
 			Comanda comanda = new Comanda();
 			comanda.setMesa(mesa);
 			comanda.setPlato(plato);
 			comanda.setCantidad(cantidad);
-			
+
 			ses.persist(comanda);
 			ses.getTransaction().commit();
 
@@ -269,11 +268,12 @@ public class BarganizerDB {
 			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
 		}
 	}
-	
-	public void InsertarEmpleado(String nombre, String apellido, String genero, Date nacimiento, Date ingreso, byte[] foto) {
+
+	public void insertarEmpleado(String nombre, String apellido, String genero, Date nacimiento, Date ingreso,
+			byte[] foto) {
 
 		try {
- 
+
 			ses.beginTransaction();
 
 			Empleado empleado = new Empleado();
@@ -283,9 +283,65 @@ public class BarganizerDB {
 			empleado.setFnac(nacimiento);
 			empleado.setFechaIngreso(ingreso);
 			empleado.setFoto(foto);
-			
-			
+
 			ses.persist(empleado);
+			ses.getTransaction().commit();
+
+		} catch (Exception e) {
+			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
+		}
+	}
+	
+	public void insertarMesa(int personas, Boolean activa) {
+
+		try {
+
+			ses.beginTransaction();
+
+			Mesa mesa = new Mesa();
+			mesa.setCantPersonas(personas);
+			mesa.setActiva(activa);
+			
+			
+
+			ses.persist(mesa);
+			ses.getTransaction().commit();
+
+		} catch (Exception e) {
+			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
+		}
+	}
+	
+	public void insertarReserva(Mesa mesa, Empleado empleado, LocalDateTime fecha, int personas) {
+
+		try {
+
+			ses.beginTransaction();
+
+			Reserva reserva = new Reserva();
+			reserva.setMesaReserva(mesa);
+			reserva.setEmpleadoReserva(empleado);
+			reserva.setFecha(fecha);
+			reserva.setCantPersonas(personas);
+
+			ses.persist(reserva);
+			ses.getTransaction().commit();
+
+		} catch (Exception e) {
+			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
+		}
+	}
+	
+	public void insertarTipoPlato(String nombre) {
+
+		try {
+
+			ses.beginTransaction();
+
+			TipoPlato tipo = new TipoPlato();
+			tipo.setNombre(nombre);
+
+			ses.persist(tipo);
 			ses.getTransaction().commit();
 
 		} catch (Exception e) {
