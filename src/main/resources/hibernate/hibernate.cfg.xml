@@ -12,13 +12,13 @@
 		<property name="hibernate.current_session_context_class">thread</property>
 		<property name="hibernate.connection.requireSSL">true</property>
 		<property name="hibernate.connection.autoReconnect">false</property>
-		<mapping class="beans.Empleado" />
-		<mapping class="beans.Mesa" />
-		<mapping class="beans.Alergeno" />
-		<mapping class="beans.TipoPlato" />
-		<mapping class="beans.Plato" />
-		<mapping class="beans.Bebida" />
-		<mapping class="beans.Comanda" />
-		<mapping class="beans.Reserva" />
+		<mapping class="dad.barganizer.db.beans.Empleado" />
+		<mapping class="dad.barganizer.db.beans.Mesa" />
+		<mapping class="dad.barganizer.db.beans.Alergeno" />
+		<mapping class="dad.barganizer.db.beans.TipoPlato" />
+		<mapping class="dad.barganizer.db.beans.Plato" />
+		<mapping class="dad.barganizer.db.beans.Bebida" />
+		<mapping class="dad.barganizer.db.beans.Comanda" />
+		<mapping class="dad.barganizer.db.beans.Reserva" />
 	</session-factory>
 </hibernate-configuration>
