@@ -18,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
@@ -27,10 +28,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class MesasController implements Initializable {
-	
 
 	// MODEL
-	
+
 	MesasModel model = new MesasModel();
 	AñadirMesaController añadirMesaController;
 
@@ -64,24 +64,16 @@ public class MesasController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		BarganizerTasks tareas = new BarganizerTasks();
-
-		tareas.getInicializarMesasTask().setOnSucceeded(e -> {
-			ObservableList<Mesa> res = tareas.getInicializarMesasTask().getValue();
-			model.setListaMesas(res);
-
-			for (Mesa mesa : res) {
-				mesasFlow.getChildren().add(new ImageTile(mesa));
-			}
-		});
-
-		tareas.getInicializarMesasTask().setOnFailed(e -> {
-			System.err.println("Inicialización de mesas fallida: ");
-			e.getSource().getException().printStackTrace();
-		});
+		listarMesas();
 		
-		new HiloEjecutador(App.semaforo, tareas.getInicializarMesasTask()).start();
+		model.mesaSeleccionadaProperty().addListener((o, ov, nv) -> {
+			if (ov != null && nv != null) {
+				Mesa ref = (Mesa)nv.getReferencia();
+				ov.setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
+			}
+			nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
 
+		});
 	}
 
 	@FXML
@@ -100,28 +92,10 @@ public class MesasController implements Initializable {
 		stage.initOwner(App.primaryStage);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.showAndWait();
-		
-		
-		
+
 		mesasFlow.getChildren().clear();
-		
-		BarganizerTasks tareas = new BarganizerTasks();
 
-		tareas.getInicializarMesasTask().setOnSucceeded(e -> {
-			ObservableList<Mesa> res = tareas.getInicializarMesasTask().getValue();
-			model.setListaMesas(res);
-
-			for (Mesa mesa : res) {
-				mesasFlow.getChildren().add(new ImageTile(mesa));
-			}
-		});
-
-		tareas.getInicializarMesasTask().setOnFailed(e -> {
-			System.err.println("Inicialización de mesas fallida: ");
-			e.getSource().getException().printStackTrace();
-		});
-		
-		new HiloEjecutador(App.semaforo, tareas.getInicializarMesasTask()).start();
+		listarMesas();
 
 	}
 
@@ -132,6 +106,41 @@ public class MesasController implements Initializable {
 
 	@FXML
 	void onQuitarAction(ActionEvent event) {
+
+	}
+
+	public void listarMesas() {
+
+		BarganizerTasks tareas = new BarganizerTasks();
+
+		tareas.getInicializarMesasTask().setOnSucceeded(e -> {
+			ObservableList<Mesa> res = tareas.getInicializarMesasTask().getValue();
+			model.setListaMesas(res);
+
+			for (Mesa mesa : res) {
+				mesasFlow.getChildren().add(new ImageTile(mesa));
+			}
+
+			ObservableList<Node> l = mesasFlow.getChildren();
+
+			for (Node node : l) {
+				node.setOnMouseClicked(ev -> {
+					ImageTile imageTileClickeado = (ImageTile) ev.getSource();
+					Mesa seleccionada = (Mesa) imageTileClickeado.getReferencia();
+					System.out.println(seleccionada.getNumero());
+
+					model.setMesaSeleccionada(imageTileClickeado);
+
+				});
+			}
+		});
+
+		tareas.getInicializarMesasTask().setOnFailed(e -> {
+			System.err.println("Inicialización de mesas fallida: ");
+			e.getSource().getException().printStackTrace();
+		});
+
+		new HiloEjecutador(App.semaforo, tareas.getInicializarMesasTask()).start();
 
 	}
 
