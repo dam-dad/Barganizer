@@ -42,23 +42,32 @@ public class ImageTile extends Tile {
 	}
 	
 	public ImageTile(Mesa m) {
+		setSkinType(SkinType.IMAGE);
+		setPrefSize(TILE_WIDTH, TILE_HEIGHT);
+		setImage(new Image(getClass().getResourceAsStream("/images/mesa.png")));
+		setImageMask(ImageMask.ROUND);
+		setText(""+m.getNumero());
+		setTextAlignment(TextAlignment.CENTER);
+		setTextSize(TextSize.BIGGER);
 		setReferencia(m);
 		
-		tile = TileBuilder.create().skinType(SkinType.IMAGE).prefSize(TILE_WIDTH, TILE_HEIGHT).title(""+m.getNumero())
-				.titleAlignment(TextAlignment.CENTER).textSize(TextSize.BIGGER)
-				.image(new Image(getClass().getResourceAsStream("/images/mesa.png"))).imageMask(ImageMask.ROUND)
-				.text("").textAlignment(TextAlignment.CENTER).build();
+//		tile = TileBuilder.create().skinType(SkinType.IMAGE).prefSize(TILE_WIDTH, TILE_HEIGHT).title(""+m.getNumero())
+//				.titleAlignment(TextAlignment.CENTER).textSize(TextSize.BIGGER)
+//				.image(new Image(getClass().getResourceAsStream("/images/mesa.png"))).imageMask(ImageMask.ROUND)
+//				.text("Personas: " + m.getCantPersonas()).textAlignment(TextAlignment.CENTER).build();
 	}
 	
 	public ImageTile(Plato p) {
 		setSkinType(SkinType.IMAGE);
+		setTitleAlignment(TextAlignment.CENTER);
+		setTitle("Título");
 		setPrefSize(TILE_WIDTH, TILE_HEIGHT);
-		setTitle("asdasdasd");
 		setImage((p.getFoto() != null) ? new Image(new ByteArrayInputStream(p.getFoto())) : null);
 		setImageMask(ImageMask.ROUND);
 		setText(p.getNombre());
 		setTextAlignment(TextAlignment.CENTER);
 		setTextSize(TextSize.BIGGER);
+		setReferencia(p);
 		
 //		tile = TileBuilder.create().skinType(SkinType.IMAGE).prefSize(TILE_WIDTH, TILE_HEIGHT).title(p.getNombre())
 //				.titleAlignment(TextAlignment.CENTER).textSize(TextSize.BIGGER)

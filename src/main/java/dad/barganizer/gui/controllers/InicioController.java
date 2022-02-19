@@ -34,8 +34,9 @@ import javafx.scene.layout.VBox;
 
 public class InicioController implements Initializable {
 
-	private Semaphore semaforo = new Semaphore(1); // Controla la cantidad de tareas que pueden ejecutarse simultáneamente
-	
+	private Semaphore semaforo = new Semaphore(1); // Controla la cantidad de tareas que pueden ejecutarse
+													// simultáneamente
+
 	// Models
 	private InicioModel model = new InicioModel();
 
@@ -89,17 +90,16 @@ public class InicioController implements Initializable {
 		});
 
 		inicializarEnBackground();
-		
+
 		cartaCombo.getSelectionModel().selectedItemProperty().addListener((o, ov, nv) -> {
-			
+
 			if (nv != null) {
 				listarPlatosDesdeCarta(nv);
 				listarEntrantesDesdeCarta(nv);
 				listarPostresDesdeCarta(nv);
 			}
-			
+
 		});
-		
 
 	}
 
@@ -123,15 +123,15 @@ public class InicioController implements Initializable {
 			for (Bebida bebida : res) {
 				bebidasFlow.getChildren().add(new ImageTile(bebida));
 			}
-			
+
 			ObservableList<Node> l = bebidasFlow.getChildren();
 			System.out.println("Cantidad de bebidas: " + l.size());
 			for (Node node : l) {
 				node.setOnMouseClicked(ev -> {
 					if (ev.getClickCount() >= 2) {
-						ImageTile imageTileClickeado = (ImageTile)ev.getSource();
-						System.out.println(((Bebida)imageTileClickeado.getReferencia()).getNombre());
-						
+						ImageTile imageTileClickeado = (ImageTile) ev.getSource();
+						System.out.println(((Bebida) imageTileClickeado.getReferencia()).getNombre());
+
 					}
 				});
 			}
@@ -147,16 +147,13 @@ public class InicioController implements Initializable {
 		tareas.getInicializarMesasTask().setOnSucceeded(e -> {
 			ObservableList<Mesa> res = tareas.getInicializarMesasTask().getValue();
 			model.setListaMesas(res);
-			
+
 			for (Mesa mesa : res) {
-				try {
-					mesasFlow.getChildren().add(
-							new ImageTile(getClass().getResourceAsStream("/images/mesa.png").readAllBytes(), ""+(Integer.parseInt("" + mesa.getNumero())), "Personas: " + mesa.getCantPersonas())
-									.getTile());
-				} catch (IOException e1) {
-					System.err.println("Error IO");
-					e1.printStackTrace();
-				}
+//					mesasFlow.getChildren()
+//							.add(new ImageTile(getClass().getResourceAsStream("/images/mesa.png").readAllBytes(),
+//									"" + (Integer.parseInt("" + mesa.getNumero())),
+//									"Personas: " + mesa.getCantPersonas()).getTile());
+					mesasFlow.getChildren().add(new ImageTile(mesa));
 			}
 		});
 
@@ -164,99 +161,106 @@ public class InicioController implements Initializable {
 			System.err.println("Inicialización de mesas fallida: ");
 			e.getSource().getException().printStackTrace();
 		});
-		
+
 		// Carta
 		tareas.getInicializarCartaTask().setOnSucceeded(e -> {
 			ObservableList<Carta> res = tareas.getInicializarCartaTask().getValue();
 			model.setListaCartas(res);
-			
+
 			for (Carta carta : res) {
 				cartaCombo.getItems().add(carta);
 			}
-			
+
 			cartaCombo.getSelectionModel().select(0);
 
 		});
 
 		// Ejecución de tareas
-		
+
 //		new Thread(tareas.getInicializarBebidasTask()).start();
 //		new Thread(tareas.getInicializarMesasTask()).start();
 //		new Thread(tareas.getInicializarCartaTask()).start();
-		
+
 		// Hilo ejecutador de tareas
 		new HiloEjecutador(semaforo, tareas.getInicializarBebidasTask()).start();
 		new HiloEjecutador(semaforo, tareas.getInicializarMesasTask()).start();
 		new HiloEjecutador(semaforo, tareas.getInicializarCartaTask()).start();
 
 	}
-	
-	/** Este método se encargará de listar los platos según el tipo de carta seleccionada **/
+
+	/**
+	 * Este método se encargará de listar los platos según el tipo de carta
+	 * seleccionada
+	 **/
 	private void listarPlatosDesdeCarta(Carta c) {
 		BarganizerTasks tareas = new BarganizerTasks(c);
-		
+
 		tareas.getObtenerPlatosCartaTask().setOnSucceeded(e -> {
 			ObservableList<Plato> res = tareas.getObtenerPlatosCartaTask().getValue();
-			
+
 			model.setListaPlatos(res);
 			platosFlow.getChildren().clear();
 			for (Plato plato : res) {
-				platosFlow.getChildren().add(new ImageTile(plato.getFoto(), "", plato.getNombre()).getTile());
+				platosFlow.getChildren().add(new ImageTile(plato));
 			}
 		});
-		
+
 		tareas.getObtenerPlatosCartaTask().setOnFailed(e -> {
 			System.err.println("Error inicializando los platos de la carta.");
 			e.getSource().getException().printStackTrace();
 		});
-		
+
 		new HiloEjecutador(semaforo, tareas.getObtenerPlatosCartaTask()).start();
 	}
-	
-	/** Este método se encargará de listar los entrantes según la carta seleccionada **/
+
+	/**
+	 * Este método se encargará de listar los entrantes según la carta seleccionada
+	 **/
 	private void listarEntrantesDesdeCarta(Carta c) {
 		BarganizerTasks tareas = new BarganizerTasks(c);
-		
+
 		tareas.getObtenerEntrantesTask().setOnSucceeded(e -> {
-			
+
 			ObservableList<Plato> res = tareas.getObtenerEntrantesTask().getValue();
-			
+
 			model.setListaEntrantes(res);
 			entrantesFlow.getChildren().clear();
-			
+
 			for (Plato plato : res) {
 				entrantesFlow.getChildren().add(new ImageTile(plato));
 			}
 		});
-		
+
 		tareas.getObtenerEntrantesTask().setOnFailed(e -> {
 			System.err.println("Error obteniendo entrantes desde carta: ");
 			e.getSource().getException().printStackTrace();
 		});
-		
+
 		new HiloEjecutador(semaforo, tareas.getObtenerEntrantesTask()).start();
 	}
-	
-	/** Este método se encargará de listar los postres según la carta seleccionada **/
+
+	/**
+	 * Este método se encargará de listar los postres según la carta seleccionada
+	 **/
 	private void listarPostresDesdeCarta(Carta c) {
 		BarganizerTasks tareas = new BarganizerTasks(c);
-		
+
 		tareas.getObtenerPostresTask().setOnSucceeded(e -> {
 			ObservableList<Plato> res = tareas.getObtenerPostresTask().getValue();
-			
+
 			model.setListaPostres(res);
 			postresFlow.getChildren().clear();
-			
+
 			for (Plato plato : res) {
 				postresFlow.getChildren().add(new ImageTile(plato));
 			}
 		});
-		
+
 		tareas.getObtenerPostresTask().setOnFailed(e -> {
 			System.err.println("Error obteniendo postres desde carta: ");
 			e.getSource().getException().printStackTrace();
 		});
-		
+
 		new HiloEjecutador(semaforo, tareas.getObtenerPostresTask()).start();
 	}
 

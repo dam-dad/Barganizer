@@ -18,7 +18,7 @@
       <HBox alignment="CENTER_LEFT" spacing="5.0" style="-fx-background-color: #FFC371;">
          <children>
             <Label alignment="TOP_LEFT" text="Seleccione carta" />
-            <JFXComboBox fx:id="cartaCombo" />
+            <JFXComboBox fx:id="cartaCombo" styleClass="inicio" />
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -26,7 +26,7 @@
       </HBox>
       <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
         <items>
-            <TabPane tabClosingPolicy="UNAVAILABLE">
+            <TabPane styleClass="inicio" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab fx:id="bebidasTab" text="BEBIDAS">
                   <content>
@@ -58,7 +58,15 @@
                         <FontAwesomeIconView fill="#c2656b" glyphName="SPOON" />
                      </graphic>
                      <content>
-                        <FlowPane fx:id="entrantesFlow" prefHeight="200.0" prefWidth="200.0" />
+                        <ScrollPane fitToHeight="true" fitToWidth="true">
+                           <content>
+                              <FlowPane fx:id="entrantesFlow" hgap="5.0" vgap="5.0">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </FlowPane>
+                           </content>
+                        </ScrollPane>
                      </content>
                 </Tab>
                   <Tab fx:id="platosTab" text="PLATOS">
@@ -66,10 +74,15 @@
                         <FontAwesomeIconView fill="#39a153" glyphName="CUTLERY" />
                      </graphic>
                      <content>
-                        <FlowPane fx:id="platosFlow" hgap="5.0" vgap="5.0">
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding></FlowPane>
+                        <ScrollPane fitToHeight="true" fitToWidth="true">
+                           <content>
+                              <FlowPane fx:id="platosFlow" hgap="5.0" vgap="5.0">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </FlowPane>
+                           </content>
+                        </ScrollPane>
                      </content>
                   </Tab>
                   <Tab fx:id="postresTab" text="POSTRES">
@@ -80,15 +93,20 @@
                         <FontAwesomeIconView fill="#e8816a" glyphName="COFFEE" />
                      </graphic>
                      <content>
-                        <FlowPane fx:id="postresFlow" hgap="5.0" vgap="5.0">
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding></FlowPane>
+                        <ScrollPane fitToHeight="true" fitToWidth="true">
+                           <content>
+                              <FlowPane fx:id="postresFlow" hgap="5.0" vgap="5.0">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </FlowPane>
+                           </content>
+                        </ScrollPane>
                      </content>
                   </Tab>
               </tabs>
             </TabPane>
-            <TabPane tabClosingPolicy="UNAVAILABLE">
+            <TabPane styleClass="inicio" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab fx:id="mesasTab" text="MESAS">
                      <graphic>
