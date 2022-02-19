@@ -36,6 +36,7 @@ public class MainController implements Initializable {
     
     // CONTROLADORES
     private InicioController inicioController = new InicioController();
+    private MesasController mesasController = new MesasController();
     
     //VISTA
     
@@ -127,12 +128,15 @@ public class MainController implements Initializable {
 
     @FXML
     void onInicioAction(ActionEvent event) {
+    	
+    	root.setCenter(inicioController.getView());
 
     }
 
     @FXML
     void onMesasAction(ActionEvent event) {
 
+    	root.setCenter(mesasController.getView());
     }
 
     @FXML
