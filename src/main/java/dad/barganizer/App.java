@@ -24,7 +24,7 @@ public class App extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		 
 		
-		Scene scene = new Scene(mainController.getView(), 600, 600);
+		Scene scene = new Scene(mainController.getView());
 		scene.getStylesheets().setAll("/css/mainView.css");
 		
 		
