@@ -94,6 +94,8 @@ public class InicioController implements Initializable {
 			
 			if (nv != null) {
 				listarPlatosDesdeCarta(nv);
+				listarEntrantesDesdeCarta(nv);
+				listarPostresDesdeCarta(nv);
 			}
 			
 		});
@@ -208,7 +210,54 @@ public class InicioController implements Initializable {
 			e.getSource().getException().printStackTrace();
 		});
 		
-		new Thread(tareas.getObtenerPlatosCartaTask()).start();
+		new HiloEjecutador(semaforo, tareas.getObtenerPlatosCartaTask()).start();
+	}
+	
+	/** Este método se encargará de listar los entrantes según la carta seleccionada **/
+	private void listarEntrantesDesdeCarta(Carta c) {
+		BarganizerTasks tareas = new BarganizerTasks(c);
+		
+		tareas.getObtenerEntrantesTask().setOnSucceeded(e -> {
+			
+			ObservableList<Plato> res = tareas.getObtenerEntrantesTask().getValue();
+			
+			model.setListaEntrantes(res);
+			entrantesFlow.getChildren().clear();
+			
+			for (Plato plato : res) {
+				entrantesFlow.getChildren().add(new ImageTile(plato));
+			}
+		});
+		
+		tareas.getObtenerEntrantesTask().setOnFailed(e -> {
+			System.err.println("Error obteniendo entrantes desde carta: ");
+			e.getSource().getException().printStackTrace();
+		});
+		
+		new HiloEjecutador(semaforo, tareas.getObtenerEntrantesTask()).start();
+	}
+	
+	/** Este método se encargará de listar los postres según la carta seleccionada **/
+	private void listarPostresDesdeCarta(Carta c) {
+		BarganizerTasks tareas = new BarganizerTasks(c);
+		
+		tareas.getObtenerPostresTask().setOnSucceeded(e -> {
+			ObservableList<Plato> res = tareas.getObtenerPostresTask().getValue();
+			
+			model.setListaPostres(res);
+			postresFlow.getChildren().clear();
+			
+			for (Plato plato : res) {
+				postresFlow.getChildren().add(new ImageTile(plato));
+			}
+		});
+		
+		tareas.getObtenerPostresTask().setOnFailed(e -> {
+			System.err.println("Error obteniendo postres desde carta: ");
+			e.getSource().getException().printStackTrace();
+		});
+		
+		new HiloEjecutador(semaforo, tareas.getObtenerPostresTask()).start();
 	}
 
 }

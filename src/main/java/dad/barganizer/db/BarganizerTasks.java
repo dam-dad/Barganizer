@@ -80,6 +80,39 @@ public class BarganizerTasks {
 			return FXCollections.observableArrayList(listaPlatosCarta);
 		}
 	};
+	
+	private Task<ObservableList<Plato>> obtenerEntrantesTask = new Task<ObservableList<Plato>>() {
+		
+		@Override
+		protected ObservableList<Plato> call() throws Exception {
+			List<Plato> listaEntrantes = null;
+			
+			if (cartaSeleccionada.getNombre().equals("Completa")) {
+				listaEntrantes = FuncionesDB.listarEntrantes(App.getBARGANIZERDB().getSes());
+			} else {
+				listaEntrantes = FuncionesDB.listarEntrantesCarta(App.getBARGANIZERDB().getSes(), cartaSeleccionada);
+			}
+			 
+			
+			return FXCollections.observableArrayList(listaEntrantes);
+		}
+	};
+	
+	private Task<ObservableList<Plato>> obtenerPostresTask = new Task<ObservableList<Plato>>() {
+		
+		@Override
+		protected ObservableList<Plato> call() throws Exception {
+			List<Plato> listaPostres = null;
+			
+			if (cartaSeleccionada.getNombre().equals("Completa")) {
+				listaPostres = FuncionesDB.listarPostres(App.getBARGANIZERDB().getSes());
+			} else {
+				listaPostres = FuncionesDB.listarPostresCarta(App.getBARGANIZERDB().getSes(), cartaSeleccionada);
+			}
+			
+			return FXCollections.observableArrayList(listaPostres);
+		}
+	};
 
 	public Task<ObservableList<Bebida>> getInicializarBebidasTask() {
 		return inicializarBebidasTask;
@@ -99,5 +132,13 @@ public class BarganizerTasks {
 
 	public Task<ObservableList<Plato>> getObtenerPlatosCartaTask() {
 		return obtenerPlatosCartaTask;
+	}
+	
+	public Task<ObservableList<Plato>> getObtenerEntrantesTask() {
+		return obtenerEntrantesTask;
+	}
+	
+	public Task<ObservableList<Plato>> getObtenerPostresTask() {
+		return obtenerPostresTask;
 	}
 }

@@ -51,12 +51,19 @@ public class ImageTile extends Tile {
 	}
 	
 	public ImageTile(Plato p) {
-		setReferencia(p);
+		setSkinType(SkinType.IMAGE);
+		setPrefSize(TILE_WIDTH, TILE_HEIGHT);
+		setTitle("asdasdasd");
+		setImage((p.getFoto() != null) ? new Image(new ByteArrayInputStream(p.getFoto())) : null);
+		setImageMask(ImageMask.ROUND);
+		setText(p.getNombre());
+		setTextAlignment(TextAlignment.CENTER);
+		setTextSize(TextSize.BIGGER);
 		
-		tile = TileBuilder.create().skinType(SkinType.IMAGE).prefSize(TILE_WIDTH, TILE_HEIGHT).title(p.getNombre())
-				.titleAlignment(TextAlignment.CENTER).textSize(TextSize.BIGGER)
-				.image((p.getFoto() != null) ? new Image(new ByteArrayInputStream(p.getFoto())) : null).imageMask(ImageMask.ROUND)
-				.text("").textAlignment(TextAlignment.CENTER).build();
+//		tile = TileBuilder.create().skinType(SkinType.IMAGE).prefSize(TILE_WIDTH, TILE_HEIGHT).title(p.getNombre())
+//				.titleAlignment(TextAlignment.CENTER).textSize(TextSize.BIGGER)
+//				.image((p.getFoto() != null) ? new Image(new ByteArrayInputStream(p.getFoto())) : null).imageMask(ImageMask.ROUND)
+//				.text("").textAlignment(TextAlignment.CENTER).build();
 	}
 
 	public ImageTile(byte[] imagen, String titulo) {

@@ -24,7 +24,7 @@ public class FuncionesDB {
 
 		try {
 
-			Query consulta = ses.createQuery("from Plato");
+			Query consulta = ses.createQuery("from Plato WHERE tipoPlato = 2");
 			List<Plato> platosList = consulta.getResultList();
 
 			return platosList;
@@ -323,18 +323,85 @@ public class FuncionesDB {
 			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
 		}
 	}
-	
+
 	public static List<Plato> listarPlatosCarta(Session ses, Carta carta) {
 		try {
 			ses.beginTransaction();
-			List<Plato> res = ses.createQuery("FROM Plato WHERE carta = " + carta.getId()).list();
+			List<Plato> res = ses.createQuery("FROM Plato WHERE carta = " + carta.getId() + " AND tipoPlato = 2")
+					.list();
 			ses.getTransaction().commit();
 			return res;
 		} catch (Exception e) {
 			ses.getTransaction().rollback();
 			e.printStackTrace();
 			return null;
-			
+
+		}
+	}
+
+	public static List<Plato> listarEntrantesCarta(Session ses, Carta c) {
+
+		try {
+			ses.beginTransaction();
+			List<Plato> res = ses.createQuery(
+					"SELECT p FROM Plato AS p INNER JOIN TipoPlato AS tp ON p.tipoPlato=tp.id WHERE p.carta = "
+							+ c.getId() + " AND tp.nombre = 'Entrante'")
+					.list();
+			ses.getTransaction().commit();
+			return res;
+		} catch (Exception e) {
+			ses.getTransaction().rollback();
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static List<Plato> listarEntrantes(Session ses) {
+
+		try {
+			ses.beginTransaction();
+			List<Plato> res = ses.createQuery(
+					"SELECT p FROM Plato AS p INNER JOIN TipoPlato AS tp ON p.tipoPlato=tp.id WHERE tp.nombre = 'Entrante'")
+					.list();
+			ses.getTransaction().commit();
+			return res;
+		} catch (Exception e) {
+			ses.getTransaction().rollback();
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static List<Plato> listarPostresCarta(Session ses, Carta c) {
+
+		try {
+			ses.beginTransaction();
+			List<Plato> res = ses.createQuery(
+					"SELECT p FROM Plato AS p INNER JOIN TipoPlato AS tp ON p.tipoPlato=tp.id WHERE p.carta = "
+							+ c.getId() + " AND tp.nombre = 'Postre'")
+					.list();
+			ses.getTransaction().commit();
+			return res;
+		} catch (Exception e) {
+			ses.getTransaction().rollback();
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static List<Plato> listarPostres(Session ses) {
+
+		try {
+			ses.beginTransaction();
+			List<Plato> res = ses.createQuery(
+					"SELECT p FROM Plato AS p INNER JOIN TipoPlato AS tp ON p.tipoPlato=tp.id WHERE tp.nombre = 'Postre'")
+					.list();
+			ses.getTransaction().commit();
+			return res;
+		} catch (Exception e) {
+			ses.getTransaction().rollback();
+			e.printStackTrace();
+			return null;
 		}
 	}
 }
