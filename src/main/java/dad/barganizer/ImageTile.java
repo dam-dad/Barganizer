@@ -2,7 +2,6 @@ package dad.barganizer;
 
 import java.io.ByteArrayInputStream;
 
-import dad.barganizer.db.beans.Bebida;
 import dad.barganizer.db.beans.Empleado;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Plato;
@@ -31,23 +30,23 @@ public class ImageTile extends Tile {
 
 	private Tile tile;
 
-	public ImageTile(Bebida b) {
-		super();
-		setSkinType(SkinType.IMAGE);
-		setPrefSize(TILE_WIDTH, TILE_HEIGHT);
-		setTitle("asdasdasd");
-		setImage((b.getFoto() != null) ? new Image(new ByteArrayInputStream(b.getFoto())) : null);
-		setImageMask(ImageMask.ROUND);
-		setText(b.getNombre());
-		setTextAlignment(TextAlignment.CENTER);
-		setTextSize(TextSize.BIGGER);
-		setReferencia(b);
-
-//		tile = TileBuilder.create().skinType(SkinType.IMAGE).prefSize(TILE_WIDTH, TILE_HEIGHT).title(b.getNombre())
-//				.titleAlignment(TextAlignment.CENTER).textSize(TextSize.BIGGER)
-//				.image((b.getFoto() != null) ? new Image(new ByteArrayInputStream(b.getFoto())) : null).imageMask(ImageMask.ROUND)
-//				.text("").textAlignment(TextAlignment.CENTER).build();
-	}
+//	public ImageTile(Plato b) {
+//		super();
+//		setSkinType(SkinType.IMAGE);
+//		setPrefSize(TILE_WIDTH, TILE_HEIGHT);
+//		setTitle("asdasdasd");
+//		setImage((b.getFoto() != null) ? new Image(new ByteArrayInputStream(b.getFoto())) : null);
+//		setImageMask(ImageMask.ROUND);
+//		setText(b.getNombre());
+//		setTextAlignment(TextAlignment.CENTER);
+//		setTextSize(TextSize.BIGGER);
+//		setReferencia(b);
+//
+////		tile = TileBuilder.create().skinType(SkinType.IMAGE).prefSize(TILE_WIDTH, TILE_HEIGHT).title(b.getNombre())
+////				.titleAlignment(TextAlignment.CENTER).textSize(TextSize.BIGGER)
+////				.image((b.getFoto() != null) ? new Image(new ByteArrayInputStream(b.getFoto())) : null).imageMask(ImageMask.ROUND)
+////				.text("").textAlignment(TextAlignment.CENTER).build();
+//	}
 
 	public ImageTile(Mesa m) {
 		super();

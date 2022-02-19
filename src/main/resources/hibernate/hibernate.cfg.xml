@@ -17,7 +17,6 @@
 		<mapping class="dad.barganizer.db.beans.Alergeno" />
 		<mapping class="dad.barganizer.db.beans.TipoPlato" />
 		<mapping class="dad.barganizer.db.beans.Plato" />
-		<mapping class="dad.barganizer.db.beans.Bebida" />
 		<mapping class="dad.barganizer.db.beans.Comanda" />
 		<mapping class="dad.barganizer.db.beans.Reserva" />
 		<mapping class="dad.barganizer.db.beans.Carta" />

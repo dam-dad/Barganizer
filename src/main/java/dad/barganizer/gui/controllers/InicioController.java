@@ -14,7 +14,7 @@ import dad.barganizer.App;
 import dad.barganizer.ImageTile;
 import dad.barganizer.db.BarganizerDB;
 import dad.barganizer.db.BarganizerTasks;
-import dad.barganizer.db.beans.Bebida;
+import dad.barganizer.db.FuncionesDB;
 import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Plato;
@@ -38,7 +38,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class InicioController implements Initializable {
-
 
 	// Models
 	private InicioModel model = new InicioModel();
@@ -78,17 +77,15 @@ public class InicioController implements Initializable {
 
 	@FXML
 	private VBox view;
-	
+
 	@FXML
 	private JFXTreeTableView<?> comandasTable;
-	
+
 	@FXML
 	private Button generarTicketButton;
-	
+
 	@FXML
 	private Label totalComandaLabel;
-	
-	
 
 	public InicioController() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/InicioView.fxml"));
@@ -100,42 +97,45 @@ public class InicioController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		bebidasFlow.setOnMouseClicked(e -> {
-			
-			if (model.getTileBebidaSeleccionada() != null ) {
+
+			if (model.getTileBebidaSeleccionada() != null) {
 				model.getTileBebidaSeleccionada().setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
 			}
-			
+
 		});
-		
+
 		mesasFlow.setOnMouseClicked(e -> {
-			
-			if (model.getTileMesaSeleccionada() != null ) {
+
+			if (model.getTileMesaSeleccionada() != null) {
 				model.getTileMesaSeleccionada().setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
 			}
-			
+
 		});
-		
+
 		model.tileMesaSeleccionadaProperty().addListener((o, ov, nv) -> {
+			System.out.println("OV: " + ov + " --- NV: "+ nv);
 			if (ov != null && nv != null) {
-				Mesa ref = (Mesa)nv.getReferencia();
+				Mesa ref = (Mesa) nv.getReferencia();
 				ov.setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
+
 			}
 			nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
 
 		});
-		
+
 		model.tileBebidaSeleccionadaProperty().addListener((o, ov, nv) -> {
+			System.out.println("TILE-BEBIDASELEC-: OV: " + ov + " --- NV:" + nv);
 			// Si no había ningún tile de bebida seleccionado previamente
 			if (ov == null && nv != null) {
 				nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
 			}
-			
+
 			// Si se cambia de tile de bebida seleccionado
 			if (ov != null && nv != null) {
 				ov.setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
 				nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
 			}
-			
+
 		});
 
 		inicializarEnBackground();
@@ -166,10 +166,10 @@ public class InicioController implements Initializable {
 		 * acciones cuando se ejecuta correctamente y cuando falla.
 		 */
 		tareas.getInicializarBebidasTask().setOnSucceeded(e -> {
-			ObservableList<Bebida> res = tareas.getInicializarBebidasTask().getValue();
+			ObservableList<Plato> res = tareas.getInicializarBebidasTask().getValue();
 			model.setListaBebidas(res);
 
-			for (Bebida bebida : res) {
+			for (Plato bebida : res) {
 				bebidasFlow.getChildren().add(new ImageTile(bebida));
 			}
 
@@ -180,14 +180,16 @@ public class InicioController implements Initializable {
 			for (Node node : l) {
 				node.setOnMouseClicked(ev -> {
 					ImageTile imageTileClickeado = (ImageTile) ev.getSource();
-					System.out.println(((Bebida) imageTileClickeado.getReferencia()).getNombre());
+					Plato bebidaSeleccionada = (Plato) imageTileClickeado.getReferencia();
+					
 					
 					model.setTileBebidaSeleccionada(imageTileClickeado);
 					if (ev.getClickCount() >= 2) {
 						if (model.getTileMesaSeleccionada() == null) {
 							App.warning("Advertencia", "Mesa no seleccionada", "Debe seleccionar una mesa antes de añadir un producto en la comanda");
 						} else {
-							
+							Mesa mesaSeleccionada = (Mesa)model.getTileMesaSeleccionada().getReferencia();
+//							FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), bebidaSeleccionada, mesaSeleccionada, 1);
 						}
 					}
 					
@@ -330,10 +332,10 @@ public class InicioController implements Initializable {
 
 		new HiloEjecutador(App.semaforo, tareas.getObtenerPostresTask()).start();
 	}
-	
+
 	@FXML
 	void onGenerarTicketAction(ActionEvent event) {
-		
+
 	}
 
 }

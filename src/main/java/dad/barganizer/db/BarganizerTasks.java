@@ -3,7 +3,6 @@ package dad.barganizer.db;
 import java.util.List;
 
 import dad.barganizer.App;
-import dad.barganizer.db.beans.Bebida;
 import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.Empleado;
 import dad.barganizer.db.beans.Mesa;
@@ -23,11 +22,11 @@ public class BarganizerTasks {
 		this.cartaSeleccionada = referencia;
 	}
 
-	private Task<ObservableList<Bebida>> inicializarBebidasTask = new Task<ObservableList<Bebida>>() {
+	private Task<ObservableList<Plato>> inicializarBebidasTask = new Task<ObservableList<Plato>>() {
 
 		@Override
-		protected ObservableList<Bebida> call() throws Exception {
-			List<Bebida> listaBebidas = FuncionesDB.listarBebidas(App.getBARGANIZERDB().getSes());
+		protected ObservableList<Plato> call() throws Exception {
+			List<Plato> listaBebidas = FuncionesDB.listarBebidas(App.getBARGANIZERDB().getSes());
 
 			return FXCollections.observableArrayList(listaBebidas);
 		}
@@ -127,7 +126,7 @@ public class BarganizerTasks {
 		}
 	};
 
-	public Task<ObservableList<Bebida>> getInicializarBebidasTask() {
+	public Task<ObservableList<Plato>> getInicializarBebidasTask() {
 		return inicializarBebidasTask;
 	}
 

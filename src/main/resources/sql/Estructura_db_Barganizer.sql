@@ -30,7 +30,7 @@ CREATE TABLE alergeno(
 
 CREATE TABLE tipo_plato(
 	id INT(2) PRIMARY KEY AUTO_INCREMENT,
-	nombre enum("Entrante", "Principal", "Postre", "Vegetariano") NOT NULL
+	nombre enum("Entrante", "Principal", "Bebida","Postre", "Vegetariano") NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=UTF8 COLLATE=utf8_spanish_ci;
 
 CREATE TABLE plato(
@@ -51,14 +51,6 @@ CREATE TABLE plato_alergeno(
 	CONSTRAINT fk_pltalerg_plato FOREIGN KEY(plato) REFERENCES plato(id),
 	CONSTRAINT fk_pltalerg_alerg FOREIGN KEY(alergeno) REFERENCES alergeno(id)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=UTF8 COLLATE=utf8_spanish_ci;
-
-CREATE TABLE bebida(
-	id INT(3) PRIMARY KEY AUTO_INCREMENT,
-	nombre VARCHAR(80) NOT NULL,
-	foto MEDIUMBLOB,
-	precio DECIMAL(6,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARACTER SET=UTF8 COLLATE=utf8_spanish_ci;
-
 
 CREATE TABLE comanda(
 	id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -103,4 +95,6 @@ INSERT INTO alergeno(nombre) VALUES
 INSERT INTO tipo_plato (nombre) VALUES
 ("Entrante"),
 ("Principal"),
-("Postre");
+("Bebida"),
+("Postre"),
+("Vegetariano");

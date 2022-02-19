@@ -1,7 +1,6 @@
 package dad.barganizer.gui.models;
 
 import dad.barganizer.ImageTile;
-import dad.barganizer.db.beans.Bebida;
 import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Plato;
@@ -14,7 +13,7 @@ import javafx.collections.ObservableList;
 
 public class InicioModel {
 
-	private ListProperty<Bebida> listaBebidas = new SimpleListProperty<Bebida>(FXCollections.observableArrayList());
+	private ListProperty<Plato> listaBebidas = new SimpleListProperty<Plato>(FXCollections.observableArrayList());
 	private ListProperty<Mesa> listaMesas = new SimpleListProperty<Mesa>(FXCollections.observableArrayList());
 	private ListProperty<Carta> listaCartas = new SimpleListProperty<Carta>(FXCollections.observableArrayList());
 	private ListProperty<Plato> listaPlatos = new SimpleListProperty<Plato>(FXCollections.observableArrayList());
@@ -24,15 +23,15 @@ public class InicioModel {
 	private ObjectProperty<ImageTile> tileBebidaSeleccionada = new SimpleObjectProperty<ImageTile>();
 	private ObjectProperty<ImageTile> tileMesaSeleccionada = new SimpleObjectProperty<ImageTile>();
 
-	public final ListProperty<Bebida> listaBebidasProperty() {
+	public final ListProperty<Plato> listaBebidasProperty() {
 		return this.listaBebidas;
 	}
 
-	public final ObservableList<Bebida> getListaBebidas() {
+	public final ObservableList<Plato> getListaBebidas() {
 		return this.listaBebidasProperty().get();
 	}
 
-	public final void setListaBebidas(final ObservableList<Bebida> listaBebidas) {
+	public final void setListaBebidas(final ObservableList<Plato> listaBebidas) {
 		this.listaBebidasProperty().set(listaBebidas);
 	}
 

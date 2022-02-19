@@ -9,7 +9,6 @@ import org.hibernate.query.Query;
 
 import dad.barganizer.App;
 import dad.barganizer.db.beans.Alergeno;
-import dad.barganizer.db.beans.Bebida;
 import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.Comanda;
 import dad.barganizer.db.beans.Empleado;
@@ -37,12 +36,12 @@ public class FuncionesDB {
 
 	}
 
-	public static List<Bebida> listarBebidas(Session ses) {
+	public static List<Plato> listarBebidas(Session ses) {
 
 		try {
 			ses.beginTransaction();
-			Query consulta = ses.createQuery("from Bebida");
-			List<Bebida> bebidasList = consulta.getResultList();
+			Query consulta = ses.createQuery("from Plato where tipoPlato = 3");
+			List<Plato> bebidasList = consulta.getResultList();
 			ses.getTransaction().commit();
 			return bebidasList;
 
@@ -196,11 +195,11 @@ public class FuncionesDB {
 
 			ses.beginTransaction();
 
-			Bebida bebida = new Bebida();
+			Plato bebida = new Plato();
 			bebida.setNombre(nombre);
 			bebida.setFoto(foto);
 			bebida.setPrecio(precio);
-
+			bebida.setTipoPlato(ses.get(TipoPlato.class, 3));
 			ses.persist(bebida);
 			ses.getTransaction().commit();
 

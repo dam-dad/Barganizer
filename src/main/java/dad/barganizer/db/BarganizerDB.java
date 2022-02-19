@@ -6,7 +6,6 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import dad.barganizer.db.beans.Alergeno;
-import dad.barganizer.db.beans.Bebida;
 import dad.barganizer.db.beans.Comanda;
 import dad.barganizer.db.beans.Empleado;
 import dad.barganizer.db.beans.Mesa;
