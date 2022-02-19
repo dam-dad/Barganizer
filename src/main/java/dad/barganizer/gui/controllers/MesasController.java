@@ -18,15 +18,21 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class MesasController implements Initializable {
 	
 
 	// MODEL
-
+	
 	MesasModel model = new MesasModel();
+	AñadirMesaController añadirMesaController;
 
 	// VISTA
 
@@ -43,9 +49,9 @@ public class MesasController implements Initializable {
 	private JFXButton quitarButton;
 
 	@FXML
-	private BorderPane root;
+	private VBox root;
 
-	public BorderPane getView() {
+	public VBox getView() {
 		return root;
 	}
 
@@ -80,6 +86,42 @@ public class MesasController implements Initializable {
 
 	@FXML
 	void onAñadirAction(ActionEvent event) {
+		try {
+			añadirMesaController = new AñadirMesaController();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Stage stage = new Stage();
+		stage.setTitle("Añadir mesa");
+		stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.PNG")));
+		stage.setScene(new Scene(añadirMesaController.getView()));
+		// Lineas opcionales pero que permiten que al tener una ventana abierta, la otra
+		// quede deshabilitada
+		stage.initOwner(App.primaryStage);
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.showAndWait();
+		
+		
+		
+		mesasFlow.getChildren().clear();
+		
+		BarganizerTasks tareas = new BarganizerTasks();
+
+		tareas.getInicializarMesasTask().setOnSucceeded(e -> {
+			ObservableList<Mesa> res = tareas.getInicializarMesasTask().getValue();
+			model.setListaMesas(res);
+
+			for (Mesa mesa : res) {
+				mesasFlow.getChildren().add(new ImageTile(mesa));
+			}
+		});
+
+		tareas.getInicializarMesasTask().setOnFailed(e -> {
+			System.err.println("Inicialización de mesas fallida: ");
+			e.getSource().getException().printStackTrace();
+		});
+		
+		new HiloEjecutador(App.semaforo, tareas.getInicializarMesasTask()).start();
 
 	}
 

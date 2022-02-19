@@ -14,6 +14,7 @@ public class App extends Application {
 
 	MainController mainController;
 	public static Semaphore semaforo = new Semaphore(1);
+	public static Stage primaryStage;
 	
 	private static BarganizerDB BARGANIZERDB = new BarganizerDB();
 	
@@ -22,8 +23,8 @@ public class App extends Application {
 	public void init() throws Exception {
 		super.init();
 		mainController = new MainController();
-		Font fuente = Font.loadFont(getClass().getResourceAsStream("/Styles/Merienda-Regular.ttf"),16);
-		Font fuenteNegrita = Font.loadFont(getClass().getResourceAsStream("/Styles/Merienda-Bold.ttf"),16);
+		Font fuente = Font.loadFont(getClass().getResourceAsStream("/Styles/Merienda-Regular.ttf"), 16);
+		Font fuenteNegrita = Font.loadFont(getClass().getResourceAsStream("/Styles/Merienda-Bold.ttf"), 16);
 	}
 	
 	@Override
@@ -33,7 +34,7 @@ public class App extends Application {
 		Scene scene = new Scene(mainController.getView());
 		scene.getStylesheets().setAll("/css/mainView.css");
 		
-		
+		App.primaryStage = primaryStage;
 		primaryStage.setTitle("Barganizer");
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.png")));
 		primaryStage.setScene(scene);
