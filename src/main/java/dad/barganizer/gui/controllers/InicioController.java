@@ -31,6 +31,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class InicioController implements Initializable {
 
@@ -128,11 +129,10 @@ public class InicioController implements Initializable {
 			System.out.println("Cantidad de bebidas: " + l.size());
 			for (Node node : l) {
 				node.setOnMouseClicked(ev -> {
-					if (ev.getClickCount() >= 2) {
-						ImageTile imageTileClickeado = (ImageTile) ev.getSource();
-						System.out.println(((Bebida) imageTileClickeado.getReferencia()).getNombre());
-
-					}
+					ImageTile imageTileClickeado = (ImageTile) ev.getSource();
+					System.out.println(((Bebida) imageTileClickeado.getReferencia()).getNombre());
+					
+					System.out.println(imageTileClickeado.getBackgroundColor());
 				});
 			}
 		});

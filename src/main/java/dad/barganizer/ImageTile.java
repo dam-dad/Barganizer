@@ -3,6 +3,7 @@ package dad.barganizer;
 import java.io.ByteArrayInputStream;
 
 import dad.barganizer.db.beans.Bebida;
+import dad.barganizer.db.beans.Empleado;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Plato;
 import eu.hansolo.tilesfx.Tile;
@@ -34,29 +35,29 @@ public class ImageTile extends Tile {
 		setTextAlignment(TextAlignment.CENTER);
 		setTextSize(TextSize.BIGGER);
 		setReferencia(b);
-		
+
 //		tile = TileBuilder.create().skinType(SkinType.IMAGE).prefSize(TILE_WIDTH, TILE_HEIGHT).title(b.getNombre())
 //				.titleAlignment(TextAlignment.CENTER).textSize(TextSize.BIGGER)
 //				.image((b.getFoto() != null) ? new Image(new ByteArrayInputStream(b.getFoto())) : null).imageMask(ImageMask.ROUND)
 //				.text("").textAlignment(TextAlignment.CENTER).build();
 	}
-	
+
 	public ImageTile(Mesa m) {
 		setSkinType(SkinType.IMAGE);
 		setPrefSize(TILE_WIDTH, TILE_HEIGHT);
 		setImage(new Image(getClass().getResourceAsStream("/images/mesa.png")));
 		setImageMask(ImageMask.ROUND);
-		setText(""+m.getNumero());
+		setText("" + m.getNumero());
 		setTextAlignment(TextAlignment.CENTER);
 		setTextSize(TextSize.BIGGER);
 		setReferencia(m);
-		
+
 //		tile = TileBuilder.create().skinType(SkinType.IMAGE).prefSize(TILE_WIDTH, TILE_HEIGHT).title(""+m.getNumero())
 //				.titleAlignment(TextAlignment.CENTER).textSize(TextSize.BIGGER)
 //				.image(new Image(getClass().getResourceAsStream("/images/mesa.png"))).imageMask(ImageMask.ROUND)
 //				.text("Personas: " + m.getCantPersonas()).textAlignment(TextAlignment.CENTER).build();
 	}
-	
+
 	public ImageTile(Plato p) {
 		setSkinType(SkinType.IMAGE);
 		setTitleAlignment(TextAlignment.CENTER);
@@ -68,11 +69,24 @@ public class ImageTile extends Tile {
 		setTextAlignment(TextAlignment.CENTER);
 		setTextSize(TextSize.BIGGER);
 		setReferencia(p);
-		
+
 //		tile = TileBuilder.create().skinType(SkinType.IMAGE).prefSize(TILE_WIDTH, TILE_HEIGHT).title(p.getNombre())
 //				.titleAlignment(TextAlignment.CENTER).textSize(TextSize.BIGGER)
 //				.image((p.getFoto() != null) ? new Image(new ByteArrayInputStream(p.getFoto())) : null).imageMask(ImageMask.ROUND)
 //				.text("").textAlignment(TextAlignment.CENTER).build();
+	}
+
+	public ImageTile(Empleado e) {
+		setSkinType(SkinType.IMAGE);
+		setTitleAlignment(TextAlignment.CENTER);
+		setTitle("Título");
+		setPrefSize(TILE_WIDTH, TILE_HEIGHT);
+		setImage((e.getFoto() != null) ? new Image(new ByteArrayInputStream(e.getFoto())) : null);
+		setImageMask(ImageMask.ROUND);
+		setText(e.getNombre() + " " + e.getApellidos());
+		setTextAlignment(TextAlignment.CENTER);
+		setTextSize(TextSize.BIGGER);
+		setReferencia(e);
 	}
 
 	public ImageTile(byte[] imagen, String titulo) {
