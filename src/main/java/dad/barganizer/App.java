@@ -5,6 +5,7 @@ import dad.barganizer.gui.controllers.MainController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class App extends Application {
@@ -18,6 +19,8 @@ public class App extends Application {
 	public void init() throws Exception {
 		super.init();
 		mainController = new MainController();
+		Font fuente = Font.loadFont(getClass().getResourceAsStream("/Styles/Merienda-Regular.ttf"),16);
+		Font fuenteNegrita = Font.loadFont(getClass().getResourceAsStream("/Styles/Merienda-Bold.ttf"),16);
 	}
 	
 	@Override
