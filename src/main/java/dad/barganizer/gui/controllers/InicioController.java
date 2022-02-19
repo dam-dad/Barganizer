@@ -35,8 +35,6 @@ import javafx.scene.paint.Color;
 
 public class InicioController implements Initializable {
 
-	private Semaphore semaforo = new Semaphore(1); // Controla la cantidad de tareas que pueden ejecutarse
-													// simultáneamente
 
 	// Models
 	private InicioModel model = new InicioModel();
@@ -182,9 +180,9 @@ public class InicioController implements Initializable {
 //		new Thread(tareas.getInicializarCartaTask()).start();
 
 		// Hilo ejecutador de tareas
-		new HiloEjecutador(semaforo, tareas.getInicializarBebidasTask()).start();
-		new HiloEjecutador(semaforo, tareas.getInicializarMesasTask()).start();
-		new HiloEjecutador(semaforo, tareas.getInicializarCartaTask()).start();
+		new HiloEjecutador(App.semaforo, tareas.getInicializarBebidasTask()).start();
+		new HiloEjecutador(App.semaforo, tareas.getInicializarMesasTask()).start();
+		new HiloEjecutador(App.semaforo, tareas.getInicializarCartaTask()).start();
 
 	}
 
@@ -210,7 +208,7 @@ public class InicioController implements Initializable {
 			e.getSource().getException().printStackTrace();
 		});
 
-		new HiloEjecutador(semaforo, tareas.getObtenerPlatosCartaTask()).start();
+		new HiloEjecutador(App.semaforo, tareas.getObtenerPlatosCartaTask()).start();
 	}
 
 	/**
@@ -236,7 +234,7 @@ public class InicioController implements Initializable {
 			e.getSource().getException().printStackTrace();
 		});
 
-		new HiloEjecutador(semaforo, tareas.getObtenerEntrantesTask()).start();
+		new HiloEjecutador(App.semaforo, tareas.getObtenerEntrantesTask()).start();
 	}
 
 	/**
@@ -261,7 +259,7 @@ public class InicioController implements Initializable {
 			e.getSource().getException().printStackTrace();
 		});
 
-		new HiloEjecutador(semaforo, tareas.getObtenerPostresTask()).start();
+		new HiloEjecutador(App.semaforo, tareas.getObtenerPostresTask()).start();
 	}
 
 }

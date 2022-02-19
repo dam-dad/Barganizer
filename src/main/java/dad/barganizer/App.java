@@ -1,5 +1,7 @@
 package dad.barganizer;
 
+import java.util.concurrent.Semaphore;
+
 import dad.barganizer.db.BarganizerDB;
 import dad.barganizer.gui.controllers.MainController;
 import javafx.application.Application;
@@ -11,6 +13,7 @@ import javafx.stage.Stage;
 public class App extends Application {
 
 	MainController mainController;
+	public static Semaphore semaforo = new Semaphore(1);
 	
 	private static BarganizerDB BARGANIZERDB = new BarganizerDB();
 	
