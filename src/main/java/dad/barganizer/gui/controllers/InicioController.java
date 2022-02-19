@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Semaphore;
 
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTreeTableView;
 
 import dad.barganizer.App;
 import dad.barganizer.ImageTile;
@@ -23,10 +24,13 @@ import eu.hansolo.tilesfx.Tile;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
@@ -74,6 +78,17 @@ public class InicioController implements Initializable {
 
 	@FXML
 	private VBox view;
+	
+	@FXML
+	private JFXTreeTableView<?> comandasTable;
+	
+	@FXML
+	private Button generarTicketButton;
+	
+	@FXML
+	private Label totalComandaLabel;
+	
+	
 
 	public InicioController() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/InicioView.fxml"));
@@ -84,8 +99,43 @@ public class InicioController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		model.listaBebidasProperty().addListener((o, ov, nv) -> {
-			System.out.println("OV: " + ov + " --- NV: " + nv);
+		bebidasFlow.setOnMouseClicked(e -> {
+			
+			if (model.getTileBebidaSeleccionada() != null ) {
+				model.getTileBebidaSeleccionada().setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
+			}
+			
+		});
+		
+		mesasFlow.setOnMouseClicked(e -> {
+			
+			if (model.getTileMesaSeleccionada() != null ) {
+				model.getTileMesaSeleccionada().setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
+			}
+			
+		});
+		
+		model.tileMesaSeleccionadaProperty().addListener((o, ov, nv) -> {
+			if (ov != null && nv != null) {
+				Mesa ref = (Mesa)nv.getReferencia();
+				ov.setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
+			}
+			nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
+
+		});
+		
+		model.tileBebidaSeleccionadaProperty().addListener((o, ov, nv) -> {
+			// Si no había ningún tile de bebida seleccionado previamente
+			if (ov == null && nv != null) {
+				nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
+			}
+			
+			// Si se cambia de tile de bebida seleccionado
+			if (ov != null && nv != null) {
+				ov.setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
+				nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
+			}
+			
 		});
 
 		inicializarEnBackground();
@@ -123,14 +173,24 @@ public class InicioController implements Initializable {
 				bebidasFlow.getChildren().add(new ImageTile(bebida));
 			}
 
+			/* Controlamos los nodos almacenados en las bebidas para asignarle a cada uno su método
+			 * onMouseClicked, que nos ayudará a añadir las bebidas a la comanda de una mesa previamente seleccionada
+			 * en el tabpane de mesas */
 			ObservableList<Node> l = bebidasFlow.getChildren();
-			System.out.println("Cantidad de bebidas: " + l.size());
 			for (Node node : l) {
 				node.setOnMouseClicked(ev -> {
 					ImageTile imageTileClickeado = (ImageTile) ev.getSource();
 					System.out.println(((Bebida) imageTileClickeado.getReferencia()).getNombre());
 					
-					System.out.println(imageTileClickeado.getBackgroundColor());
+					model.setTileBebidaSeleccionada(imageTileClickeado);
+					if (ev.getClickCount() >= 2) {
+						if (model.getTileMesaSeleccionada() == null) {
+							App.warning("Advertencia", "Mesa no seleccionada", "Debe seleccionar una mesa antes de añadir un producto en la comanda");
+						} else {
+							
+						}
+					}
+					
 				});
 			}
 		});
@@ -147,11 +207,20 @@ public class InicioController implements Initializable {
 			model.setListaMesas(res);
 
 			for (Mesa mesa : res) {
-//					mesasFlow.getChildren()
-//							.add(new ImageTile(getClass().getResourceAsStream("/images/mesa.png").readAllBytes(),
-//									"" + (Integer.parseInt("" + mesa.getNumero())),
-//									"Personas: " + mesa.getCantPersonas()).getTile());
 					mesasFlow.getChildren().add(new ImageTile(mesa));
+			}
+			
+			/* Obtenemso */
+			ObservableList<Node> l = mesasFlow.getChildren();
+			for (Node node : l) {
+				node.setOnMouseClicked(ev -> {
+					ImageTile imageTileClickeado = (ImageTile) ev.getSource();
+					Mesa seleccionada = (Mesa) imageTileClickeado.getReferencia();
+					System.out.println(seleccionada.getNumero());
+					
+					model.setTileMesaSeleccionada(imageTileClickeado);
+					
+				});
 			}
 		});
 
@@ -260,6 +329,11 @@ public class InicioController implements Initializable {
 		});
 
 		new HiloEjecutador(App.semaforo, tareas.getObtenerPostresTask()).start();
+	}
+	
+	@FXML
+	void onGenerarTicketAction(ActionEvent event) {
+		
 	}
 
 }

@@ -65,7 +65,8 @@ CREATE TABLE comanda(
 	mesa INT(3) NOT NULL,
 	plato INT(3) NOT NULL,
 	cantidad INT(2) NOT NULL DEFAULT 1,
-	CONSTRAINT fk_com_mesa FOREIGN KEY(mesa) REFERENCES mesa(numero)
+	CONSTRAINT fk_com_mesa FOREIGN KEY(mesa) REFERENCES mesa(numero),
+	CONSTRAINT fk_com_pl FOREIGN KEY(plato) REFERENCES plato(id)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=UTF8 COLLATE=utf8_spanish_ci;
 
 CREATE TABLE reserva(

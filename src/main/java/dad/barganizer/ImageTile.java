@@ -14,18 +14,25 @@ import eu.hansolo.tilesfx.Tile.TextSize;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
 public class ImageTile extends Tile {
 
 	private static final int TILE_WIDTH = 125;
 	private static final int TILE_HEIGHT = 125;
+	
+	
+	public static final Color TILE_DEFAULT_COLOR = Color.web("#2A2A2A");
+	public static final Color TILE_SELECTED_COLOR = Color.web("#054C31");
+	public static final Color TILE_MESA_NODISP_COLOR = Color.web("#300503");
 
 	private ObjectProperty<Object> referencia = new SimpleObjectProperty<Object>();
 
 	private Tile tile;
 
 	public ImageTile(Bebida b) {
+		super();
 		setSkinType(SkinType.IMAGE);
 		setPrefSize(TILE_WIDTH, TILE_HEIGHT);
 		setTitle("asdasdasd");
@@ -43,6 +50,7 @@ public class ImageTile extends Tile {
 	}
 
 	public ImageTile(Mesa m) {
+		super();
 		setSkinType(SkinType.IMAGE);
 		setPrefSize(TILE_WIDTH, TILE_HEIGHT);
 		setImage(new Image(getClass().getResourceAsStream("/images/mesa.png")));

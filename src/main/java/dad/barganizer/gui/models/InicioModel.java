@@ -1,11 +1,14 @@
 package dad.barganizer.gui.models;
 
+import dad.barganizer.ImageTile;
 import dad.barganizer.db.beans.Bebida;
 import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Plato;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -17,6 +20,9 @@ public class InicioModel {
 	private ListProperty<Plato> listaPlatos = new SimpleListProperty<Plato>(FXCollections.observableArrayList());
 	private ListProperty<Plato> listaEntrantes = new SimpleListProperty<Plato>(FXCollections.observableArrayList());
 	private ListProperty<Plato> listaPostres = new SimpleListProperty<Plato>(FXCollections.observableArrayList());
+
+	private ObjectProperty<ImageTile> tileBebidaSeleccionada = new SimpleObjectProperty<ImageTile>();
+	private ObjectProperty<ImageTile> tileMesaSeleccionada = new SimpleObjectProperty<ImageTile>();
 
 	public final ListProperty<Bebida> listaBebidasProperty() {
 		return this.listaBebidas;
@@ -88,6 +94,30 @@ public class InicioModel {
 
 	public final void setListaPostres(final ObservableList<Plato> listaPostres) {
 		this.listaPostresProperty().set(listaPostres);
+	}
+
+	public final ObjectProperty<ImageTile> tileBebidaSeleccionadaProperty() {
+		return this.tileBebidaSeleccionada;
+	}
+
+	public final ImageTile getTileBebidaSeleccionada() {
+		return this.tileBebidaSeleccionadaProperty().get();
+	}
+
+	public final void setTileBebidaSeleccionada(final ImageTile tileBebidaSeleccionada) {
+		this.tileBebidaSeleccionadaProperty().set(tileBebidaSeleccionada);
+	}
+
+	public final ObjectProperty<ImageTile> tileMesaSeleccionadaProperty() {
+		return this.tileMesaSeleccionada;
+	}
+
+	public final ImageTile getTileMesaSeleccionada() {
+		return this.tileMesaSeleccionadaProperty().get();
+	}
+
+	public final void setTileMesaSeleccionada(final ImageTile tileMesaSeleccionada) {
+		this.tileMesaSeleccionadaProperty().set(tileMesaSeleccionada);
 	}
 
 }

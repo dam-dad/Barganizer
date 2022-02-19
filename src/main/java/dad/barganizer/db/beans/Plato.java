@@ -1,10 +1,12 @@
 package dad.barganizer.db.beans;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -39,6 +42,9 @@ public class Plato {
 	@JoinTable(name = "plato_alergeno", joinColumns = @JoinColumn(name = "plato", nullable = false), inverseJoinColumns = @JoinColumn(name = "alergeno", nullable = false))
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Alergeno> alergenos;
+	
+	@OneToMany(mappedBy = "plato", cascade = { CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
+	private List<Comanda> comandasList = new ArrayList<Comanda>();
 
 	@ManyToOne
 	@JoinColumn(name = "carta")

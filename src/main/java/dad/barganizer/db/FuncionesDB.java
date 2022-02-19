@@ -227,7 +227,7 @@ public class FuncionesDB {
 		}
 	}
 
-	public static void insertarComanda(Session ses, Mesa mesa, int plato, int cantidad) {
+	public static void insertarComanda(Session ses, Mesa mesa, Plato plato, int cantidad) {
 
 		try {
 

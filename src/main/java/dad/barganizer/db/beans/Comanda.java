@@ -1,11 +1,14 @@
 package dad.barganizer.db.beans;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -21,8 +24,8 @@ public class Comanda {
     // @Column(name = "mesa", nullable = false, columnDefinition = "INT(3)")
     // private int mesa;
 
-    @Column(name = "plato", nullable = false, columnDefinition = "INT(2)")
-    private int plato;
+//    @Column(name = "plato", nullable = false, columnDefinition = "INT(2)")
+//    private int plato;
 
     @Column(name = "cantidad", nullable = false, columnDefinition = "INT(2)")
     private int cantidad;
@@ -31,6 +34,10 @@ public class Comanda {
     @ManyToOne
     @JoinColumn(name = "mesa")
     private Mesa mesa;
+    
+    @ManyToOne
+    @JoinColumn(name = "plato")
+    private Plato plato;
 
 	public long getId() {
 		return id;
@@ -40,11 +47,11 @@ public class Comanda {
 		this.id = id;
 	}
 
-	public int getPlato() {
+	public Plato getPlato() {
 		return plato;
 	}
 
-	public void setPlato(int plato) {
+	public void setPlato(Plato plato) {
 		this.plato = plato;
 	}
 
