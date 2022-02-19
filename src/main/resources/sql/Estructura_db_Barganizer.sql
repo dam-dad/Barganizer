@@ -1,5 +1,10 @@
 /* Estructura de base de datos utilizada por Barganizer */
 
+CREATE TABLE carta (
+	id INT(3) PRIMARY KEY AUTO_INCREMENT,
+	nombre VARCHAR(80) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARACTER SET=UTF8 COLLATE=utf8_spanish_ci;
+
 CREATE TABLE empleado(
 	id int(3) PRIMARY KEY AUTO_INCREMENT,
 	nombre VARCHAR(20) NOT NULL,
@@ -7,7 +12,8 @@ CREATE TABLE empleado(
 	genero enum("Hombre","Mujer") NOT NULL,
 	fnac DATE NOT NULL,
 	fechaIngreso DATE NOT NULL,
-	foto MEDIUMBLOB
+	foto MEDIUMBLOB,
+	pass BLOB NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=UTF8 COLLATE=utf8_spanish_ci;
 
 CREATE TABLE mesa(
@@ -33,7 +39,9 @@ CREATE TABLE plato(
 	foto MEDIUMBLOB,
 	tipo INT NOT NULL,
 	precio DECIMAL(6,2) NOT NULL,
-	CONSTRAINT fk_plato_tipo FOREIGN KEY(tipo) REFERENCES tipo_plato(id)
+	carta INT(3),
+	CONSTRAINT fk_plato_tipo FOREIGN KEY(tipo) REFERENCES tipo_plato(id),
+	CONSTRAINT fk_plato_carta FOREIGN KEY(carta) REFERENCES carta(id)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=UTF8 COLLATE=utf8_spanish_ci;
 
 CREATE TABLE plato_alergeno(
@@ -50,6 +58,7 @@ CREATE TABLE bebida(
 	foto MEDIUMBLOB,
 	precio DECIMAL(6,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=UTF8 COLLATE=utf8_spanish_ci;
+
 
 CREATE TABLE comanda(
 	id INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -68,6 +77,10 @@ CREATE TABLE reserva(
 	CONSTRAINT fk_res_emp FOREIGN KEY(emp) REFERENCES empleado(id),
 	CONSTRAINT fK_res_mesa FOREIGN KEY(mesa) REFERENCES mesa(numero)
 );
+
+INSERT INTO carta(nombre) VALUES 
+("Completa"),
+("Vegetariana");
 
 /* Inserción de alérgenos */
 INSERT INTO alergeno(nombre) VALUES
@@ -89,5 +102,4 @@ INSERT INTO alergeno(nombre) VALUES
 INSERT INTO tipo_plato (nombre) VALUES
 ("Entrante"),
 ("Principal"),
-("Postre"),
-("Vegetariano");
+("Postre");

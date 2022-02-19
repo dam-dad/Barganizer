@@ -10,6 +10,7 @@ import org.hibernate.query.Query;
 import dad.barganizer.App;
 import dad.barganizer.db.beans.Alergeno;
 import dad.barganizer.db.beans.Bebida;
+import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.Comanda;
 import dad.barganizer.db.beans.Empleado;
 import dad.barganizer.db.beans.Mesa;
@@ -22,10 +23,10 @@ public class FuncionesDB {
 	public static List<Plato> listarPlatos(Session ses) {
 
 		try {
-			
+
 			Query consulta = ses.createQuery("from Plato");
 			List<Plato> platosList = consulta.getResultList();
-			
+
 			return platosList;
 
 		} catch (Exception e) {
@@ -153,9 +154,22 @@ public class FuncionesDB {
 
 	}
 
+	public static List<Carta> listarCarta(Session ses) {
+		try {
+			ses.beginTransaction();
+			Query consulta = ses.createQuery("from Carta");
+			List<Carta> cartasList = consulta.getResultList();
+			ses.getTransaction().commit();
+			return cartasList;
+		} catch (Exception e) {
+			System.err.println("Error.");
+			ses.getTransaction().rollback();
+			return null;
+		}
+	}
 
-
-	public static void insertarPlato(Session ses, String nombre, TipoPlato tipo, Double precio, byte[] foto, List<Alergeno> alergenos) {
+	public static void insertarPlato(Session ses, String nombre, TipoPlato tipo, Double precio, byte[] foto,
+			List<Alergeno> alergenos) {
 
 		try {
 
@@ -232,8 +246,8 @@ public class FuncionesDB {
 		}
 	}
 
-	public static void insertarEmpleado(Session ses, String nombre, String apellido, String genero, Date nacimiento, Date ingreso,
-			byte[] foto) {
+	public static void insertarEmpleado(Session ses, String nombre, String apellido, String genero, Date nacimiento,
+			Date ingreso, byte[] foto) {
 
 		try {
 
@@ -254,7 +268,7 @@ public class FuncionesDB {
 			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
 		}
 	}
-	
+
 	public static void insertarMesa(Session ses, int personas, Boolean activa) {
 
 		try {
@@ -264,8 +278,6 @@ public class FuncionesDB {
 			Mesa mesa = new Mesa();
 			mesa.setCantPersonas(personas);
 			mesa.setActiva(activa);
-			
-			
 
 			ses.persist(mesa);
 			ses.getTransaction().commit();
@@ -274,7 +286,7 @@ public class FuncionesDB {
 			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
 		}
 	}
-	
+
 	public static void insertarReserva(Session ses, Mesa mesa, Empleado empleado, LocalDateTime fecha, int personas) {
 
 		try {
@@ -294,7 +306,7 @@ public class FuncionesDB {
 			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
 		}
 	}
-	
+
 	public static void insertarTipoPlato(Session ses, String nombre) {
 
 		try {
@@ -309,6 +321,20 @@ public class FuncionesDB {
 
 		} catch (Exception e) {
 			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
+		}
+	}
+	
+	public static List<Plato> listarPlatosCarta(Session ses, Carta carta) {
+		try {
+			ses.beginTransaction();
+			List<Plato> res = ses.createQuery("FROM Plato WHERE carta = " + carta.getId()).list();
+			ses.getTransaction().commit();
+			return res;
+		} catch (Exception e) {
+			ses.getTransaction().rollback();
+			e.printStackTrace();
+			return null;
+			
 		}
 	}
 }

@@ -1,6 +1,5 @@
 package dad.barganizer.db.beans;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -10,27 +9,24 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tipo_plato")
-public class TipoPlato {
+@Table(name = "carta")
+public class Carta {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", columnDefinition = "INT(3)", nullable = false)
 	private long id;
-	
-	@Column(name = "nombre", nullable = false, columnDefinition = "ENUM('Entrante', 'Principal', 'Postre', 'Vegetariano')")
+
+	@Column(name = "nombre", nullable = false, columnDefinition = "VARCHAR(80)")
 	private String nombre;
-	
-	// Relación 1:N
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "tipoPlato")
-	private List<Plato> platosTipo = new ArrayList<Plato>();
-	
-	
+
+	@OneToMany(mappedBy = "carta", cascade = { CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
+	private List<Plato> platosList;
+
 	public long getId() {
 		return id;
 	}
@@ -47,13 +43,17 @@ public class TipoPlato {
 		this.nombre = nombre;
 	}
 
-	public List<Plato> getPlatosTipo() {
-		return platosTipo;
+	public List<Plato> getPlatosList() {
+		return platosList;
 	}
 
-	public void setPlatosTipo(List<Plato> platosTipo) {
-		this.platosTipo = platosTipo;
+	public void setPlatosList(List<Plato> platosList) {
+		this.platosList = platosList;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return nombre;
+	}
+
 }

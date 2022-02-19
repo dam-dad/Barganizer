@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.Semaphore;
 
 import com.jfoenix.controls.JFXComboBox;
 
@@ -13,8 +14,11 @@ import dad.barganizer.ImageTile;
 import dad.barganizer.db.BarganizerDB;
 import dad.barganizer.db.BarganizerTasks;
 import dad.barganizer.db.beans.Bebida;
+import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.Mesa;
+import dad.barganizer.db.beans.Plato;
 import dad.barganizer.gui.models.InicioModel;
+import dad.barganizer.thread.HiloEjecutador;
 import eu.hansolo.tilesfx.Tile;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +26,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
@@ -29,6 +34,8 @@ import javafx.scene.layout.VBox;
 
 public class InicioController implements Initializable {
 
+	private Semaphore semaforo = new Semaphore(1); // Controla la cantidad de tareas que pueden ejecutarse simultáneamente
+	
 	// Models
 	private InicioModel model = new InicioModel();
 
@@ -39,7 +46,7 @@ public class InicioController implements Initializable {
 	private Tab bebidasTab;
 
 	@FXML
-	private JFXComboBox<?> cartaCombo;
+	private JFXComboBox<Carta> cartaCombo;
 
 	@FXML
 	private FlowPane entrantesFlow;
@@ -82,8 +89,15 @@ public class InicioController implements Initializable {
 		});
 
 		inicializarEnBackground();
-
-		// Listener
+		
+		cartaCombo.getSelectionModel().selectedItemProperty().addListener((o, ov, nv) -> {
+			
+			if (nv != null) {
+				listarPlatosDesdeCarta(nv);
+			}
+			
+		});
+		
 
 	}
 
@@ -105,7 +119,19 @@ public class InicioController implements Initializable {
 			model.setListaBebidas(res);
 
 			for (Bebida bebida : res) {
-				bebidasFlow.getChildren().add(new ImageTile(bebida.getFoto(), bebida.getNombre()).getTile());
+				bebidasFlow.getChildren().add(new ImageTile(bebida));
+			}
+			
+			ObservableList<Node> l = bebidasFlow.getChildren();
+			System.out.println("Cantidad de bebidas: " + l.size());
+			for (Node node : l) {
+				node.setOnMouseClicked(ev -> {
+					if (ev.getClickCount() >= 2) {
+						ImageTile imageTileClickeado = (ImageTile)ev.getSource();
+						System.out.println(((Bebida)imageTileClickeado.getReferencia()).getNombre());
+						
+					}
+				});
 			}
 		});
 
@@ -119,7 +145,7 @@ public class InicioController implements Initializable {
 		tareas.getInicializarMesasTask().setOnSucceeded(e -> {
 			ObservableList<Mesa> res = tareas.getInicializarMesasTask().getValue();
 			model.setListaMesas(res);
-
+			
 			for (Mesa mesa : res) {
 				try {
 					mesasFlow.getChildren().add(
@@ -136,12 +162,53 @@ public class InicioController implements Initializable {
 			System.err.println("Inicialización de mesas fallida: ");
 			e.getSource().getException().printStackTrace();
 		});
+		
+		// Carta
+		tareas.getInicializarCartaTask().setOnSucceeded(e -> {
+			ObservableList<Carta> res = tareas.getInicializarCartaTask().getValue();
+			model.setListaCartas(res);
+			
+			for (Carta carta : res) {
+				cartaCombo.getItems().add(carta);
+			}
+			
+			cartaCombo.getSelectionModel().select(0);
+
+		});
 
 		// Ejecución de tareas
 		
-		new Thread(tareas.getInicializarBebidasTask()).start();
-		new Thread(tareas.getInicializarMesasTask()).start();
+//		new Thread(tareas.getInicializarBebidasTask()).start();
+//		new Thread(tareas.getInicializarMesasTask()).start();
+//		new Thread(tareas.getInicializarCartaTask()).start();
+		
+		// Hilo ejecutador de tareas
+		new HiloEjecutador(semaforo, tareas.getInicializarBebidasTask()).start();
+		new HiloEjecutador(semaforo, tareas.getInicializarMesasTask()).start();
+		new HiloEjecutador(semaforo, tareas.getInicializarCartaTask()).start();
 
+	}
+	
+	/** Este método se encargará de listar los platos según el tipo de carta seleccionada **/
+	private void listarPlatosDesdeCarta(Carta c) {
+		BarganizerTasks tareas = new BarganizerTasks(c);
+		
+		tareas.getObtenerPlatosCartaTask().setOnSucceeded(e -> {
+			ObservableList<Plato> res = tareas.getObtenerPlatosCartaTask().getValue();
+			
+			model.setListaPlatos(res);
+			platosFlow.getChildren().clear();
+			for (Plato plato : res) {
+				platosFlow.getChildren().add(new ImageTile(plato.getFoto(), "", plato.getNombre()).getTile());
+			}
+		});
+		
+		tareas.getObtenerPlatosCartaTask().setOnFailed(e -> {
+			System.err.println("Error inicializando los platos de la carta.");
+			e.getSource().getException().printStackTrace();
+		});
+		
+		new Thread(tareas.getObtenerPlatosCartaTask()).start();
 	}
 
 }

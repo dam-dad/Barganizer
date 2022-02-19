@@ -22,27 +22,27 @@ public class Plato {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", columnDefinition = "INT(3)", nullable = false)
 	private long id;
-	
+
 	@Column(name = "nombre", nullable = false, columnDefinition = "VARCHAR(80)")
 	private String nombre;
-	
+
 	@Column(name = "foto", nullable = true, columnDefinition = "MEDIUMBLOB")
 	private byte[] foto;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "tipo")
 	private TipoPlato tipoPlato;
-	
-	@Column(name="precio", nullable=false, columnDefinition = "DECIMAL(6,2)")
+
+	@Column(name = "precio", nullable = false, columnDefinition = "DECIMAL(6,2)")
 	private double precio;
-	
-	@JoinTable(
-			name = "plato_alergeno",
-			joinColumns = @JoinColumn(name = "plato", nullable = false),
-			inverseJoinColumns = @JoinColumn(name = "alergeno", nullable = false)
-			)
+
+	@JoinTable(name = "plato_alergeno", joinColumns = @JoinColumn(name = "plato", nullable = false), inverseJoinColumns = @JoinColumn(name = "alergeno", nullable = false))
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Alergeno> alergenos;
+
+	@ManyToOne
+	@JoinColumn(name = "carta")
+	private Carta carta;
 
 	public long getId() {
 		return id;
@@ -91,7 +91,13 @@ public class Plato {
 	public void setAlergenos(List<Alergeno> alergenos) {
 		this.alergenos = alergenos;
 	}
-	
-	
-	
+
+	public Carta getCarta() {
+		return carta;
+	}
+
+	public void setCarta(Carta carta) {
+		this.carta = carta;
+	}
+
 }

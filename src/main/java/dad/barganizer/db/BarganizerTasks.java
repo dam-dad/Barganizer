@@ -4,6 +4,7 @@ import java.util.List;
 
 import dad.barganizer.App;
 import dad.barganizer.db.beans.Bebida;
+import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Plato;
 import javafx.collections.FXCollections;
@@ -12,7 +13,13 @@ import javafx.concurrent.Task;
 
 public class BarganizerTasks {
 
+	private Carta cartaSeleccionada;
+	
 	public BarganizerTasks() {
+	}
+	
+	public BarganizerTasks(Carta referencia) {
+		this.cartaSeleccionada = referencia;
 	}
 
 	private Task<ObservableList<Bebida>> inicializarBebidasTask = new Task<ObservableList<Bebida>>() {
@@ -46,6 +53,33 @@ public class BarganizerTasks {
 			return FXCollections.observableArrayList(listaPlatos);
 		}
 	};
+	
+	private Task<ObservableList<Carta>> inicializarCartaTask = new Task<ObservableList<Carta>>() {
+		
+		
+		@Override
+		protected ObservableList<Carta> call() throws Exception {
+			
+			List<Carta> listaCartas = FuncionesDB.listarCarta(App.getBARGANIZERDB().getSes());
+			
+			return FXCollections.observableArrayList(listaCartas);
+		}
+	};
+	
+	private Task<ObservableList<Plato>> obtenerPlatosCartaTask = new Task<ObservableList<Plato>>() {
+		
+		@Override
+		protected ObservableList<Plato> call() throws Exception {
+			List<Plato> listaPlatosCarta = null;
+			if (cartaSeleccionada.getNombre().equals("Completa")) {
+				listaPlatosCarta = FuncionesDB.listarPlatos(App.getBARGANIZERDB().getSes());
+			} else {
+				listaPlatosCarta = FuncionesDB.listarPlatosCarta(App.getBARGANIZERDB().getSes(), cartaSeleccionada);
+			}
+			
+			return FXCollections.observableArrayList(listaPlatosCarta);
+		}
+	};
 
 	public Task<ObservableList<Bebida>> getInicializarBebidasTask() {
 		return inicializarBebidasTask;
@@ -58,5 +92,12 @@ public class BarganizerTasks {
 	public Task<ObservableList<Plato>> getInicializarPlatosTask() {
 		return inicializarPlatosTask;
 	}
+	
+	public Task<ObservableList<Carta>> getInicializarCartaTask() {
+		return inicializarCartaTask;
+	}
 
+	public Task<ObservableList<Plato>> getObtenerPlatosCartaTask() {
+		return obtenerPlatosCartaTask;
+	}
 }
