@@ -13,7 +13,7 @@
    <top>
       <HBox alignment="CENTER" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER" spacing="5.0" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER" minWidth="350.0" spacing="5.0" HBox.hgrow="ALWAYS">
                <children>
                   <ImageView fx:id="empleadoImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
                   <VBox alignment="CENTER">
@@ -38,7 +38,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </HBox>
-            <VBox fx:id="widgetBox" alignment="TOP_CENTER" spacing="5.0" HBox.hgrow="ALWAYS">
+            <VBox fx:id="widgetBox" alignment="TOP_CENTER" minWidth="150.0" spacing="5.0" HBox.hgrow="ALWAYS">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
@@ -48,12 +48,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
                <children>
-                  <JFXButton fx:id="inicioButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onInicioAction" text="Inicio">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton fx:id="comandasButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onComandasAction" text="Comandas" HBox.hgrow="ALWAYS">
+                  <JFXButton fx:id="inicioButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onInicioAction" prefWidth="125.0" text="Inicio" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -61,7 +56,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </JFXButton>
-                  <JFXButton fx:id="mesaButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onMesasAction" text="Mesas" HBox.hgrow="ALWAYS">
+                  <JFXButton fx:id="comandasButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onComandasAction" prefWidth="125.0" text="Comandas" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -69,7 +64,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </JFXButton>
-                  <JFXButton fx:id="reservasButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onReservasAction" text="Reservas" HBox.hgrow="ALWAYS">
+                  <JFXButton fx:id="mesaButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onMesasAction" prefWidth="125.0" text="Mesas" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -77,7 +72,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </JFXButton>
-                  <JFXButton fx:id="cartaButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onCartasAction" text="Carta" HBox.hgrow="ALWAYS">
+                  <JFXButton fx:id="reservasButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onReservasAction" prefWidth="125.0" text="Reservas" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -85,7 +80,15 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </JFXButton>
-                  <JFXButton fx:id="empleadosButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onEmpleadosAction" text="Empleados" HBox.hgrow="ALWAYS">
+                  <JFXButton fx:id="cartaButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onCartasAction" prefWidth="125.0" text="Carta" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </JFXButton>
+                  <JFXButton fx:id="empleadosButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onEmpleadosAction" prefWidth="125.0" text="Empleados" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
