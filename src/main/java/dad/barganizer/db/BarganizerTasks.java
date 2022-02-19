@@ -115,7 +115,7 @@ public class BarganizerTasks {
 		}
 	};
 	
-	private Task<ObservableList<Empleado>> obtenerEmpleados = new Task<ObservableList<Empleado>>() {
+	private Task<ObservableList<Empleado>> obtenerEmpleadosTask = new Task<ObservableList<Empleado>>() {
 		
 		@Override
 		protected ObservableList<Empleado> call() throws Exception {
@@ -155,7 +155,7 @@ public class BarganizerTasks {
 		return obtenerPostresTask;
 	}
 	
-	public Task<ObservableList<Empleado>> getObtenerEmpleados() {
-		return obtenerEmpleados;
+	public Task<ObservableList<Empleado>> getObtenerEmpleadosTask() {
+		return obtenerEmpleadosTask;
 	}
 }
