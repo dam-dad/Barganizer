@@ -718,5 +718,31 @@ public class FuncionesDB {
 			return null;
 		}
 	}
+	
+	public static void modificarEmpleado(Session ses, Empleado e) {
+		try {
+
+			ses.beginTransaction();
+
+			Empleado emp = ses.get(Empleado.class, e.getId());
+			
+			emp.setNombre(e.getNombre());
+			emp.setApellidos(e.getApellidos());
+			emp.setGenero(e.getGenero());
+			emp.setFnac(e.getFnac());
+			emp.setFoto(e.getFoto());
+			emp.setPass(e.getPass());
+			emp.setFechaIngreso(e.getFechaIngreso());
+			
+			ses.update(emp);
+
+			ses.getTransaction().commit();
+		} catch (Exception ex) {
+			System.out.println("No se puede modificar el registro: " + ex.getMessage());
+			ses.getTransaction().rollback();
+		}
+
+
+	}
 
 }
