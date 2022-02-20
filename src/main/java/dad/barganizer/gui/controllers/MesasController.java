@@ -179,7 +179,7 @@ public class MesasController implements Initializable {
 		}
 		
 		catch (Exception e) {
-			App.error("Error", "Error al borrar", "Debe tener una mesa seleccionada.");
+			App.error("Error", "Error al modificar", "Debe tener una mesa seleccionada.");
 		}
 	}
 

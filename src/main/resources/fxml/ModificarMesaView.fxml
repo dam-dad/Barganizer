@@ -35,12 +35,12 @@
       </HBox>
       <HBox alignment="CENTER" spacing="5.0" VBox.vgrow="ALWAYS">
          <children>
-            <JFXButton fx:id="modificarButton" onAction="#onModificarAction" prefHeight="30.0" prefWidth="100.0" text="Modificar">
+            <JFXButton fx:id="modificarButton" onAction="#onModificarAction" prefHeight="30.0" prefWidth="150.0" text="Modificar" HBox.hgrow="ALWAYS">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </JFXButton>
-            <JFXButton fx:id="cancelarButton" onAction="#onCancelarAction" prefHeight="30.0" prefWidth="100.0" text="Cancelar">
+            <JFXButton fx:id="cancelarButton" onAction="#onCancelarAction" prefHeight="30.0" prefWidth="150.0" text="Cancelar" HBox.hgrow="ALWAYS">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
