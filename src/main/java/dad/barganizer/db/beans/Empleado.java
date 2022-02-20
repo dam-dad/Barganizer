@@ -1,5 +1,6 @@
 package dad.barganizer.db.beans;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,16 +26,17 @@ public class Empleado {
 	@Column(name = "genero", nullable = false, columnDefinition = "enum('Hombre', 'Mujer')")
 	private String genero;
 	@Column(name = "fnac", nullable = false, columnDefinition = "DATE")
-	private Date fnac;
+	private LocalDate fnac;
 	@Column(name = "fechaIngreso", nullable = false, columnDefinition = "DATE")
-	private Date fechaIngreso;
+	private LocalDate fechaIngreso;
 	@Column(name = "foto", nullable = true, columnDefinition = "MEDIUMBLOB")
 	private byte[] Foto;
-	
+
 	@Column(name = "pass", nullable = false, columnDefinition = "BLOB")
 	private byte[] Pass;
 
-	@OneToMany(mappedBy = "empleadoReserva", cascade = { CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "empleadoReserva", cascade = { CascadeType.PERSIST,
+			CascadeType.REFRESH }, fetch = FetchType.LAZY)
 	private List<Reserva> reservasList = new ArrayList<Reserva>();
 
 	public Empleado() {
@@ -64,19 +66,21 @@ public class Empleado {
 		this.genero = genero;
 	}
 
-	public Date getFnac() {
+	
+
+	public LocalDate getFnac() {
 		return fnac;
 	}
 
-	public void setFnac(Date fnac) {
+	public void setFnac(LocalDate fnac) {
 		this.fnac = fnac;
 	}
 
-	public Date getFechaIngreso() {
+	public LocalDate getFechaIngreso() {
 		return fechaIngreso;
 	}
 
-	public void setFechaIngreso(Date fechaIngreso) {
+	public void setFechaIngreso(LocalDate fechaIngreso) {
 		this.fechaIngreso = fechaIngreso;
 	}
 
@@ -111,7 +115,6 @@ public class Empleado {
 	public void setPass(byte[] pass) {
 		Pass = pass;
 	}
-	
-	
+
 
 }

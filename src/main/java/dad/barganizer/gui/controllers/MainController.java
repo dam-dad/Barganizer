@@ -37,6 +37,8 @@ public class MainController implements Initializable {
     // CONTROLADORES
     private InicioController inicioController = new InicioController();
     private MesasController mesasController = new MesasController();
+    private EmpleadoController empleadoController = new EmpleadoController();
+  
     
     //VISTA
     
@@ -123,7 +125,8 @@ public class MainController implements Initializable {
 
     @FXML
     void onEmpleadosAction(ActionEvent event) {
-
+    	
+    	root.setCenter(empleadoController.getView());
     }
 
     @FXML

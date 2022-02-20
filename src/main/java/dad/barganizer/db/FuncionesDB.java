@@ -1,5 +1,6 @@
 package dad.barganizer.db;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -255,8 +256,8 @@ public class FuncionesDB {
 		}
 	}
 
-	public static void insertarEmpleado(Session ses, String nombre, String apellido, String genero, Date nacimiento,
-			Date ingreso, byte[] foto) {
+	public static void insertarEmpleado(Session ses, String nombre, String apellido, String genero, LocalDate nacimiento,
+			LocalDate ingreso, byte[] foto) {
 
 		try {
 
