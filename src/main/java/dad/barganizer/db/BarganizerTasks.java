@@ -1,9 +1,11 @@
 package dad.barganizer.db;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dad.barganizer.App;
 import dad.barganizer.beansprop.ComandaProp;
+import dad.barganizer.beansprop.EmpleadoProp;
 import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.Comanda;
 import dad.barganizer.db.beans.Empleado;
@@ -116,15 +118,19 @@ public class BarganizerTasks {
 		}
 	};
 	
-	private Task<ObservableList<Empleado>> obtenerEmpleadosTask = new Task<ObservableList<Empleado>>() {
+	private Task<ObservableList<EmpleadoProp>> obtenerEmpleadosTask = new Task<ObservableList<EmpleadoProp>>() {
 		
 		@Override
-		protected ObservableList<Empleado> call() throws Exception {
+		protected ObservableList<EmpleadoProp> call() throws Exception {
 			List<Empleado> listaEmpleado = null;
 			
 			listaEmpleado = FuncionesDB.listarEmpleados(App.getBARGANIZERDB().getSes());
+			List<EmpleadoProp> listaProp = new ArrayList<>();
+			for (Empleado empleado : listaEmpleado) {
+				listaProp.add(new EmpleadoProp(empleado));
+			}
 			
-			return FXCollections.observableArrayList(listaEmpleado);
+			return FXCollections.observableArrayList(listaProp);
 		}
 	};
 	
@@ -169,7 +175,7 @@ public class BarganizerTasks {
 		return obtenerPostresTask;
 	}
 	
-	public Task<ObservableList<Empleado>> getObtenerEmpleadosTask() {
+	public Task<ObservableList<EmpleadoProp>> getObtenerEmpleadosTask() {
 		return obtenerEmpleadosTask;
 	}
 	

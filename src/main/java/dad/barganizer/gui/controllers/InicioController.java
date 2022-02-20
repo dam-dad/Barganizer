@@ -139,6 +139,13 @@ public class InicioController implements Initializable {
 				actualizarComandasMesaTask.setOnSucceeded(e -> {
 					
 					model.setComandasMesa(actualizarComandasMesaTask.getValue());
+					double preciototal = 0;
+					
+					for (ComandaProp c : model.getComandasMesa()) {
+						preciototal += (c.getCantidad()*c.getPrecioUnidad());
+					}
+					
+					totalComandaLabel.setText("Precio total: " + preciototal + "€");
 				});
 				
 				new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
@@ -240,6 +247,13 @@ public class InicioController implements Initializable {
 								model.setComandasMesa(actualizarComandasMesaTask.getValue());
 								comandasTable.itemsProperty().bind(model.comandasMesaProperty());
 								comandasTable.refresh();
+								double preciototal = 0;
+								
+								for (ComandaProp c : model.getComandasMesa()) {
+									preciototal += (c.getCantidad()*c.getPrecioUnidad());
+								}
+								
+								totalComandaLabel.setText("Precio total: " + preciototal + "€");
 							});
 							new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
 							
