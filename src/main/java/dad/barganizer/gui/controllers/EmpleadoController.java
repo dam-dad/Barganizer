@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -37,6 +38,7 @@ import java.util.ResourceBundle;
 import dad.barganizer.App;
 import dad.barganizer.beansprop.EmpleadoProp;
 import dad.barganizer.beansprop.Sexo;
+import dad.barganizer.db.BarganizerTasks;
 import dad.barganizer.db.FuncionesDB;
 import dad.barganizer.db.beans.Empleado;
 import dad.barganizer.gui.models.EmpleadoModel;
@@ -274,7 +276,24 @@ public class EmpleadoController implements Initializable{
 	    }
 
 	    private void listarEmpleados() {
-			// TODO Auto-generated method stub
+			
+	    	BarganizerTasks tarea = new BarganizerTasks();
+	    	
+	    	tarea.getObtenerEmpleadosTask().setOnSucceeded(e -> {
+	    		ObservableList<EmpleadoProp> emp = tarea.getObtenerEmpleadosTask().getValue();
+	    		lista.setValue(emp);
+	    		
+	    		for(EmpleadoProp empleado : emp) {
+		    		lista.getValue().add(new EmpleadoProp(empleado));
+		    	}
+		    	
+	    	}
+	    	
+	    
+	    	
+	    	
+	    			
+	    			);
 			
 		}
 
