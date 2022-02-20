@@ -3,6 +3,91 @@
     -fx-font-size: 1.1em;
     -fx-font-family: "Merienda";
 }
+
+/* ============================= */
+/* ESTILOS DE LA TABLA DE INICIO */
+.inicioTablaMesas {
+	-fx-background-color: #EFFBBA;
+}
+
+.cartaFlows {
+	-fx-font-family: "System";
+}
+
+.inicioTablaMesas .column-header-background{
+    -fx-background-color: linear-gradient(to bottom, #1dbbdd44, #93f9b944);
+    -fx-background-radius: 7px 7px 0px 0px;
+    -fx-background-insets: 0 11px 0 0;
+    -fx-padding: 0 0 5px 0;
+}
+
+.inicioTablaMesas .column-header {
+    -fx-background-color: transparent;
+}
+
+.inicioTablaMesas .table-column{
+	-fx-alignment: CENTER;
+	-fx-cell-size: 10;
+}
+.inicioTablaMesas .table-cell{
+    -fx-border-color: transparent;
+    -fx-padding: 2 0 2 10px;
+}
+.inicioTablaMesas .table-row-cell:hover {
+    -fx-background-color: #93f9b911;
+    -fx-text-background-color: red;
+}
+.inicioTablaMesas .table-row-cell:odd{
+    -fx-background-color: #93f9b911;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+.inicioTablaMesas .table-row-cell:even{
+    -fx-background-color: #1dbbdd11;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+
+.inicioTablaMesas .table-row-cell:highlighted {
+    -fx-background-color: #81c483;
+    -fx-background-radius: 15px;
+}
+
+.inicioTablaMesas .table-row-cell:selected {
+    -fx-background-color: #054C31;
+    -fx-border-color: transparent;
+    -fx-background-radius: 15px;
+}
+.inicioTablaMesas .table-row-cell:selected .text {
+	
+}
+
+.inicioTablaMesas .table-row-cell .text {
+	-fx-fill: red;
+}
+
+.inicioGenerarTicket .button{
+		-fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #449430 0.0%, #3C842A 100.0%),
+        #326625,
+        #7CEC64,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #7CEC64, #326625);
+        
+}
+
+.inicioAccionesColumn .button {
+	-fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #A55252 0.0%, #9C4949 100.0%),
+        #9C4949,
+        #E76161,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #E76161, #954242);
+}
+
+.inicioAccionesColumn .button .text {
+	-fx-fill: #F1D964;
+}
+/* ============================= */
+
 .button {
 	-fx-padding: 8.0 15.0 15.0 15.0;
     -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;

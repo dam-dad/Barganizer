@@ -30,10 +30,12 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 public class InicioController implements Initializable {
 
@@ -89,6 +91,9 @@ public class InicioController implements Initializable {
 	private TableColumn<ComandaProp, Number> cantidadColumn;
 
 	@FXML
+	private TableColumn<ComandaProp, Void> accionesColumn;
+
+	@FXML
 	private Button generarTicketButton;
 
 	@FXML
@@ -119,10 +124,15 @@ public class InicioController implements Initializable {
 			if (model.getTileMesaSeleccionada() != null) {
 				model.getTileMesaSeleccionada().setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
 				model.setTileMesaSeleccionada(null);
+				model.setComandasMesa(null);
 			}
 
 		});
 		
+		platosFlow.setOnMouseClicked(e -> {
+			
+		});
+
 		/* Listeners de los tipos de tiles seleccionables del modelo */
 
 		model.tileMesaSeleccionadaProperty().addListener((o, ov, nv) -> {
@@ -136,18 +146,7 @@ public class InicioController implements Initializable {
 				nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
 
 				redeclararTasks();
-				actualizarComandasMesaTask.setOnSucceeded(e -> {
-					
-					model.setComandasMesa(actualizarComandasMesaTask.getValue());
-					double preciototal = 0;
-					
-					for (ComandaProp c : model.getComandasMesa()) {
-						preciototal += (c.getCantidad()*c.getPrecioUnidad());
-					}
-					
-					totalComandaLabel.setText("Precio total: " + preciototal + "€");
-				});
-				
+
 				new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
 			}
 
@@ -167,11 +166,10 @@ public class InicioController implements Initializable {
 			}
 
 		});
-		
+
 		model.comandasMesaProperty().addListener((o, ov, nv) -> {
 			System.out.println("Comandas mesa --- OV: " + ov + "--- NV: " + nv);
 		});
-
 
 		cartaCombo.getSelectionModel().selectedItemProperty().addListener((o, ov, nv) -> {
 
@@ -189,8 +187,11 @@ public class InicioController implements Initializable {
 		precioColumn.setCellValueFactory(v -> v.getValue().precioUnidadProperty());
 		cantidadColumn.setCellValueFactory(v -> v.getValue().cantidadProperty());
 
+		// Botón en una columna
+		addButtonColumn();
+
 		comandasTable.itemsProperty().bind(model.comandasMesaProperty());
-		
+
 		inicializarEnBackground();
 
 	}
@@ -241,24 +242,24 @@ public class InicioController implements Initializable {
 							/* Actualizar la lista de comandas con la nueva comanda añadida */
 
 							redeclararTasks();
-							
-							actualizarComandasMesaTask.setOnSucceeded(eve -> {
-								
-								model.setComandasMesa(actualizarComandasMesaTask.getValue());
-								comandasTable.itemsProperty().bind(model.comandasMesaProperty());
-								comandasTable.refresh();
-								double preciototal = 0;
-								
-								for (ComandaProp c : model.getComandasMesa()) {
-									preciototal += (c.getCantidad()*c.getPrecioUnidad());
-								}
-								
-								totalComandaLabel.setText("Precio total: " + preciototal + "€");
-							});
+
+//							actualizarComandasMesaTask.setOnSucceeded(eve -> {
+//
+//								model.setComandasMesa(actualizarComandasMesaTask.getValue());
+//								comandasTable.itemsProperty().bind(model.comandasMesaProperty());
+//								comandasTable.refresh();
+//								double preciototal = 0;
+//
+//								for (ComandaProp c : model.getComandasMesa()) {
+//									preciototal += (c.getCantidad() * c.getPrecioUnidad());
+//								}
+//
+//								totalComandaLabel.setText("Precio total: " + preciototal + "€");
+//							});
 							new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
-							
+
 							new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
-							
+
 						}
 					}
 
@@ -416,46 +417,48 @@ public class InicioController implements Initializable {
 					(Mesa) model.getTileMesaSeleccionada().getReferencia());
 
 			List<ComandaProp> listaProps = new ArrayList<>();
-			
+
 			for (Comanda comanda : listaComandas) {
 				listaProps.add(new ComandaProp(comanda));
 			}
-			
+
 			return FXCollections.observableArrayList(listaProps);
 		}
 	};
-	
+
 	private Task<ObservableList<ComandaProp>> actualizarComandasMesaTask = new Task<ObservableList<ComandaProp>>() {
 
 		@Override
 		protected ObservableList<ComandaProp> call() throws Exception {
 
-			FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), (Mesa)model.getTileMesaSeleccionada().getReferencia(),
-					(Plato)model.getTileBebidaSeleccionada().getReferencia(), 1);
-			
+			FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(),
+					(Mesa) model.getTileMesaSeleccionada().getReferencia(),
+					(Plato) model.getTileBebidaSeleccionada().getReferencia(), 1);
+
 			List<Comanda> listaComandas = FuncionesDB.listarComandasMesa(App.getBARGANIZERDB().getSes(),
 					(Mesa) model.getTileMesaSeleccionada().getReferencia());
 
 			List<ComandaProp> listaProps = new ArrayList<>();
-			
+
 			for (Comanda comanda : listaComandas) {
 				listaProps.add(new ComandaProp(comanda));
 			}
-			
+
 			return FXCollections.observableArrayList(listaProps);
 		}
 	};
-	
+
 	private Task<Void> insertarComandaMesa = new Task<Void>() {
-		
+
 		@Override
 		protected Void call() throws Exception {
-			FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), (Mesa)model.getTileMesaSeleccionada().getReferencia(),
-					(Plato)model.getTileBebidaSeleccionada().getReferencia(), 1);
+			FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(),
+					(Mesa) model.getTileMesaSeleccionada().getReferencia(),
+					(Plato) model.getTileBebidaSeleccionada().getReferencia(), 1);
 			return null;
 		};
 	};
-	
+
 	private void redeclararTasks() {
 		actualizarComandasMesaTask = new Task<ObservableList<ComandaProp>>() {
 
@@ -466,27 +469,79 @@ public class InicioController implements Initializable {
 						(Mesa) model.getTileMesaSeleccionada().getReferencia());
 
 				List<ComandaProp> listaProps = new ArrayList<>();
-				
+
 				for (Comanda comanda : listaComandas) {
 					listaProps.add(new ComandaProp(comanda));
 				}
-				
+
 				return FXCollections.observableArrayList(listaProps);
 			}
 		};
 		
+		actualizarComandasMesaTask.setOnSucceeded(e -> {
+
+			model.setComandasMesa(actualizarComandasMesaTask.getValue());
+			double preciototal = 0;
+
+			for (ComandaProp c : model.getComandasMesa()) {
+				preciototal += (c.getCantidad() * c.getPrecioUnidad());
+			}
+
+			totalComandaLabel.setText("Precio total: " + preciototal + "€");
+		});
+
 		insertarComandaMesa = new Task<Void>() {
-			
+
 			@Override
 			protected Void call() throws Exception {
-				FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), (Mesa)model.getTileMesaSeleccionada().getReferencia(),
-						(Plato)model.getTileBebidaSeleccionada().getReferencia(), 1);
+				FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(),
+						(Mesa) model.getTileMesaSeleccionada().getReferencia(),
+						(Plato) model.getTileBebidaSeleccionada().getReferencia(), 1);
 				return null;
 			};
 		};
-		
-		
+
 	}
 
+	private void addButtonColumn() {
+		Callback<TableColumn<ComandaProp, Void>, TableCell<ComandaProp, Void>> cellFactory = new Callback<TableColumn<ComandaProp, Void>, TableCell<ComandaProp, Void>>() {
+
+			@Override
+			public TableCell<ComandaProp, Void> call(TableColumn<ComandaProp, Void> param) {
+				final TableCell<ComandaProp, Void> celda = new TableCell<ComandaProp, Void>() {
+
+					private Button quitarButton = new Button("Quitar");
+
+					
+					{
+						
+						quitarButton.setOnAction(e -> {
+							ComandaProp comanda = getTableView().getItems().get(getIndex());
+
+							// Acciones a realizar al clickear el botón
+							FuncionesDB.eliminarComanda(App.getBARGANIZERDB().getSes(), comanda.getReferencia());
+							redeclararTasks();
+							
+							new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
+						});
+						
+					}
+
+					@Override
+					public void updateItem(Void item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty) {
+							setGraphic(null);
+						} else {
+							setGraphic(quitarButton);
+						}
+					}
+				};
+
+				return celda;
+			}
+		};
+		accionesColumn.setCellFactory(cellFactory);
+	}
 
 }

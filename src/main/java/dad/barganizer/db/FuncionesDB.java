@@ -473,8 +473,13 @@ public class FuncionesDB {
 			sesion.beginTransaction();
 
 			Comanda c = sesion.get(Comanda.class, comanda.getId());
-			sesion.delete(c);
-
+			
+			if (comanda.getCantidad() > 1) {
+				c.setCantidad(c.getCantidad()-1);
+				sesion.save(c);
+			} else {
+				sesion.delete(c);
+			}
 			sesion.getTransaction().commit();
 
 		} catch (Exception e) {

@@ -6,9 +6,11 @@ import dad.barganizer.db.beans.Comanda;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.LongProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -19,12 +21,15 @@ public class ComandaProp extends RecursiveTreeObject<ComandaProp>{
 	private IntegerProperty cantidad = new SimpleIntegerProperty();
 	private DoubleProperty precioUnidad = new SimpleDoubleProperty();
 	private DoubleProperty precioTotal = new SimpleDoubleProperty();
+	
+	private ObjectProperty<Comanda> referencia = new SimpleObjectProperty<Comanda>();
 
 	public ComandaProp(Comanda c) {
 		setNumMesa(c.getMesa().getNumero());
 		setNombrePlato(c.getPlato().getNombre());
 		setCantidad(c.getCantidad());
 		setPrecioUnidad(c.getPlato().getPrecio());
+		setReferencia(c);
 	}
 
 	public final LongProperty numMesaProperty() {
@@ -91,4 +96,21 @@ public class ComandaProp extends RecursiveTreeObject<ComandaProp>{
 	public String toString() {
 		return "Comanda: [Mesa:" + getNumMesa() + ", Plato: " + getNombrePlato() + ", Cantidad: " + getCantidad() + "]";
 	}
+
+	public final ObjectProperty<Comanda> referenciaProperty() {
+		return this.referencia;
+	}
+	
+
+	public final Comanda getReferencia() {
+		return this.referenciaProperty().get();
+	}
+	
+
+	public final void setReferencia(final Comanda referencia) {
+		this.referenciaProperty().set(referencia);
+	}
+	
+	
+	
 }

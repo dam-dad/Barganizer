@@ -284,7 +284,7 @@ public class EmpleadoController implements Initializable{
 	    		lista.setValue(emp);
 	    		
 	    		for(EmpleadoProp empleado : emp) {
-		    		lista.getValue().add(new EmpleadoProp(empleado));
+//		    		lista.getValue().add(new EmpleadoProp(empleado));
 		    	}
 		    	
 	    	}
