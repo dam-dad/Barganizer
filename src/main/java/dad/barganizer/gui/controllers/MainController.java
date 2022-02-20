@@ -9,22 +9,18 @@ import com.jfoenix.controls.JFXButton;
 
 import eu.hansolo.tilesfx.Tile;
 import eu.hansolo.tilesfx.TileBuilder;
-import eu.hansolo.tilesfx.addons.HappinessIndicator;
-import eu.hansolo.tilesfx.addons.HappinessIndicator.Happiness;
 import eu.hansolo.tilesfx.Tile.SkinType;
 import eu.hansolo.tilesfx.Tile.TextSize;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class MainController implements Initializable {
@@ -38,6 +34,7 @@ public class MainController implements Initializable {
     private InicioController inicioController = new InicioController();
     private MesasController mesasController = new MesasController();
     private EmpleadoController empleadoController = new EmpleadoController();
+    private ReservasController reservasController = new ReservasController();
   
     
     //VISTA
@@ -135,7 +132,7 @@ public class MainController implements Initializable {
 			inicioController = new InicioController();
 			root.setCenter(inicioController.getView());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
     	
@@ -150,6 +147,8 @@ public class MainController implements Initializable {
 
     @FXML
     void onReservasAction(ActionEvent event) {
+    	
+    	root.setCenter(reservasController.getView());
 
     }
 
