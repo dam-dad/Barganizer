@@ -37,6 +37,8 @@ import java.util.ResourceBundle;
 import dad.barganizer.App;
 import dad.barganizer.beansprop.EmpleadoProp;
 import dad.barganizer.beansprop.Sexo;
+import dad.barganizer.db.FuncionesDB;
+import dad.barganizer.db.beans.Empleado;
 import dad.barganizer.gui.models.EmpleadoModel;
 
 import javafx.fxml.Initializable;
@@ -228,6 +230,19 @@ public class EmpleadoController implements Initializable{
 
 	    @FXML
 	    void OnEliminarAction(ActionEvent event) {
+	    	
+	    	try {
+	    		FuncionesDB.eliminarEmpleado(App.getBARGANIZERDB().getSes(), (Empleado)(listaEmpleados.getSelectionModel().getSelectedItems()));
+	    		App.info("COMPLETADO", "Borrado completado", "Se ha eliminado la mesa con éxito");
+	    		
+	    		listaEmpleados.refresh();
+	    		
+	    		listarEmpleados();
+	    		
+	    		
+	    	}catch (Exception e) {
+	    		App.error("Error", "Error al modificar", "Debe tener un empleado seleccionado.");
+			}
 
 	    	EmpleadoProp seleccionado = listaEmpleados.getSelectionModel().getSelectedItem();
 	    	
@@ -258,7 +273,12 @@ public class EmpleadoController implements Initializable{
 
 	    }
 
-	    @FXML
+	    private void listarEmpleados() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@FXML
 	    void onCambiarImagen(ActionEvent event) {
 
 	    	Stage stageChoser = new Stage();
