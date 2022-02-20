@@ -9,7 +9,9 @@ import com.jfoenix.controls.JFXButton;
 
 import dad.barganizer.App;
 import dad.barganizer.ImageTile;
+import dad.barganizer.db.BarganizerDB;
 import dad.barganizer.db.BarganizerTasks;
+import dad.barganizer.db.FuncionesDB;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.gui.models.MesasModel;
 import dad.barganizer.thread.HiloEjecutador;
@@ -78,17 +80,24 @@ public class MesasController implements Initializable {
 
 	@FXML
 	void onAñadirAction(ActionEvent event) {
+		
 		try {
+			
 			añadirMesaController = new AñadirMesaController();
+			
 		} catch (IOException e) {
-			e.printStackTrace();
+			
+			System.err.println("Error: "+e.getMessage());
 		}
+		
 		Stage stage = new Stage();
 		stage.setTitle("Añadir mesa");
 		stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.PNG")));
 		stage.setScene(new Scene(añadirMesaController.getView()));
+		
 		// Lineas opcionales pero que permiten que al tener una ventana abierta, la otra
 		// quede deshabilitada
+		
 		stage.initOwner(App.primaryStage);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.showAndWait();
@@ -96,6 +105,7 @@ public class MesasController implements Initializable {
 		mesasFlow.getChildren().clear();
 
 		listarMesas();
+		
 
 	}
 
@@ -106,6 +116,9 @@ public class MesasController implements Initializable {
 
 	@FXML
 	void onQuitarAction(ActionEvent event) {
+		
+
+		//FuncionesDB.eliminarMesa();
 
 	}
 
