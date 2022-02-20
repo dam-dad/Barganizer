@@ -67,6 +67,7 @@ public class App extends Application {
 	public static void error(String title, String header, String content) {
 		Alert error = new Alert(AlertType.ERROR);
 		Stage errorStage = (Stage)error.getDialogPane().getScene().getWindow();
+		errorStage.getScene().getStylesheets().setAll("/css/mainView.css");
 //		errorStage.getIcons().add(new Image(App.class.getResourceAsStream("")));
 		error.setTitle(title);
 		error.setHeaderText(header);
@@ -78,6 +79,7 @@ public class App extends Application {
 	public static void info(String title, String header, String content) {
 		Alert info = new Alert(AlertType.INFORMATION);
 		Stage infoStage = (Stage)info.getDialogPane().getScene().getWindow();
+		infoStage.getScene().getStylesheets().setAll("/css/mainView.css");
 //		infoStage.getIcons().add(new Image(App.class.getResourceAsStream("")));
 		info.setTitle(title);
 		info.setHeaderText(header);
@@ -89,6 +91,7 @@ public class App extends Application {
 	public static boolean confirm(String title, String header, String content) {
 		Alert confirm = new Alert(AlertType.CONFIRMATION);
 		Stage confirmStage = (Stage)confirm.getDialogPane().getScene().getWindow();
+		confirmStage.getScene().getStylesheets().setAll("/css/mainView.css");
 //		confirmStage.getIcons().add(new Image(App.class.getResourceAsStream("")));
 		confirm.setTitle(title);
 		confirm.setHeaderText(header);
@@ -101,7 +104,7 @@ public class App extends Application {
 	public static void warning(String title, String header, String content) {
 		Alert warning = new Alert(AlertType.WARNING);
 		Stage warningStage = (Stage)warning.getDialogPane().getScene().getWindow();
-		
+		warningStage.getScene().getStylesheets().setAll("/css/mainView.css");
 		warning.setTitle(title);
 		warning.setHeaderText(header);
 		warning.setContentText(content);
