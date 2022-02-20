@@ -128,8 +128,14 @@ public class MainController implements Initializable {
 
     @FXML
     void onInicioAction(ActionEvent event) {
+    	try {
+			inicioController = new InicioController();
+			root.setCenter(inicioController.getView());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	
-    	root.setCenter(inicioController.getView());
 
     }
 

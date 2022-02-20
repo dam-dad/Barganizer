@@ -138,6 +138,8 @@ public class BarganizerTasks {
 			return FXCollections.observableArrayList(listaMesas);
 		}
 	};
+	
+
 
 	public Task<ObservableList<Plato>> getInicializarBebidasTask() {
 		return inicializarBebidasTask;

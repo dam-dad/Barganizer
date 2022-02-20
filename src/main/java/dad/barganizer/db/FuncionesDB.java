@@ -230,7 +230,6 @@ public class FuncionesDB {
 	public static void insertarComanda(Session ses, Mesa mesa, Plato plato, int cantidad) {
 
 		try {
-
 			ses.beginTransaction();
 
 			List<Comanda> comprobacion = ses
@@ -239,7 +238,7 @@ public class FuncionesDB {
 
 			if (comprobacion != null && comprobacion.size() != 0) {
 				// Si existe un plato en la comanda, simplemente estableceremos su cantidad a +1
-				ses.createQuery("UPDATE Comanda SET cantidad = cantidad+1 WHERE plato = " + plato.getId()
+				ses.createNativeQuery("UPDATE comanda SET cantidad = cantidad+1 WHERE plato = " + plato.getId()
 						+ " AND mesa = " + mesa.getNumero()).executeUpdate();
 			} else {
 				Comanda comanda = new Comanda();
@@ -247,7 +246,7 @@ public class FuncionesDB {
 				comanda.setPlato(plato);
 				comanda.setCantidad(cantidad);
 
-				ses.save(comanda);
+				ses.persist(comanda);
 			}
 			ses.getTransaction().commit();
 

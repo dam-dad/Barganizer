@@ -2,19 +2,15 @@ package dad.barganizer.gui.controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.Semaphore;
 
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
 import dad.barganizer.App;
 import dad.barganizer.ImageTile;
 import dad.barganizer.beansprop.ComandaProp;
-import dad.barganizer.db.BarganizerDB;
 import dad.barganizer.db.BarganizerTasks;
 import dad.barganizer.db.FuncionesDB;
 import dad.barganizer.db.beans.Carta;
@@ -23,7 +19,6 @@ import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Plato;
 import dad.barganizer.gui.models.InicioModel;
 import dad.barganizer.thread.HiloEjecutador;
-import eu.hansolo.tilesfx.Tile;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -37,12 +32,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 public class InicioController implements Initializable {
 
@@ -87,16 +78,15 @@ public class InicioController implements Initializable {
 
 	@FXML
 	private TableView<ComandaProp> comandasTable;
-	
+
 	@FXML
 	private TableColumn<ComandaProp, String> platoColumn;
-	
+
 	@FXML
 	private TableColumn<ComandaProp, Number> precioColumn;
-	
+
 	@FXML
 	private TableColumn<ComandaProp, Number> cantidadColumn;
-	
 
 	@FXML
 	private Button generarTicketButton;
@@ -113,6 +103,7 @@ public class InicioController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
+		/** Eventos onMouseClicked de los FlowPanes **/
 		bebidasFlow.setOnMouseClicked(e -> {
 
 			if (model.getTileBebidaSeleccionada() != null) {
@@ -131,18 +122,27 @@ public class InicioController implements Initializable {
 			}
 
 		});
+		
+		/* Listeners de los tipos de tiles seleccionables del modelo */
 
 		model.tileMesaSeleccionadaProperty().addListener((o, ov, nv) -> {
-			System.out.println("OV: " + ov + " --- NV: "+ nv);
+			System.out.println("TileMesaSeleccionada --- OV: " + ov + " --- NV: " + nv);
 			if (ov != null && nv != null) {
-				Mesa ref = (Mesa) nv.getReferencia();
 				ov.setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
 			}
-			
+
 			if (nv != null) {
+				Mesa ref = (Mesa) nv.getReferencia();
 				nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
+
+				redeclararTasks();
+				actualizarComandasMesaTask.setOnSucceeded(e -> {
+					
+					model.setComandasMesa(actualizarComandasMesaTask.getValue());
+				});
+				
+				new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
 			}
-			
 
 		});
 
@@ -160,8 +160,11 @@ public class InicioController implements Initializable {
 			}
 
 		});
+		
+		model.comandasMesaProperty().addListener((o, ov, nv) -> {
+			System.out.println("Comandas mesa --- OV: " + ov + "--- NV: " + nv);
+		});
 
-		inicializarEnBackground();
 
 		cartaCombo.getSelectionModel().selectedItemProperty().addListener((o, ov, nv) -> {
 
@@ -172,16 +175,16 @@ public class InicioController implements Initializable {
 			}
 
 		});
-		
+
 		// Tabla de comandas
 		// Cell Values
 		platoColumn.setCellValueFactory(v -> v.getValue().nombrePlatoProperty());
 		precioColumn.setCellValueFactory(v -> v.getValue().precioUnidadProperty());
 		cantidadColumn.setCellValueFactory(v -> v.getValue().cantidadProperty());
-		
+
 		comandasTable.itemsProperty().bind(model.comandasMesaProperty());
 		
-		
+		inicializarEnBackground();
 
 	}
 
@@ -206,9 +209,11 @@ public class InicioController implements Initializable {
 				bebidasFlow.getChildren().add(new ImageTile(bebida));
 			}
 
-			/* Controlamos los nodos almacenados en las bebidas para asignarle a cada uno su método
-			 * onMouseClicked, que nos ayudará a añadir las bebidas a la comanda de una mesa previamente seleccionada
-			 * en el tabpane de mesas */
+			/*
+			 * Controlamos los nodos almacenados en las bebidas para asignarle a cada uno su
+			 * método onMouseClicked, que nos ayudará a añadir las bebidas a la comanda de
+			 * una mesa previamente seleccionada en el tabpane de mesas
+			 */
 			ObservableList<Node> l = bebidasFlow.getChildren();
 			for (Node node : l) {
 				node.setOnMouseClicked(ev -> {
@@ -218,14 +223,31 @@ public class InicioController implements Initializable {
 					model.getTileBebidaSeleccionada().setActive(true);
 					if (ev.getClickCount() >= 2) {
 						if (model.getTileMesaSeleccionada() == null) {
-							App.warning("Advertencia", "Mesa no seleccionada", "Debe seleccionar una mesa antes de añadir un producto en la comanda");
+							App.warning("Advertencia", "Mesa no seleccionada",
+									"Debe seleccionar una mesa antes de añadir un producto en la comanda");
 						} else {
-							Mesa mesaSeleccionada = (Mesa)model.getTileMesaSeleccionada().getReferencia();
-							FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), mesaSeleccionada, bebidaSeleccionada, 1);
+							System.out.println("Doble click");
+							Mesa mesaSeleccionada = (Mesa) model.getTileMesaSeleccionada().getReferencia();
+//							FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), mesaSeleccionada,
+//									bebidaSeleccionada, 1);
+
+							/* Actualizar la lista de comandas con la nueva comanda añadida */
+
+							redeclararTasks();
+							
+							actualizarComandasMesaTask.setOnSucceeded(eve -> {
+								
+								model.setComandasMesa(actualizarComandasMesaTask.getValue());
+								comandasTable.itemsProperty().bind(model.comandasMesaProperty());
+								comandasTable.refresh();
+							});
+							new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
+							
+							new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
 							
 						}
 					}
-					
+
 				});
 			}
 		});
@@ -242,19 +264,19 @@ public class InicioController implements Initializable {
 			model.setListaMesas(res);
 
 			for (Mesa mesa : res) {
-					mesasFlow.getChildren().add(new ImageTile(mesa));
+				mesasFlow.getChildren().add(new ImageTile(mesa));
 			}
-			
-			/* Obtenemso */
+
+			/* Obtenemos los nodos del flowpane de mesas */
 			ObservableList<Node> l = mesasFlow.getChildren();
 			for (Node node : l) {
 				node.setOnMouseClicked(ev -> {
 					ImageTile imageTileClickeado = (ImageTile) ev.getSource();
 					Mesa seleccionada = (Mesa) imageTileClickeado.getReferencia();
-					System.out.println(seleccionada.getNumero());
-					
+					System.out.println("Mesa seleccionada: " + seleccionada.getNumero());
+
 					model.setTileMesaSeleccionada(imageTileClickeado);
-					
+
 				});
 			}
 		});
@@ -370,5 +392,87 @@ public class InicioController implements Initializable {
 	void onGenerarTicketAction(ActionEvent event) {
 
 	}
+
+	private Task<ObservableList<ComandaProp>> obtenerComandasMesaTask = new Task<ObservableList<ComandaProp>>() {
+
+		@Override
+		protected ObservableList<ComandaProp> call() throws Exception {
+
+			List<Comanda> listaComandas = FuncionesDB.listarComandasMesa(App.getBARGANIZERDB().getSes(),
+					(Mesa) model.getTileMesaSeleccionada().getReferencia());
+
+			List<ComandaProp> listaProps = new ArrayList<>();
+			
+			for (Comanda comanda : listaComandas) {
+				listaProps.add(new ComandaProp(comanda));
+			}
+			
+			return FXCollections.observableArrayList(listaProps);
+		}
+	};
+	
+	private Task<ObservableList<ComandaProp>> actualizarComandasMesaTask = new Task<ObservableList<ComandaProp>>() {
+
+		@Override
+		protected ObservableList<ComandaProp> call() throws Exception {
+
+			FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), (Mesa)model.getTileMesaSeleccionada().getReferencia(),
+					(Plato)model.getTileBebidaSeleccionada().getReferencia(), 1);
+			
+			List<Comanda> listaComandas = FuncionesDB.listarComandasMesa(App.getBARGANIZERDB().getSes(),
+					(Mesa) model.getTileMesaSeleccionada().getReferencia());
+
+			List<ComandaProp> listaProps = new ArrayList<>();
+			
+			for (Comanda comanda : listaComandas) {
+				listaProps.add(new ComandaProp(comanda));
+			}
+			
+			return FXCollections.observableArrayList(listaProps);
+		}
+	};
+	
+	private Task<Void> insertarComandaMesa = new Task<Void>() {
+		
+		@Override
+		protected Void call() throws Exception {
+			FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), (Mesa)model.getTileMesaSeleccionada().getReferencia(),
+					(Plato)model.getTileBebidaSeleccionada().getReferencia(), 1);
+			return null;
+		};
+	};
+	
+	private void redeclararTasks() {
+		actualizarComandasMesaTask = new Task<ObservableList<ComandaProp>>() {
+
+			@Override
+			protected ObservableList<ComandaProp> call() throws Exception {
+				App.getBARGANIZERDB().resetSesion();
+				List<Comanda> listaComandas = FuncionesDB.listarComandasMesa(App.getBARGANIZERDB().getSes(),
+						(Mesa) model.getTileMesaSeleccionada().getReferencia());
+
+				List<ComandaProp> listaProps = new ArrayList<>();
+				
+				for (Comanda comanda : listaComandas) {
+					listaProps.add(new ComandaProp(comanda));
+				}
+				
+				return FXCollections.observableArrayList(listaProps);
+			}
+		};
+		
+		insertarComandaMesa = new Task<Void>() {
+			
+			@Override
+			protected Void call() throws Exception {
+				FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), (Mesa)model.getTileMesaSeleccionada().getReferencia(),
+						(Plato)model.getTileBebidaSeleccionada().getReferencia(), 1);
+				return null;
+			};
+		};
+		
+		
+	}
+
 
 }
