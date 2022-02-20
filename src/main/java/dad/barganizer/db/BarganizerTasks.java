@@ -3,7 +3,9 @@ package dad.barganizer.db;
 import java.util.List;
 
 import dad.barganizer.App;
+import dad.barganizer.beansprop.ComandaProp;
 import dad.barganizer.db.beans.Carta;
+import dad.barganizer.db.beans.Comanda;
 import dad.barganizer.db.beans.Empleado;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Plato;
@@ -136,8 +138,6 @@ public class BarganizerTasks {
 			return FXCollections.observableArrayList(listaMesas);
 		}
 	};
-	
-	
 
 	public Task<ObservableList<Plato>> getInicializarBebidasTask() {
 		return inicializarBebidasTask;

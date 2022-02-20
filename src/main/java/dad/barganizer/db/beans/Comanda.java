@@ -70,5 +70,12 @@ public class Comanda {
 	public void setMesa(Mesa mesa) {
 		this.mesa = mesa;
 	}
+
+	@Override
+	public String toString() {
+		return "Comanda [id=" + id + ", cantidad=" + cantidad + ", mesa=" + mesa + ", plato=" + plato + "]";
+	}
+	
+	
     
 }

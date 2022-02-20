@@ -233,18 +233,21 @@ public class FuncionesDB {
 
 			ses.beginTransaction();
 
-			List<Comanda> comprobacion = ses.createQuery("FROM Comanda where plato = " + plato.getId()).list();
-			
+			List<Comanda> comprobacion = ses
+					.createQuery("FROM Comanda where plato = " + plato.getId() + " AND mesa = " + mesa.getNumero())
+					.list();
+
 			if (comprobacion != null && comprobacion.size() != 0) {
 				// Si existe un plato en la comanda, simplemente estableceremos su cantidad a +1
-				ses.createQuery("UPDATE Comanda SET cantidad = cantidad+1 WHERE plato = " + plato.getId()).executeUpdate();
+				ses.createQuery("UPDATE Comanda SET cantidad = cantidad+1 WHERE plato = " + plato.getId()
+						+ " AND mesa = " + mesa.getNumero()).executeUpdate();
 			} else {
 				Comanda comanda = new Comanda();
 				comanda.setMesa(mesa);
 				comanda.setPlato(plato);
 				comanda.setCantidad(cantidad);
 
-				ses.persist(comanda);
+				ses.save(comanda);
 			}
 			ses.getTransaction().commit();
 
@@ -417,10 +420,10 @@ public class FuncionesDB {
 		try {
 
 			sesion.beginTransaction();
-			
+
 			Mesa m = sesion.get(Mesa.class, mesa.getNumero());
 			sesion.delete(m);
-			
+
 			sesion.getTransaction().commit();
 
 		} catch (Exception e) {
@@ -428,16 +431,16 @@ public class FuncionesDB {
 			sesion.getTransaction().rollback();
 		}
 	}
-	
+
 	public static void eliminarAlergeno(Session sesion, Alergeno alergeno) {
 
 		try {
 
 			sesion.beginTransaction();
-			
+
 			Alergeno a = sesion.get(Alergeno.class, alergeno.getId());
 			sesion.delete(a);
-			
+
 			sesion.getTransaction().commit();
 
 		} catch (Exception e) {
@@ -445,16 +448,16 @@ public class FuncionesDB {
 			sesion.getTransaction().rollback();
 		}
 	}
-	
+
 	public static void eliminarCarta(Session sesion, Carta carta) {
 
 		try {
 
 			sesion.beginTransaction();
-			
+
 			Carta c = sesion.get(Carta.class, carta.getId());
 			sesion.delete(c);
-			
+
 			sesion.getTransaction().commit();
 
 		} catch (Exception e) {
@@ -462,16 +465,16 @@ public class FuncionesDB {
 			sesion.getTransaction().rollback();
 		}
 	}
-	
+
 	public static void eliminarComanda(Session sesion, Comanda comanda) {
 
 		try {
 
 			sesion.beginTransaction();
-			
+
 			Comanda c = sesion.get(Comanda.class, comanda.getId());
 			sesion.delete(c);
-			
+
 			sesion.getTransaction().commit();
 
 		} catch (Exception e) {
@@ -479,17 +482,16 @@ public class FuncionesDB {
 			sesion.getTransaction().rollback();
 		}
 	}
-	
-	
+
 	public static void eliminarEmpleado(Session sesion, Empleado empleado) {
 
 		try {
 
 			sesion.beginTransaction();
-			
+
 			Empleado e = sesion.get(Empleado.class, empleado.getId());
 			sesion.delete(e);
-			
+
 			sesion.getTransaction().commit();
 
 		} catch (Exception e) {
@@ -497,16 +499,16 @@ public class FuncionesDB {
 			sesion.getTransaction().rollback();
 		}
 	}
-	
+
 	public static void eliminarPlato(Session sesion, Plato plato) {
 
 		try {
 
 			sesion.beginTransaction();
-			
+
 			Plato p = sesion.get(Plato.class, plato.getId());
 			sesion.delete(p);
-			
+
 			sesion.getTransaction().commit();
 
 		} catch (Exception e) {
@@ -514,18 +516,16 @@ public class FuncionesDB {
 			sesion.getTransaction().rollback();
 		}
 	}
-	
-	
 
 	public static void eliminarReserva(Session sesion, Reserva reserva) {
 
 		try {
 
 			sesion.beginTransaction();
-			
+
 			Reserva r = sesion.get(Reserva.class, reserva.getId());
 			sesion.delete(r);
-			
+
 			sesion.getTransaction().commit();
 
 		} catch (Exception e) {
@@ -533,16 +533,16 @@ public class FuncionesDB {
 			sesion.getTransaction().rollback();
 		}
 	}
-	
+
 	public static void eliminarTipo(Session sesion, TipoPlato tipo) {
 
 		try {
 
 			sesion.beginTransaction();
-			
+
 			TipoPlato t = sesion.get(TipoPlato.class, tipo.getId());
 			sesion.delete(t);
-			
+
 			sesion.getTransaction().commit();
 
 		} catch (Exception e) {
@@ -550,14 +550,13 @@ public class FuncionesDB {
 			sesion.getTransaction().rollback();
 		}
 	}
-	
-	
+
 	public static void modificarAlergeno(Session sesion, Alergeno alergeno) {
 
 		try {
 
 			sesion.beginTransaction();
-			
+
 			Alergeno a = sesion.get(Alergeno.class, alergeno.getId());
 			a.setNombre(alergeno.getNombre());
 			a.setIcono(alergeno.getIcono());
@@ -570,32 +569,32 @@ public class FuncionesDB {
 		}
 
 	}
-	
+
 	public static void modificarCarta(Session sesion, Carta carta) {
 
 		try {
 
 			sesion.beginTransaction();
-			
+
 			Carta c = sesion.get(Carta.class, carta.getId());
 			c.setNombre(carta.getNombre());
 			sesion.update(c);
 
 			sesion.getTransaction().commit();
-			
+
 		} catch (Exception e) {
 			System.out.println("No se puede modificar el registro: " + e.getMessage());
 			sesion.getTransaction().rollback();
 		}
 
 	}
-	
+
 	public static void modificarComanda(Session sesion, Comanda comanda) {
 
 		try {
 
 			sesion.beginTransaction();
-			
+
 			Comanda c = sesion.get(Comanda.class, comanda.getId());
 			c.setMesa(comanda.getMesa());
 			c.setCantidad(comanda.getCantidad());
@@ -609,13 +608,13 @@ public class FuncionesDB {
 		}
 
 	}
-	
+
 	public static void modificarMesa(Session sesion, Mesa mesa) {
 
 		try {
 
 			sesion.beginTransaction();
-			
+
 			Mesa m = sesion.get(Mesa.class, mesa.getNumero());
 			m.setCantPersonas(mesa.getCantPersonas());
 			m.setActiva(mesa.isActiva());
@@ -628,13 +627,13 @@ public class FuncionesDB {
 		}
 
 	}
-	
+
 	public static void modificarPlato(Session sesion, Plato plato) {
 
 		try {
 
 			sesion.beginTransaction();
-			
+
 			Plato p = sesion.get(Plato.class, plato.getId());
 			p.setNombre(plato.getNombre());
 			p.setFoto(plato.getFoto());
@@ -651,13 +650,13 @@ public class FuncionesDB {
 		}
 
 	}
-	
+
 	public static void modificarReserva(Session sesion, Reserva reserva) {
 
 		try {
 
 			sesion.beginTransaction();
-			
+
 			Reserva r = sesion.get(Reserva.class, reserva.getId());
 			r.setCantPersonas(reserva.getCantPersonas());
 			r.setEmpleadoReserva(reserva.getEmpleadoReserva());
@@ -672,13 +671,13 @@ public class FuncionesDB {
 		}
 
 	}
-	
+
 	public static void modificarTipo(Session sesion, TipoPlato tipo) {
 
 		try {
 
 			sesion.beginTransaction();
-			
+
 			TipoPlato t = sesion.get(TipoPlato.class, tipo.getId());
 			t.setNombre(tipo.getNombre());
 			sesion.update(t);
@@ -690,7 +689,6 @@ public class FuncionesDB {
 		}
 
 	}
-
 
 	public static List<Mesa> listarMesasActivas(Session ses) {
 
@@ -707,6 +705,18 @@ public class FuncionesDB {
 			return null;
 		}
 	}
-	
+
+	public static List<Comanda> listarComandasMesa(Session ses, Mesa m) {
+		try {
+			ses.beginTransaction();
+			List<Comanda> listaComandas = ses.createQuery("FROM Comanda WHERE mesa = " + m.getNumero()).list();
+			ses.getTransaction().commit();
+			return listaComandas;
+		} catch (Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			ses.getTransaction().rollback();
+			return null;
+		}
+	}
 
 }

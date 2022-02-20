@@ -87,4 +87,8 @@ public class ComandaProp extends RecursiveTreeObject<ComandaProp>{
 		this.precioTotalProperty().set(precioTotal);
 	}
 
+	@Override
+	public String toString() {
+		return "Comanda: [Mesa:" + getNumMesa() + ", Plato: " + getNombrePlato() + ", Cantidad: " + getCantidad() + "]";
+	}
 }

@@ -125,18 +125,19 @@
                            <children>
                               <ScrollPane fitToHeight="true" fitToWidth="true">
                                  <content>
-                                    <FlowPane fx:id="mesasFlow" hgap="5.0" vgap="5.0">
+                                    <FlowPane fx:id="mesasFlow" hgap="5.0" prefWrapLength="100.0" vgap="5.0">
                                        <padding>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </padding>
                                     </FlowPane>
                                  </content>
                               </ScrollPane>
-                              <TableView fx:id="comandasTable">
+                              <TableView fx:id="comandasTable" minHeight="300.0" minWidth="300.0" VBox.vgrow="ALWAYS">
                                 <columns>
                                   <TableColumn fx:id="platoColumn" prefWidth="75.0" text="Plato" />
                                   <TableColumn fx:id="precioColumn" prefWidth="75.0" text="Precio/unidad" />
                                     <TableColumn fx:id="cantidadColumn" prefWidth="75.0" text="Cantidad" />
+                                    <TableColumn fx:id="accionesColumn" prefWidth="75.0" text="Acciones" />
                                 </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
