@@ -3,10 +3,13 @@ package dad.barganizer.db;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
+import aed.hibernate.Habitaciones;
+import aed.hibernate.HabitacionesObservaciones;
 import dad.barganizer.App;
 import dad.barganizer.db.beans.Alergeno;
 import dad.barganizer.db.beans.Carta;
@@ -354,7 +357,7 @@ public class FuncionesDB {
 			return null;
 		}
 	}
-	
+
 	public static List<Plato> listarEntrantes(Session ses) {
 
 		try {
@@ -370,7 +373,7 @@ public class FuncionesDB {
 			return null;
 		}
 	}
-	
+
 	public static List<Plato> listarPostresCarta(Session ses, Carta c) {
 
 		try {
@@ -387,7 +390,7 @@ public class FuncionesDB {
 			return null;
 		}
 	}
-	
+
 	public static List<Plato> listarPostres(Session ses) {
 
 		try {
@@ -403,5 +406,283 @@ public class FuncionesDB {
 			return null;
 		}
 	}
+
+	public static void eliminarMesa(Session sesion, Mesa mesa) {
+
+		try {
+
+			sesion.beginTransaction();
+			
+			Mesa m = sesion.get(Mesa.class, mesa.getNumero());
+			sesion.delete(m);
+			
+			sesion.getTransaction().commit();
+
+		} catch (Exception e) {
+			System.out.println("No se puede eliminar el registro: " + e.getMessage());
+			sesion.getTransaction().rollback();
+		}
+	}
 	
+	public static void eliminarAlergeno(Session sesion, Alergeno alergeno) {
+
+		try {
+
+			sesion.beginTransaction();
+			
+			Alergeno a = sesion.get(Alergeno.class, alergeno.getId());
+			sesion.delete(a);
+			
+			sesion.getTransaction().commit();
+
+		} catch (Exception e) {
+			System.out.println("No se puede eliminar el registro: " + e.getMessage());
+			sesion.getTransaction().rollback();
+		}
+	}
+	
+	public static void eliminarCarta(Session sesion, Carta carta) {
+
+		try {
+
+			sesion.beginTransaction();
+			
+			Carta c = sesion.get(Carta.class, carta.getId());
+			sesion.delete(c);
+			
+			sesion.getTransaction().commit();
+
+		} catch (Exception e) {
+			System.out.println("No se puede eliminar el registro: " + e.getMessage());
+			sesion.getTransaction().rollback();
+		}
+	}
+	
+	public static void eliminarComanda(Session sesion, Comanda comanda) {
+
+		try {
+
+			sesion.beginTransaction();
+			
+			Comanda c = sesion.get(Comanda.class, comanda.getId());
+			sesion.delete(c);
+			
+			sesion.getTransaction().commit();
+
+		} catch (Exception e) {
+			System.out.println("No se puede eliminar el registro: " + e.getMessage());
+			sesion.getTransaction().rollback();
+		}
+	}
+	
+	
+	public static void eliminarEmpleado(Session sesion, Empleado empleado) {
+
+		try {
+
+			sesion.beginTransaction();
+			
+			Empleado e = sesion.get(Empleado.class, empleado.getId());
+			sesion.delete(e);
+			
+			sesion.getTransaction().commit();
+
+		} catch (Exception e) {
+			System.out.println("No se puede eliminar el registro: " + e.getMessage());
+			sesion.getTransaction().rollback();
+		}
+	}
+	
+	public static void eliminarPlato(Session sesion, Plato plato) {
+
+		try {
+
+			sesion.beginTransaction();
+			
+			Plato p = sesion.get(Plato.class, plato.getId());
+			sesion.delete(p);
+			
+			sesion.getTransaction().commit();
+
+		} catch (Exception e) {
+			System.out.println("No se puede eliminar el registro: " + e.getMessage());
+			sesion.getTransaction().rollback();
+		}
+	}
+	
+	
+	public static void eliminarReserva(Session sesion, Reserva reserva) {
+
+		try {
+
+			sesion.beginTransaction();
+			
+			Reserva r = sesion.get(Reserva.class, reserva.getId());
+			sesion.delete(r);
+			
+			sesion.getTransaction().commit();
+
+		} catch (Exception e) {
+			System.out.println("No se puede eliminar el registro: " + e.getMessage());
+			sesion.getTransaction().rollback();
+		}
+	}
+	
+	public static void eliminarTipo(Session sesion, TipoPlato tipo) {
+
+		try {
+
+			sesion.beginTransaction();
+			
+			TipoPlato t = sesion.get(TipoPlato.class, tipo.getId());
+			sesion.delete(t);
+			
+			sesion.getTransaction().commit();
+
+		} catch (Exception e) {
+			System.out.println("No se puede eliminar el registro: " + e.getMessage());
+			sesion.getTransaction().rollback();
+		}
+	}
+	
+	
+	public static void modificarAlergeno(Session sesion, Alergeno alergeno) {
+
+		try {
+
+			sesion.beginTransaction();
+			
+			Alergeno a = sesion.get(Alergeno.class, alergeno.getId());
+			a.setNombre(alergeno.getNombre());
+			a.setIcono(alergeno.getIcono());
+			sesion.update(a);
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			System.out.println("No se puede modificar el registro: " + e.getMessage());
+			sesion.getTransaction().rollback();
+		}
+
+	}
+	
+	public static void modificarCarta(Session sesion, Carta carta) {
+
+		try {
+
+			sesion.beginTransaction();
+			
+			Carta c = sesion.get(Carta.class, carta.getId());
+			c.setNombre(carta.getNombre());
+			sesion.update(c);
+
+			sesion.getTransaction().commit();
+			
+		} catch (Exception e) {
+			System.out.println("No se puede modificar el registro: " + e.getMessage());
+			sesion.getTransaction().rollback();
+		}
+
+	}
+	
+	public static void modificarComanda(Session sesion, Comanda comanda) {
+
+		try {
+
+			sesion.beginTransaction();
+			
+			Comanda c = sesion.get(Comanda.class, comanda.getId());
+			c.setMesa(comanda.getMesa());
+			c.setCantidad(comanda.getCantidad());
+			c.setPlato(comanda.getPlato());
+			sesion.update(c);
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			System.out.println("No se puede modificar el registro: " + e.getMessage());
+			sesion.getTransaction().rollback();
+		}
+
+	}
+	
+	public static void modificarMesa(Session sesion, Mesa mesa) {
+
+		try {
+
+			sesion.beginTransaction();
+			
+			Mesa m = sesion.get(Mesa.class, mesa.getNumero());
+			m.setCantPersonas(mesa.getCantPersonas());
+			m.setActiva(mesa.isActiva());
+			sesion.update(m);
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			System.out.println("No se puede modificar el registro: " + e.getMessage());
+			sesion.getTransaction().rollback();
+		}
+
+	}
+	
+	public static void modificarPlato(Session sesion, Plato plato) {
+
+		try {
+
+			sesion.beginTransaction();
+			
+			Plato p = sesion.get(Plato.class, plato.getId());
+			p.setNombre(plato.getNombre());
+			p.setFoto(plato.getFoto());
+			p.setPrecio(plato.getPrecio());
+			p.setTipoPlato(plato.getTipoPlato());
+			p.setCarta(plato.getCarta());
+			p.setAlergenos(plato.getAlergenos());
+			sesion.update(p);
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			System.out.println("No se puede modificar el registro: " + e.getMessage());
+			sesion.getTransaction().rollback();
+		}
+
+	}
+	
+	public static void modificarReserva(Session sesion, Reserva reserva) {
+
+		try {
+
+			sesion.beginTransaction();
+			
+			Reserva r = sesion.get(Reserva.class, reserva.getId());
+			r.setCantPersonas(reserva.getCantPersonas());
+			r.setEmpleadoReserva(reserva.getEmpleadoReserva());
+			r.setFecha(reserva.getFecha());
+			r.setMesaReserva(reserva.getMesaReserva());
+			sesion.update(r);
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			System.out.println("No se puede modificar el registro: " + e.getMessage());
+			sesion.getTransaction().rollback();
+		}
+
+	}
+	
+	public static void modificarTipo(Session sesion, TipoPlato tipo) {
+
+		try {
+
+			sesion.beginTransaction();
+			
+			TipoPlato t = sesion.get(TipoPlato.class, tipo.getId());
+			t.setNombre(tipo.getNombre());
+			sesion.update(t);
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			System.out.println("No se puede modificar el registro: " + e.getMessage());
+			sesion.getTransaction().rollback();
+		}
+
+	}
+
 }
