@@ -426,7 +426,7 @@ public class FuncionesDB {
 			sesion.getTransaction().commit();
 
 		} catch (Exception e) {
-			System.out.println("No se puede eliminar el registro: " + e.getMessage());
+			App.error("Error", "Error al borrar", "No puede borrar una mesa con una comanda activa.");
 			sesion.getTransaction().rollback();
 		}
 	}

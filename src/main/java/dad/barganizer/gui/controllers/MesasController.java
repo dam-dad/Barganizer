@@ -3,13 +3,10 @@ package dad.barganizer.gui.controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.concurrent.Semaphore;
-
 import com.jfoenix.controls.JFXButton;
 
 import dad.barganizer.App;
 import dad.barganizer.ImageTile;
-import dad.barganizer.db.BarganizerDB;
 import dad.barganizer.db.BarganizerTasks;
 import dad.barganizer.db.FuncionesDB;
 import dad.barganizer.db.beans.Mesa;
@@ -23,7 +20,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -73,9 +69,20 @@ public class MesasController implements Initializable {
 				Mesa ref = (Mesa)nv.getReferencia();
 				ov.setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
 			}
+			if (nv != null) {
 			nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
+			}
+		});
+		
+		mesasFlow.setOnMouseClicked(e -> {
+
+			if (model.getMesaSeleccionada() != null) {
+				model.getMesaSeleccionada().setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
+				model.setMesaSeleccionada(null);
+			}
 
 		});
+		
 	}
 
 	@FXML
@@ -85,7 +92,7 @@ public class MesasController implements Initializable {
 			
 			añadirMesaController = new AñadirMesaController();
 			
-		} catch (IOException e) {
+		} catch (Exception e) {
 			
 			System.err.println("Error: "+e.getMessage());
 		}
@@ -94,6 +101,7 @@ public class MesasController implements Initializable {
 		stage.setTitle("Añadir mesa");
 		stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.PNG")));
 		stage.setScene(new Scene(añadirMesaController.getView()));
+		stage.getScene().getStylesheets().setAll("/css/mainView.css");
 		
 		// Lineas opcionales pero que permiten que al tener una ventana abierta, la otra
 		// quede deshabilitada
@@ -111,15 +119,67 @@ public class MesasController implements Initializable {
 
 	@FXML
 	void onModificarAction(ActionEvent event) {
+		
+		try {
+			
+			ModificarMesaController modificarMesaController = new ModificarMesaController();
+			Mesa mesa = (Mesa)(model.getMesaSeleccionada().getReferencia());
+			
+			modificarMesaController.seleccionado.set(mesa);
+			modificarMesaController.setCantidadText(mesa.getCantPersonas());
+			modificarMesaController.setIdLabel(String.valueOf(mesa.getNumero()));
+			modificarMesaController.setActivaCheck(mesa.isActiva());
+			
+			System.out.println(modificarMesaController.seleccionado.get().getNumero());
+			System.out.println(modificarMesaController.seleccionado.get().getCantPersonas());
+			System.out.println(modificarMesaController.seleccionado.get().isActiva());
+			
+			
+			Stage stage = new Stage();
+			stage.setTitle("Modificar mesa");
+			stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.PNG")));
+			stage.setScene(new Scene(modificarMesaController.getView()));
+			stage.getScene().getStylesheets().setAll("/css/mainView.css");
+			
+			// Lineas opcionales pero que permiten que al tener una ventana abierta, la otra
+			// quede deshabilitada
+			
+			stage.initOwner(App.primaryStage);
+			stage.initModality(Modality.APPLICATION_MODAL);
+			
+			stage.showAndWait();
+
+			mesasFlow.getChildren().clear();
+
+			listarMesas();
+			
+			
+		} catch (Exception e) {
+			
+			App.error("Error", "Error al borrar", "Debe tener una mesa seleccionada.");
+		}
 
 	}
 
 	@FXML
 	void onQuitarAction(ActionEvent event) {
 		
-
-		//FuncionesDB.eliminarMesa();
-
+		try {
+			
+		FuncionesDB.eliminarMesa(App.getBARGANIZERDB().getSes(), (Mesa)(model.getMesaSeleccionada().getReferencia()));
+		App.info("COMPLETADO", "Borrado completado", "Se ha quitado la mesa con éxito");
+		
+		mesasFlow.getChildren().clear();
+		
+		listarMesas();
+		
+		model.setMesaSeleccionada(null);
+		
+		}
+		
+		catch (Exception e) {
+			App.error("Error", "Error al borrar", "Debe tener una mesa seleccionada.");
+		}
 	}
 
 	public void listarMesas() {
@@ -156,5 +216,8 @@ public class MesasController implements Initializable {
 		new HiloEjecutador(App.semaforo, tareas.getInicializarMesasTask()).start();
 
 	}
-
+	
+	public MesasModel getModel() {
+		return model;
+	}
 }
