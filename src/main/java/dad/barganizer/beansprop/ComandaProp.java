@@ -1,5 +1,7 @@
 package dad.barganizer.beansprop;
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
 import dad.barganizer.db.beans.Comanda;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -10,7 +12,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class ComandaProp {
+public class ComandaProp extends RecursiveTreeObject<ComandaProp>{
 
 	private LongProperty numMesa = new SimpleLongProperty();
 	private StringProperty nombrePlato = new SimpleStringProperty();

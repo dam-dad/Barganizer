@@ -9,13 +9,16 @@ import java.util.concurrent.Semaphore;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
 import dad.barganizer.App;
 import dad.barganizer.ImageTile;
+import dad.barganizer.beansprop.ComandaProp;
 import dad.barganizer.db.BarganizerDB;
 import dad.barganizer.db.BarganizerTasks;
 import dad.barganizer.db.FuncionesDB;
 import dad.barganizer.db.beans.Carta;
+import dad.barganizer.db.beans.Comanda;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Plato;
 import dad.barganizer.gui.models.InicioModel;
@@ -32,6 +35,10 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
@@ -79,7 +86,17 @@ public class InicioController implements Initializable {
 	private VBox view;
 
 	@FXML
-	private JFXTreeTableView<?> comandasTable;
+	private TableView<ComandaProp> comandasTable;
+	
+	@FXML
+	private TableColumn<ComandaProp, String> platoColumn;
+	
+	@FXML
+	private TableColumn<ComandaProp, Number> precioColumn;
+	
+	@FXML
+	private TableColumn<ComandaProp, Number> cantidadColumn;
+	
 
 	@FXML
 	private Button generarTicketButton;
@@ -100,6 +117,8 @@ public class InicioController implements Initializable {
 
 			if (model.getTileBebidaSeleccionada() != null) {
 				model.getTileBebidaSeleccionada().setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
+				model.getTileBebidaSeleccionada().setActive(false);
+				model.setTileBebidaSeleccionada(null);
 			}
 
 		});
@@ -108,6 +127,7 @@ public class InicioController implements Initializable {
 
 			if (model.getTileMesaSeleccionada() != null) {
 				model.getTileMesaSeleccionada().setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
+				model.setTileMesaSeleccionada(null);
 			}
 
 		});
@@ -117,9 +137,12 @@ public class InicioController implements Initializable {
 			if (ov != null && nv != null) {
 				Mesa ref = (Mesa) nv.getReferencia();
 				ov.setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
-
 			}
-			nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
+			
+			if (nv != null) {
+				nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
+			}
+			
 
 		});
 
@@ -149,6 +172,16 @@ public class InicioController implements Initializable {
 			}
 
 		});
+		
+		// Tabla de comandas
+		// Cell Values
+		platoColumn.setCellValueFactory(v -> v.getValue().nombrePlatoProperty());
+		precioColumn.setCellValueFactory(v -> v.getValue().precioUnidadProperty());
+		cantidadColumn.setCellValueFactory(v -> v.getValue().cantidadProperty());
+		
+		comandasTable.itemsProperty().bind(model.comandasMesaProperty());
+		
+		
 
 	}
 
@@ -181,15 +214,15 @@ public class InicioController implements Initializable {
 				node.setOnMouseClicked(ev -> {
 					ImageTile imageTileClickeado = (ImageTile) ev.getSource();
 					Plato bebidaSeleccionada = (Plato) imageTileClickeado.getReferencia();
-					
-					
 					model.setTileBebidaSeleccionada(imageTileClickeado);
+					model.getTileBebidaSeleccionada().setActive(true);
 					if (ev.getClickCount() >= 2) {
 						if (model.getTileMesaSeleccionada() == null) {
 							App.warning("Advertencia", "Mesa no seleccionada", "Debe seleccionar una mesa antes de añadir un producto en la comanda");
 						} else {
 							Mesa mesaSeleccionada = (Mesa)model.getTileMesaSeleccionada().getReferencia();
-//							FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), bebidaSeleccionada, mesaSeleccionada, 1);
+							FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), mesaSeleccionada, bebidaSeleccionada, 1);
+							
 						}
 					}
 					
@@ -204,8 +237,8 @@ public class InicioController implements Initializable {
 
 		// Declaración de métodos onSucceed y onFailed de la tarea de inicialización de
 		// mesas
-		tareas.getInicializarMesasTask().setOnSucceeded(e -> {
-			ObservableList<Mesa> res = tareas.getInicializarMesasTask().getValue();
+		tareas.getObtenerMesasActivasTask().setOnSucceeded(e -> {
+			ObservableList<Mesa> res = tareas.getObtenerMesasActivasTask().getValue();
 			model.setListaMesas(res);
 
 			for (Mesa mesa : res) {
@@ -252,7 +285,7 @@ public class InicioController implements Initializable {
 
 		// Hilo ejecutador de tareas
 		new HiloEjecutador(App.semaforo, tareas.getInicializarBebidasTask()).start();
-		new HiloEjecutador(App.semaforo, tareas.getInicializarMesasTask()).start();
+		new HiloEjecutador(App.semaforo, tareas.getObtenerMesasActivasTask()).start();
 		new HiloEjecutador(App.semaforo, tareas.getInicializarCartaTask()).start();
 
 	}

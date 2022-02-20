@@ -1,6 +1,7 @@
 package dad.barganizer.gui.models;
 
 import dad.barganizer.ImageTile;
+import dad.barganizer.beansprop.ComandaProp;
 import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Plato;
@@ -10,6 +11,7 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TreeItem;
 
 public class InicioModel {
 
@@ -22,6 +24,8 @@ public class InicioModel {
 
 	private ObjectProperty<ImageTile> tileBebidaSeleccionada = new SimpleObjectProperty<ImageTile>();
 	private ObjectProperty<ImageTile> tileMesaSeleccionada = new SimpleObjectProperty<ImageTile>();
+
+	private ListProperty<ComandaProp> comandasMesa = new SimpleListProperty<ComandaProp>();
 
 	public final ListProperty<Plato> listaBebidasProperty() {
 		return this.listaBebidas;
@@ -117,6 +121,18 @@ public class InicioModel {
 
 	public final void setTileMesaSeleccionada(final ImageTile tileMesaSeleccionada) {
 		this.tileMesaSeleccionadaProperty().set(tileMesaSeleccionada);
+	}
+
+	public final ListProperty<ComandaProp> comandasMesaProperty() {
+		return this.comandasMesa;
+	}
+
+	public final ObservableList<ComandaProp> getComandasMesa() {
+		return this.comandasMesaProperty().get();
+	}
+
+	public final void setComandasMesa(final ObservableList<ComandaProp> comandasMesa) {
+		this.comandasMesaProperty().set(comandasMesa);
 	}
 
 }

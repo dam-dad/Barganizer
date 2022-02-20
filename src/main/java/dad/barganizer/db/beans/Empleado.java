@@ -30,6 +30,9 @@ public class Empleado {
 	private Date fechaIngreso;
 	@Column(name = "foto", nullable = true, columnDefinition = "MEDIUMBLOB")
 	private byte[] Foto;
+	
+	@Column(name = "pass", nullable = false, columnDefinition = "BLOB")
+	private byte[] Pass;
 
 	@OneToMany(mappedBy = "empleadoReserva", cascade = { CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
 	private List<Reserva> reservasList = new ArrayList<Reserva>();
@@ -99,6 +102,14 @@ public class Empleado {
 
 	public void setReservasList(List<Reserva> reservasList) {
 		this.reservasList = reservasList;
+	}
+
+	public byte[] getPass() {
+		return Pass;
+	}
+
+	public void setPass(byte[] pass) {
+		Pass = pass;
 	}
 	
 	

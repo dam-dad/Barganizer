@@ -7,10 +7,8 @@ import java.util.Scanner;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-
-import aed.hibernate.Habitaciones;
-import aed.hibernate.HabitacionesObservaciones;
 import dad.barganizer.App;
+import dad.barganizer.beansprop.ComandaProp;
 import dad.barganizer.db.beans.Alergeno;
 import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.Comanda;
@@ -235,12 +233,19 @@ public class FuncionesDB {
 
 			ses.beginTransaction();
 
-			Comanda comanda = new Comanda();
-			comanda.setMesa(mesa);
-			comanda.setPlato(plato);
-			comanda.setCantidad(cantidad);
+			List<Comanda> comprobacion = ses.createQuery("FROM Comanda where plato = " + plato.getId()).list();
+			
+			if (comprobacion != null && comprobacion.size() != 0) {
+				// Si existe un plato en la comanda, simplemente estableceremos su cantidad a +1
+				ses.createQuery("UPDATE Comanda SET cantidad = cantidad+1 WHERE plato = " + plato.getId()).executeUpdate();
+			} else {
+				Comanda comanda = new Comanda();
+				comanda.setMesa(mesa);
+				comanda.setPlato(plato);
+				comanda.setCantidad(cantidad);
 
-			ses.persist(comanda);
+				ses.persist(comanda);
+			}
 			ses.getTransaction().commit();
 
 		} catch (Exception e) {
@@ -511,6 +516,7 @@ public class FuncionesDB {
 	}
 	
 	
+
 	public static void eliminarReserva(Session sesion, Reserva reserva) {
 
 		try {
@@ -684,5 +690,23 @@ public class FuncionesDB {
 		}
 
 	}
+
+
+	public static List<Mesa> listarMesasActivas(Session ses) {
+
+		try {
+			ses.beginTransaction();
+			Query consulta = ses.createQuery("from Mesa where activa = true");
+			List<Mesa> mesasList = consulta.getResultList();
+			ses.getTransaction().commit();
+			return mesasList;
+
+		} catch (Exception e) {
+			System.err.println("Error: " + e.getMessage());
+			ses.getTransaction().rollback();
+			return null;
+		}
+	}
+	
 
 }

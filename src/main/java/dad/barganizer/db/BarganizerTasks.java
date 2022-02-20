@@ -125,6 +125,19 @@ public class BarganizerTasks {
 			return FXCollections.observableArrayList(listaEmpleado);
 		}
 	};
+	
+	private Task<ObservableList<Mesa>> obtenerMesasActivasTask = new Task<ObservableList<Mesa>>() {
+
+		@Override
+		protected ObservableList<Mesa> call() throws Exception {
+
+			List<Mesa> listaMesas = FuncionesDB.listarMesasActivas(App.getBARGANIZERDB().getSes());
+
+			return FXCollections.observableArrayList(listaMesas);
+		}
+	};
+	
+	
 
 	public Task<ObservableList<Plato>> getInicializarBebidasTask() {
 		return inicializarBebidasTask;
@@ -156,5 +169,9 @@ public class BarganizerTasks {
 	
 	public Task<ObservableList<Empleado>> getObtenerEmpleadosTask() {
 		return obtenerEmpleadosTask;
+	}
+	
+	public Task<ObservableList<Mesa>> getObtenerMesasActivasTask() {
+		return obtenerMesasActivasTask;
 	}
 }
