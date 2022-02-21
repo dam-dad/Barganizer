@@ -22,7 +22,7 @@ public class InicioModel {
 	private ListProperty<Plato> listaEntrantes = new SimpleListProperty<Plato>(FXCollections.observableArrayList());
 	private ListProperty<Plato> listaPostres = new SimpleListProperty<Plato>(FXCollections.observableArrayList());
 
-	private ObjectProperty<ImageTile> tileBebidaSeleccionada = new SimpleObjectProperty<ImageTile>();
+	private ObjectProperty<ImageTile> tilePlatoSeleccionado = new SimpleObjectProperty<ImageTile>();
 	private ObjectProperty<ImageTile> tileMesaSeleccionada = new SimpleObjectProperty<ImageTile>();
 
 	private ListProperty<ComandaProp> comandasMesa = new SimpleListProperty<ComandaProp>();
@@ -99,16 +99,16 @@ public class InicioModel {
 		this.listaPostresProperty().set(listaPostres);
 	}
 
-	public final ObjectProperty<ImageTile> tileBebidaSeleccionadaProperty() {
-		return this.tileBebidaSeleccionada;
+	public final ObjectProperty<ImageTile> tilePlatoSeleccionadoProperty() {
+		return this.tilePlatoSeleccionado;
 	}
 
-	public final ImageTile getTileBebidaSeleccionada() {
-		return this.tileBebidaSeleccionadaProperty().get();
+	public final ImageTile getTilePlatoSeleccionado() {
+		return this.tilePlatoSeleccionadoProperty().get();
 	}
 
-	public final void setTileBebidaSeleccionada(final ImageTile tileBebidaSeleccionada) {
-		this.tileBebidaSeleccionadaProperty().set(tileBebidaSeleccionada);
+	public final void setTilePlatoSeleccionado(final ImageTile tilePlatoSeleccionado) {
+		this.tilePlatoSeleccionadoProperty().set(tilePlatoSeleccionado);
 	}
 
 	public final ObjectProperty<ImageTile> tileMesaSeleccionadaProperty() {

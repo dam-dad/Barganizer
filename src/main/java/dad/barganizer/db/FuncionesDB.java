@@ -746,8 +746,20 @@ public class FuncionesDB {
 			System.out.println("No se puede modificar el registro: " + ex.getMessage());
 			ses.getTransaction().rollback();
 		}
-
-
+	}
+	
+	public static void eliminarComandasMesa(Session ses, Mesa m) {
+		try {
+			
+			ses.beginTransaction();
+			ses.createQuery("DELETE FROM Comanda WHERE mesa = " + m.getNumero()).executeUpdate();
+			
+			ses.getTransaction().commit();
+			
+		} catch (Exception ex) {
+			System.err.println("Hubo un error al eliminar las comandas de la mesa: ");
+			ses.getTransaction().rollback();
+		}
 	}
 
 }

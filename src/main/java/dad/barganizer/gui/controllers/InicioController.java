@@ -1,9 +1,14 @@
 package dad.barganizer.gui.controllers;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXComboBox;
@@ -18,7 +23,10 @@ import dad.barganizer.db.beans.Comanda;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Plato;
 import dad.barganizer.gui.models.InicioModel;
+import dad.barganizer.reports.ComandasDataSource;
 import dad.barganizer.thread.HiloEjecutador;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanExpression;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -36,8 +44,16 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 public class InicioController implements Initializable {
+
+	private static final String JRXML_TICKET_MODEL = "/report_models/Ticket.jrxml";
 
 	// Models
 	private InicioModel model = new InicioModel();
@@ -111,10 +127,10 @@ public class InicioController implements Initializable {
 		/** Eventos onMouseClicked de los FlowPanes **/
 		bebidasFlow.setOnMouseClicked(e -> {
 
-			if (model.getTileBebidaSeleccionada() != null) {
-				model.getTileBebidaSeleccionada().setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
-				model.getTileBebidaSeleccionada().setActive(false);
-				model.setTileBebidaSeleccionada(null);
+			if (model.getTilePlatoSeleccionado() != null) {
+				model.getTilePlatoSeleccionado().setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
+				model.getTilePlatoSeleccionado().setActive(false);
+				model.setTilePlatoSeleccionado(null);
 			}
 
 		});
@@ -128,9 +144,13 @@ public class InicioController implements Initializable {
 			}
 
 		});
-		
+
 		platosFlow.setOnMouseClicked(e -> {
-			
+			if (model.getTilePlatoSeleccionado() != null) {
+				model.getTilePlatoSeleccionado().setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
+				model.getTilePlatoSeleccionado().setActive(false);
+				model.setTilePlatoSeleccionado(null);
+			}
 		});
 
 		/* Listeners de los tipos de tiles seleccionables del modelo */
@@ -150,16 +170,21 @@ public class InicioController implements Initializable {
 				new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
 			}
 
+			if (nv == null) {
+				ov.setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
+				totalComandaLabel.setText("Precio total: 0.0€");
+			}
+
 		});
 
-		model.tileBebidaSeleccionadaProperty().addListener((o, ov, nv) -> {
-			System.out.println("TILE-BEBIDASELEC-: OV: " + ov + " --- NV:" + nv);
-			// Si no había ningún tile de bebida seleccionado previamente
+		model.tilePlatoSeleccionadoProperty().addListener((o, ov, nv) -> {
+			System.out.println("TILE-PLATO-SELEC-: OV: " + ov + " --- NV:" + nv);
+			// Si no había ningún tile de plato seleccionado previamente
 			if (ov == null && nv != null) {
 				nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
 			}
 
-			// Si se cambia de tile de bebida seleccionado
+			// Si se cambia de tile de plato seleccionado
 			if (ov != null && nv != null) {
 				ov.setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
 				nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
@@ -191,6 +216,11 @@ public class InicioController implements Initializable {
 		addButtonColumn();
 
 		comandasTable.itemsProperty().bind(model.comandasMesaProperty());
+		BooleanExpression expr = Bindings
+				.when(model.comandasMesaProperty().isNull().or(model.comandasMesaProperty().emptyProperty())).then(true)
+				.otherwise(false);
+
+		generarTicketButton.disableProperty().bind(expr);
 
 		inicializarEnBackground();
 
@@ -220,51 +250,12 @@ public class InicioController implements Initializable {
 			/*
 			 * Controlamos los nodos almacenados en las bebidas para asignarle a cada uno su
 			 * método onMouseClicked, que nos ayudará a añadir las bebidas a la comanda de
-			 * una mesa previamente seleccionada en el tabpane de mesas
+			 * una mesa previamente seleccionada en el tabpane de mesas.
+			 * 
+			 * Realizaremos el mismo procedimiento con el resto de tipos de platos
 			 */
-			ObservableList<Node> l = bebidasFlow.getChildren();
-			for (Node node : l) {
-				node.setOnMouseClicked(ev -> {
-					ImageTile imageTileClickeado = (ImageTile) ev.getSource();
-					Plato bebidaSeleccionada = (Plato) imageTileClickeado.getReferencia();
-					model.setTileBebidaSeleccionada(imageTileClickeado);
-					model.getTileBebidaSeleccionada().setActive(true);
-					if (ev.getClickCount() >= 2) {
-						if (model.getTileMesaSeleccionada() == null) {
-							App.warning("Advertencia", "Mesa no seleccionada",
-									"Debe seleccionar una mesa antes de añadir un producto en la comanda");
-						} else {
-							System.out.println("Doble click");
-							Mesa mesaSeleccionada = (Mesa) model.getTileMesaSeleccionada().getReferencia();
-//							FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), mesaSeleccionada,
-//									bebidaSeleccionada, 1);
+			prepararNodosBebidas();
 
-							/* Actualizar la lista de comandas con la nueva comanda añadida */
-
-							redeclararTasks();
-
-//							actualizarComandasMesaTask.setOnSucceeded(eve -> {
-//
-//								model.setComandasMesa(actualizarComandasMesaTask.getValue());
-//								comandasTable.itemsProperty().bind(model.comandasMesaProperty());
-//								comandasTable.refresh();
-//								double preciototal = 0;
-//
-//								for (ComandaProp c : model.getComandasMesa()) {
-//									preciototal += (c.getCantidad() * c.getPrecioUnidad());
-//								}
-//
-//								totalComandaLabel.setText("Precio total: " + preciototal + "€");
-//							});
-							new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
-
-							new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
-
-						}
-					}
-
-				});
-			}
 		});
 
 		tareas.getInicializarBebidasTask().setOnFailed(e -> {
@@ -342,6 +333,8 @@ public class InicioController implements Initializable {
 			for (Plato plato : res) {
 				platosFlow.getChildren().add(new ImageTile(plato));
 			}
+
+			prepararNodosPlatos();
 		});
 
 		tareas.getObtenerPlatosCartaTask().setOnFailed(e -> {
@@ -368,6 +361,8 @@ public class InicioController implements Initializable {
 			for (Plato plato : res) {
 				entrantesFlow.getChildren().add(new ImageTile(plato));
 			}
+
+			prepararNodosEntrantes();
 		});
 
 		tareas.getObtenerEntrantesTask().setOnFailed(e -> {
@@ -393,6 +388,8 @@ public class InicioController implements Initializable {
 			for (Plato plato : res) {
 				postresFlow.getChildren().add(new ImageTile(plato));
 			}
+
+			prepararNodosPostres();
 		});
 
 		tareas.getObtenerPostresTask().setOnFailed(e -> {
@@ -405,6 +402,57 @@ public class InicioController implements Initializable {
 
 	@FXML
 	void onGenerarTicketAction(ActionEvent event) {
+
+		// Sólo Windows
+		String rutaUsuario = System.getenv("USERPROFILE");
+		System.out.println(rutaUsuario);
+		File directorioReportes = new File(rutaUsuario + "\\tickets");
+
+		// Si el directorio donde se generarán los reportes por defecto ya está
+		// creado...
+		if (directorioReportes.exists()) {
+
+			JasperReport report;
+			try {
+				// Compilamos el informe
+				report = JasperCompileManager
+						.compileReport(InicioController.class.getResourceAsStream(JRXML_TICKET_MODEL));
+
+				// Inicialización de un mapa de parámetros para el informe
+				Map<String, Object> parameters = new HashMap<String, Object>();
+
+				// Generación del informe (combinamos el informe compilado con los datos)
+				JasperPrint print = JasperFillManager.fillReport(report, parameters,
+						new ComandasDataSource(model.getComandasMesa()));
+
+				// exporta el informe a un fichero PDF
+				System.out.println(LocalDateTime.now());
+				String rutaGuardado = directorioReportes.getAbsolutePath() + "\\Ticket"
+						+ LocalDateTime.now().toString().replace('-', '_').replace(':', '_').replace('.', '_') + ".pdf";
+				JasperExportManager.exportReportToPdfFile(print, rutaGuardado);
+
+				// Abre el archivo PDF generado con el programa predeterminado del sistema
+				Desktop.getDesktop().open(new File(rutaGuardado));
+
+				// Se limpia la comanda relacionada a esa mesa
+				eliminarComandasMesaTask.setOnSucceeded(e -> {
+					model.setTileMesaSeleccionada(null);
+					model.getComandasMesa().clear();
+				});
+
+				new HiloEjecutador(App.semaforo, eliminarComandasMesaTask).start();
+
+			} catch (JRException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				System.err.println("ez");
+				e.printStackTrace();
+			}
+
+		} else {
+			directorioReportes.mkdir();
+		}
 
 	}
 
@@ -433,7 +481,7 @@ public class InicioController implements Initializable {
 
 			FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(),
 					(Mesa) model.getTileMesaSeleccionada().getReferencia(),
-					(Plato) model.getTileBebidaSeleccionada().getReferencia(), 1);
+					(Plato) model.getTilePlatoSeleccionado().getReferencia(), 1);
 
 			List<Comanda> listaComandas = FuncionesDB.listarComandasMesa(App.getBARGANIZERDB().getSes(),
 					(Mesa) model.getTileMesaSeleccionada().getReferencia());
@@ -448,13 +496,22 @@ public class InicioController implements Initializable {
 		}
 	};
 
+	private Task<Void> eliminarComandasMesaTask = new Task<Void>() {
+		protected Void call() throws Exception {
+			FuncionesDB.eliminarComandasMesa(App.getBARGANIZERDB().getSes(),
+					(Mesa) model.getTileMesaSeleccionada().getReferencia());
+
+			return null;
+		};
+	};
+
 	private Task<Void> insertarComandaMesa = new Task<Void>() {
 
 		@Override
 		protected Void call() throws Exception {
 			FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(),
 					(Mesa) model.getTileMesaSeleccionada().getReferencia(),
-					(Plato) model.getTileBebidaSeleccionada().getReferencia(), 1);
+					(Plato) model.getTilePlatoSeleccionado().getReferencia(), 1);
 			return null;
 		};
 	};
@@ -477,7 +534,7 @@ public class InicioController implements Initializable {
 				return FXCollections.observableArrayList(listaProps);
 			}
 		};
-		
+
 		actualizarComandasMesaTask.setOnSucceeded(e -> {
 
 			model.setComandasMesa(actualizarComandasMesaTask.getValue());
@@ -496,7 +553,16 @@ public class InicioController implements Initializable {
 			protected Void call() throws Exception {
 				FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(),
 						(Mesa) model.getTileMesaSeleccionada().getReferencia(),
-						(Plato) model.getTileBebidaSeleccionada().getReferencia(), 1);
+						(Plato) model.getTilePlatoSeleccionado().getReferencia(), 1);
+				return null;
+			};
+		};
+
+		eliminarComandasMesaTask = new Task<Void>() {
+			protected Void call() throws Exception {
+				FuncionesDB.eliminarComandasMesa(App.getBARGANIZERDB().getSes(),
+						(Mesa) model.getTileMesaSeleccionada().getReferencia());
+
 				return null;
 			};
 		};
@@ -512,19 +578,18 @@ public class InicioController implements Initializable {
 
 					private Button quitarButton = new Button("Quitar");
 
-					
 					{
-						
+
 						quitarButton.setOnAction(e -> {
 							ComandaProp comanda = getTableView().getItems().get(getIndex());
 
 							// Acciones a realizar al clickear el botón
 							FuncionesDB.eliminarComanda(App.getBARGANIZERDB().getSes(), comanda.getReferencia());
 							redeclararTasks();
-							
+
 							new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
 						});
-						
+
 					}
 
 					@Override
@@ -542,6 +607,134 @@ public class InicioController implements Initializable {
 			}
 		};
 		accionesColumn.setCellFactory(cellFactory);
+	}
+
+	private void prepararNodosBebidas() {
+		ObservableList<Node> l = bebidasFlow.getChildren();
+		for (Node node : l) {
+			node.setOnMouseClicked(ev -> {
+				ImageTile imageTileClickeado = (ImageTile) ev.getSource();
+				Plato bebidaSeleccionada = (Plato) imageTileClickeado.getReferencia();
+				model.setTilePlatoSeleccionado(imageTileClickeado);
+				model.getTilePlatoSeleccionado().setActive(true);
+				if (ev.getClickCount() >= 2) {
+					if (model.getTileMesaSeleccionada() == null) {
+						App.warning("Advertencia", "Mesa no seleccionada",
+								"Debe seleccionar una mesa antes de añadir un producto en la comanda");
+					} else {
+						System.out.println("Doble click");
+						Mesa mesaSeleccionada = (Mesa) model.getTileMesaSeleccionada().getReferencia();
+//							FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), mesaSeleccionada,
+//									bebidaSeleccionada, 1);
+
+						/* Actualizar la lista de comandas con la nueva comanda añadida */
+
+						redeclararTasks();
+						new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
+
+						new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
+
+					}
+				}
+
+			});
+		}
+	}
+
+	private void prepararNodosEntrantes() {
+		ObservableList<Node> l = entrantesFlow.getChildren();
+		for (Node node : l) {
+			node.setOnMouseClicked(ev -> {
+				ImageTile imageTileClickeado = (ImageTile) ev.getSource();
+				Plato entranteSeleccionado = (Plato) imageTileClickeado.getReferencia();
+				model.setTilePlatoSeleccionado(imageTileClickeado);
+				model.getTilePlatoSeleccionado().setActive(true);
+				if (ev.getClickCount() >= 2) {
+					if (model.getTileMesaSeleccionada() == null) {
+						App.warning("Advertencia", "Mesa no seleccionada",
+								"Debe seleccionar una mesa antes de añadir un producto en la comanda");
+					} else {
+						System.out.println("Doble click");
+						Mesa mesaSeleccionada = (Mesa) model.getTileMesaSeleccionada().getReferencia();
+//							FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), mesaSeleccionada,
+//									bebidaSeleccionada, 1);
+
+						/* Actualizar la lista de comandas con la nueva comanda añadida */
+
+						redeclararTasks();
+						new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
+
+						new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
+
+					}
+				}
+
+			});
+		}
+	}
+
+	private void prepararNodosPostres() {
+		ObservableList<Node> l = postresFlow.getChildren();
+		for (Node node : l) {
+			node.setOnMouseClicked(ev -> {
+				ImageTile imageTileClickeado = (ImageTile) ev.getSource();
+				Plato postreSeleccionado = (Plato) imageTileClickeado.getReferencia();
+				model.setTilePlatoSeleccionado(imageTileClickeado);
+				model.getTilePlatoSeleccionado().setActive(true);
+				if (ev.getClickCount() >= 2) {
+					if (model.getTileMesaSeleccionada() == null) {
+						App.warning("Advertencia", "Mesa no seleccionada",
+								"Debe seleccionar una mesa antes de añadir un producto en la comanda");
+					} else {
+						System.out.println("Doble click");
+						Mesa mesaSeleccionada = (Mesa) model.getTileMesaSeleccionada().getReferencia();
+//							FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), mesaSeleccionada,
+//									bebidaSeleccionada, 1);
+
+						/* Actualizar la lista de comandas con la nueva comanda añadida */
+
+						redeclararTasks();
+						new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
+
+						new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
+
+					}
+				}
+
+			});
+		}
+	}
+
+	private void prepararNodosPlatos() {
+		ObservableList<Node> l = platosFlow.getChildren();
+		for (Node node : l) {
+			node.setOnMouseClicked(ev -> {
+				ImageTile imageTileClickeado = (ImageTile) ev.getSource();
+				Plato platoSeleccionado = (Plato) imageTileClickeado.getReferencia();
+				model.setTilePlatoSeleccionado(imageTileClickeado);
+				model.getTilePlatoSeleccionado().setActive(true);
+				if (ev.getClickCount() >= 2) {
+					if (model.getTileMesaSeleccionada() == null) {
+						App.warning("Advertencia", "Mesa no seleccionada",
+								"Debe seleccionar una mesa antes de añadir un producto en la comanda");
+					} else {
+						System.out.println("Doble click");
+						Mesa mesaSeleccionada = (Mesa) model.getTileMesaSeleccionada().getReferencia();
+//							FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), mesaSeleccionada,
+//									bebidaSeleccionada, 1);
+
+						/* Actualizar la lista de comandas con la nueva comanda añadida */
+
+						redeclararTasks();
+						new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
+
+						new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
+
+					}
+				}
+
+			});
+		}
 	}
 
 }

@@ -59,7 +59,7 @@
 			<artifactId>fontawesomefx-fontawesome</artifactId>
 			<version>4.7.0-9.1.2</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -71,6 +71,13 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>5.6.0.Final</version>
+		</dependency>
+		
+		<!--  Jasper Reports -->
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>6.11.0</version>
 		</dependency>
 	</dependencies>
 </project>

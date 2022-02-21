@@ -92,15 +92,15 @@ public class ReservasController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		
 		
-		List<Reserva> lista = FuncionesDB.listarReservas(App.getBARGANIZERDB().getSes());
+//		List<Reserva> lista = FuncionesDB.listarReservas(App.getBARGANIZERDB().getSes());
 		
 		ArrayList<ReservaProp> listaProp = new ArrayList<>();
 		
-		for (Reserva reserva : lista) {
-			
-			listaProp.add(new ReservaProp(reserva));
-		}
-		
+//		for (Reserva reserva : lista) {
+//			
+//			listaProp.add(new ReservaProp(reserva));
+//		}
+//		
 		model.setLista(FXCollections.observableArrayList(listaProp));
 		
 		reservasList.itemsProperty().bind(model.listaProperty());
