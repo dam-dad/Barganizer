@@ -67,7 +67,7 @@ public class AñadirMesaController implements Initializable {
 
 			FuncionesDB.insertarMesa(App.getBARGANIZERDB().getSes(), Integer.parseInt(cantidadText.getText()), activaCheck.isSelected());
 			
-			App.confirm("Completado", "Inserción completado", "Se ha completado la inserción con éxito");
+			App.info("Completado", "Inserción completado", "Se ha completado la inserción con éxito");
 			
 			Stage stage = (Stage) añadirButton.getScene().getWindow();
 			stage.close();

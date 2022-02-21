@@ -73,5 +73,12 @@ public class Mesa {
 	public void setReservasList(List<Reserva> reservasList) {
 		this.reservasList = reservasList;
 	}
+	
+	
+	public String toString() {
+		
+		return String.valueOf(numero);
+		
+	}
 
 }
