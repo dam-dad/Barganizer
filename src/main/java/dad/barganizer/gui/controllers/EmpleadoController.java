@@ -1,5 +1,4 @@
 package dad.barganizer.gui.controllers;
-
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -32,7 +31,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -297,10 +295,6 @@ public class EmpleadoController implements Initializable {
 		tarea.getObtenerEmpleadosTask().setOnSucceeded(e -> {
 			ObservableList<EmpleadoProp> emp = tarea.getObtenerEmpleadosTask().getValue();
 			lista.setValue(emp);
-			/*
-			 * for(EmpleadoProp empleado : emp) { lista.getValue().add(new
-			 * EmpleadoProp(empleado)); }
-			 */
 		}
 
 		);
@@ -330,8 +324,6 @@ public class EmpleadoController implements Initializable {
 				Alert alertaError = new Alert(AlertType.ERROR);
 				Stage stage = (Stage) alertaError.getDialogPane().getScene().getWindow();
 				alertaError.initOwner(App.primaryStage);
-				// stage.getIcons().add(new
-				// Image(getClass().getResourceAsStream("/images/contacts-icon-32x32.png")));
 				alertaError.setTitle("Error");
 				alertaError.setHeaderText("Error al cargar la imagen.");
 				alertaError.setContentText("Error: " + e.getMessage());
