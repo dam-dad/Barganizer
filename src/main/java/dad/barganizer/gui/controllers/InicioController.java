@@ -487,6 +487,14 @@ public class InicioController implements Initializable {
 			return null;
 		};
 	};
+	
+	private Task<Void> eliminarComandaIndexTask = new Task<Void>() {
+		protected Void call() throws Exception {
+			FuncionesDB.eliminarComanda(App.getBARGANIZERDB().getSes(),
+					model.getComandaIndex().getReferencia());
+			return null;
+		};
+	};
 
 	private void redeclararTasks() {
 		actualizarComandasMesaTask = new Task<ObservableList<ComandaProp>>() {
@@ -509,14 +517,18 @@ public class InicioController implements Initializable {
 
 		actualizarComandasMesaTask.setOnSucceeded(e -> {
 
+			
 			model.setComandasMesa(actualizarComandasMesaTask.getValue());
 			double preciototal = 0;
 
-			for (ComandaProp c : model.getComandasMesa()) {
-				preciototal += (c.getCantidad() * c.getPrecioUnidad());
+			if (model.getComandasMesa() != null) {
+				for (ComandaProp c : model.getComandasMesa()) {
+					preciototal += (c.getCantidad() * c.getPrecioUnidad());
+				}
+
+				totalComandaLabel.setText("Precio total: " + preciototal + "€");
 			}
 
-			totalComandaLabel.setText("Precio total: " + preciototal + "€");
 		});
 
 		insertarComandaMesa = new Task<Void>() {
@@ -538,6 +550,14 @@ public class InicioController implements Initializable {
 				return null;
 			};
 		};
+		
+		eliminarComandaIndexTask = new Task<Void>() {
+			protected Void call() throws Exception {
+				FuncionesDB.eliminarComanda(App.getBARGANIZERDB().getSes(),
+						model.getComandaIndex().getReferencia());
+				return null;
+			};
+		};
 
 	}
 
@@ -554,11 +574,12 @@ public class InicioController implements Initializable {
 
 						quitarButton.setOnAction(e -> {
 							ComandaProp comanda = getTableView().getItems().get(getIndex());
-
+							model.setComandaIndex(comanda);
 							// Acciones a realizar al clickear el botón
-							FuncionesDB.eliminarComanda(App.getBARGANIZERDB().getSes(), comanda.getReferencia());
+//							FuncionesDB.eliminarComanda(App.getBARGANIZERDB().getSes(), comanda.getReferencia());
 							redeclararTasks();
-
+							
+							new HiloEjecutador(App.semaforo, eliminarComandaIndexTask).start();
 							new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
 						});
 

@@ -68,7 +68,7 @@ public class App extends Application {
 		Alert error = new Alert(AlertType.ERROR);
 		Stage errorStage = (Stage)error.getDialogPane().getScene().getWindow();
 		errorStage.getScene().getStylesheets().setAll("/css/mainView.css");
-//		errorStage.getIcons().add(new Image(App.class.getResourceAsStream("")));
+		errorStage.getIcons().add(new Image(App.class.getResourceAsStream("/images/barganizer.PNG")));
 		error.setTitle(title);
 		error.setHeaderText(header);
 		error.setContentText(content);
@@ -80,7 +80,7 @@ public class App extends Application {
 		Alert info = new Alert(AlertType.INFORMATION);
 		Stage infoStage = (Stage)info.getDialogPane().getScene().getWindow();
 		infoStage.getScene().getStylesheets().setAll("/css/mainView.css");
-//		infoStage.getIcons().add(new Image(App.class.getResourceAsStream("")));
+		infoStage.getIcons().add(new Image(App.class.getResourceAsStream("/images/barganizer.PNG")));
 		info.setTitle(title);
 		info.setHeaderText(header);
 		info.setContentText(content);
@@ -92,7 +92,7 @@ public class App extends Application {
 		Alert confirm = new Alert(AlertType.CONFIRMATION);
 		Stage confirmStage = (Stage)confirm.getDialogPane().getScene().getWindow();
 		confirmStage.getScene().getStylesheets().setAll("/css/mainView.css");
-//		confirmStage.getIcons().add(new Image(App.class.getResourceAsStream("")));
+		confirmStage.getIcons().add(new Image(App.class.getResourceAsStream("/images/barganizer.PNG")));
 		confirm.setTitle(title);
 		confirm.setHeaderText(header);
 		confirm.setContentText(content);
@@ -105,6 +105,7 @@ public class App extends Application {
 		Alert warning = new Alert(AlertType.WARNING);
 		Stage warningStage = (Stage)warning.getDialogPane().getScene().getWindow();
 		warningStage.getScene().getStylesheets().setAll("/css/mainView.css");
+		warningStage.getIcons().add(new Image(App.class.getResourceAsStream("/images/barganizer.PNG")));
 		warning.setTitle(title);
 		warning.setHeaderText(header);
 		warning.setContentText(content);

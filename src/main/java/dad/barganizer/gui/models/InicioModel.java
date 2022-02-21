@@ -11,7 +11,6 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TreeItem;
 
 public class InicioModel {
 
@@ -24,6 +23,7 @@ public class InicioModel {
 
 	private ObjectProperty<ImageTile> tilePlatoSeleccionado = new SimpleObjectProperty<ImageTile>();
 	private ObjectProperty<ImageTile> tileMesaSeleccionada = new SimpleObjectProperty<ImageTile>();
+	private ObjectProperty<ComandaProp> comandaIndex = new SimpleObjectProperty<ComandaProp>();
 
 	private ListProperty<ComandaProp> comandasMesa = new SimpleListProperty<ComandaProp>();
 
@@ -133,6 +133,18 @@ public class InicioModel {
 
 	public final void setComandasMesa(final ObservableList<ComandaProp> comandasMesa) {
 		this.comandasMesaProperty().set(comandasMesa);
+	}
+
+	public final ObjectProperty<ComandaProp> comandaIndexProperty() {
+		return this.comandaIndex;
+	}
+
+	public final ComandaProp getComandaIndex() {
+		return this.comandaIndexProperty().get();
+	}
+
+	public final void setComandaIndex(final ComandaProp comandaIndex) {
+		this.comandaIndexProperty().set(comandaIndex);
 	}
 
 }
