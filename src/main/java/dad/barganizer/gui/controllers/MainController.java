@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXButton;
 
+import dad.barganizer.gui.models.MainModel;
 import eu.hansolo.tilesfx.Tile;
 import eu.hansolo.tilesfx.TileBuilder;
 import eu.hansolo.tilesfx.Tile.SkinType;
@@ -36,6 +37,9 @@ public class MainController implements Initializable {
     private EmpleadoController empleadoController;
     private ReservasController reservasController = new ReservasController();
     private CartaController cartaController;
+    
+    //MODEL
+    private MainModel model = new MainModel();
   
     
     //VISTA
@@ -145,8 +149,7 @@ public class MainController implements Initializable {
     	try {
 			inicioController = new InicioController();
 			root.setCenter(inicioController.getView());
-		} catch (IOException e) {
-			
+		} catch (IOException e) {			
 			e.printStackTrace();
 		}
     	
@@ -159,7 +162,6 @@ public class MainController implements Initializable {
 			mesasController = new MesasController();
 			root.setCenter(mesasController.getView());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	
