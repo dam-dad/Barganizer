@@ -4,9 +4,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class LoginModel {
-	
+
 	StringProperty nombre = new SimpleStringProperty();
 	StringProperty clave = new SimpleStringProperty();
+	
+	
 	public final StringProperty nombreProperty() {
 		return this.nombre;
 	}
@@ -30,6 +32,5 @@ public class LoginModel {
 	public final void setClave(final String clave) {
 		this.claveProperty().set(clave);
 	}
-	
 
 }

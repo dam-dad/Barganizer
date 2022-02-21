@@ -56,14 +56,6 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </JFXButton>
-                  <JFXButton fx:id="comandasButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onComandasAction" prefWidth="125.0" text="Comandas" HBox.hgrow="ALWAYS">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </JFXButton>
                   <JFXButton fx:id="mesaButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onMesasAction" prefWidth="125.0" text="Mesas" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="System Bold" size="18.0" />

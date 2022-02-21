@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.concurrent.Semaphore;
 
 import dad.barganizer.db.BarganizerDB;
+import dad.barganizer.gui.controllers.LoginController;
 import dad.barganizer.gui.controllers.MainController;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -16,7 +17,8 @@ import javafx.stage.Stage;
 
 public class App extends Application {
 
-	MainController mainController;
+	LoginController loginController;
+	//MainController mainController;
 	public static Semaphore semaforo = new Semaphore(1);
 	public static Stage primaryStage;
 	
@@ -26,7 +28,8 @@ public class App extends Application {
 	@Override
 	public void init() throws Exception {
 		super.init();
-		mainController = new MainController();
+		//mainController = new MainController();
+		loginController = new LoginController();
 		Font fuente = Font.loadFont(getClass().getResourceAsStream("/Styles/Merienda-Regular.ttf"), 16);
 		Font fuenteNegrita = Font.loadFont(getClass().getResourceAsStream("/Styles/Merienda-Bold.ttf"), 16);
 	}
@@ -35,7 +38,7 @@ public class App extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		 
 		
-		Scene scene = new Scene(mainController.getView());
+		Scene scene = new Scene(loginController.getView());
 		scene.getStylesheets().setAll("/css/mainView.css");
 		
 
