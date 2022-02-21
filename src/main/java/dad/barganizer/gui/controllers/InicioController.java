@@ -116,6 +116,7 @@ public class InicioController implements Initializable {
 	private Label totalComandaLabel;
 
 	public InicioController() throws IOException {
+		App.getBARGANIZERDB().resetSesion();
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/InicioView.fxml"));
 		loader.setController(this);
 		loader.load();
@@ -162,7 +163,6 @@ public class InicioController implements Initializable {
 			}
 
 			if (nv != null) {
-				Mesa ref = (Mesa) nv.getReferencia();
 				nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
 
 				redeclararTasks();
@@ -305,12 +305,6 @@ public class InicioController implements Initializable {
 
 		});
 
-		// Ejecución de tareas
-
-//		new Thread(tareas.getInicializarBebidasTask()).start();
-//		new Thread(tareas.getInicializarMesasTask()).start();
-//		new Thread(tareas.getInicializarCartaTask()).start();
-
 		// Hilo ejecutador de tareas
 		new HiloEjecutador(App.semaforo, tareas.getInicializarBebidasTask()).start();
 		new HiloEjecutador(App.semaforo, tareas.getObtenerMesasActivasTask()).start();
@@ -403,76 +397,54 @@ public class InicioController implements Initializable {
 	@FXML
 	void onGenerarTicketAction(ActionEvent event) {
 
-		// Sólo Windows
+		// Sólo Windows. Los tickets se guardarán en el directorio del usuario, en la carpeta tickets.
 		String rutaUsuario = System.getenv("USERPROFILE");
 		System.out.println(rutaUsuario);
 		File directorioReportes = new File(rutaUsuario + "\\tickets");
 
 		// Si el directorio donde se generarán los reportes por defecto ya está
 		// creado...
-		if (directorioReportes.exists()) {
 
-			JasperReport report;
-			try {
-				// Compilamos el informe
-				report = JasperCompileManager
-						.compileReport(InicioController.class.getResourceAsStream(JRXML_TICKET_MODEL));
-
-				// Inicialización de un mapa de parámetros para el informe
-				Map<String, Object> parameters = new HashMap<String, Object>();
-
-				// Generación del informe (combinamos el informe compilado con los datos)
-				JasperPrint print = JasperFillManager.fillReport(report, parameters,
-						new ComandasDataSource(model.getComandasMesa()));
-
-				// exporta el informe a un fichero PDF
-				System.out.println(LocalDateTime.now());
-				String rutaGuardado = directorioReportes.getAbsolutePath() + "\\Ticket"
-						+ LocalDateTime.now().toString().replace('-', '_').replace(':', '_').replace('.', '_') + ".pdf";
-				JasperExportManager.exportReportToPdfFile(print, rutaGuardado);
-
-				// Abre el archivo PDF generado con el programa predeterminado del sistema
-				Desktop.getDesktop().open(new File(rutaGuardado));
-
-				// Se limpia la comanda relacionada a esa mesa
-				eliminarComandasMesaTask.setOnSucceeded(e -> {
-					model.setTileMesaSeleccionada(null);
-					model.getComandasMesa().clear();
-				});
-
-				new HiloEjecutador(App.semaforo, eliminarComandasMesaTask).start();
-
-			} catch (JRException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (Exception e) {
-				System.err.println("ez");
-				e.printStackTrace();
-			}
-
-		} else {
+		if (!directorioReportes.exists()) {
 			directorioReportes.mkdir();
 		}
+		
+		JasperReport report;
+		try {
+			// Compilamos el informe
+			report = JasperCompileManager.compileReport(InicioController.class.getResourceAsStream(JRXML_TICKET_MODEL));
 
-	}
+			// Inicialización de un mapa de parámetros para el informe
+			Map<String, Object> parameters = new HashMap<String, Object>();
 
-	private Task<ObservableList<ComandaProp>> obtenerComandasMesaTask = new Task<ObservableList<ComandaProp>>() {
+			// Generación del informe (combinamos el informe compilado con los datos)
+			JasperPrint print = JasperFillManager.fillReport(report, parameters,
+					new ComandasDataSource(model.getComandasMesa()));
 
-		@Override
-		protected ObservableList<ComandaProp> call() throws Exception {
+			// exporta el informe a un fichero PDF
+			System.out.println(LocalDateTime.now());
+			String rutaGuardado = directorioReportes.getAbsolutePath() + "\\Ticket"
+					+ LocalDateTime.now().toString().replace('-', '_').replace(':', '_').replace('.', '_') + ".pdf";
+			JasperExportManager.exportReportToPdfFile(print, rutaGuardado);
 
-			List<Comanda> listaComandas = FuncionesDB.listarComandasMesa(App.getBARGANIZERDB().getSes(),
-					(Mesa) model.getTileMesaSeleccionada().getReferencia());
+			// Abre el archivo PDF generado con el programa predeterminado del sistema
+			Desktop.getDesktop().open(new File(rutaGuardado));
 
-			List<ComandaProp> listaProps = new ArrayList<>();
+			// Se limpia la comanda relacionada a esa mesa
+			eliminarComandasMesaTask.setOnSucceeded(e -> {
+				model.setTileMesaSeleccionada(null);
+				model.getComandasMesa().clear();
+			});
 
-			for (Comanda comanda : listaComandas) {
-				listaProps.add(new ComandaProp(comanda));
-			}
+			new HiloEjecutador(App.semaforo, eliminarComandasMesaTask).start();
 
-			return FXCollections.observableArrayList(listaProps);
+		} catch (JRException e) {
+			App.error("Error", "Error Jasper",
+					"Se ha producido un error de tipo JRException. Detalles: " + e.getMessage());
+		} catch (Exception e) {
+			App.error("Error", "Excepción", "Se ha producido una excepción. Detalles: " + e.getMessage());
 		}
-	};
+	}
 
 	private Task<ObservableList<ComandaProp>> actualizarComandasMesaTask = new Task<ObservableList<ComandaProp>>() {
 
@@ -614,7 +586,7 @@ public class InicioController implements Initializable {
 		for (Node node : l) {
 			node.setOnMouseClicked(ev -> {
 				ImageTile imageTileClickeado = (ImageTile) ev.getSource();
-				Plato bebidaSeleccionada = (Plato) imageTileClickeado.getReferencia();
+				
 				model.setTilePlatoSeleccionado(imageTileClickeado);
 				model.getTilePlatoSeleccionado().setActive(true);
 				if (ev.getClickCount() >= 2) {
@@ -622,13 +594,7 @@ public class InicioController implements Initializable {
 						App.warning("Advertencia", "Mesa no seleccionada",
 								"Debe seleccionar una mesa antes de añadir un producto en la comanda");
 					} else {
-						System.out.println("Doble click");
-						Mesa mesaSeleccionada = (Mesa) model.getTileMesaSeleccionada().getReferencia();
-//							FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), mesaSeleccionada,
-//									bebidaSeleccionada, 1);
-
 						/* Actualizar la lista de comandas con la nueva comanda añadida */
-
 						redeclararTasks();
 						new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
 
@@ -646,7 +612,7 @@ public class InicioController implements Initializable {
 		for (Node node : l) {
 			node.setOnMouseClicked(ev -> {
 				ImageTile imageTileClickeado = (ImageTile) ev.getSource();
-				Plato entranteSeleccionado = (Plato) imageTileClickeado.getReferencia();
+
 				model.setTilePlatoSeleccionado(imageTileClickeado);
 				model.getTilePlatoSeleccionado().setActive(true);
 				if (ev.getClickCount() >= 2) {
@@ -654,11 +620,6 @@ public class InicioController implements Initializable {
 						App.warning("Advertencia", "Mesa no seleccionada",
 								"Debe seleccionar una mesa antes de añadir un producto en la comanda");
 					} else {
-						System.out.println("Doble click");
-						Mesa mesaSeleccionada = (Mesa) model.getTileMesaSeleccionada().getReferencia();
-//							FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), mesaSeleccionada,
-//									bebidaSeleccionada, 1);
-
 						/* Actualizar la lista de comandas con la nueva comanda añadida */
 
 						redeclararTasks();
@@ -678,7 +639,6 @@ public class InicioController implements Initializable {
 		for (Node node : l) {
 			node.setOnMouseClicked(ev -> {
 				ImageTile imageTileClickeado = (ImageTile) ev.getSource();
-				Plato postreSeleccionado = (Plato) imageTileClickeado.getReferencia();
 				model.setTilePlatoSeleccionado(imageTileClickeado);
 				model.getTilePlatoSeleccionado().setActive(true);
 				if (ev.getClickCount() >= 2) {
@@ -686,11 +646,6 @@ public class InicioController implements Initializable {
 						App.warning("Advertencia", "Mesa no seleccionada",
 								"Debe seleccionar una mesa antes de añadir un producto en la comanda");
 					} else {
-						System.out.println("Doble click");
-						Mesa mesaSeleccionada = (Mesa) model.getTileMesaSeleccionada().getReferencia();
-//							FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), mesaSeleccionada,
-//									bebidaSeleccionada, 1);
-
 						/* Actualizar la lista de comandas con la nueva comanda añadida */
 
 						redeclararTasks();
@@ -710,7 +665,7 @@ public class InicioController implements Initializable {
 		for (Node node : l) {
 			node.setOnMouseClicked(ev -> {
 				ImageTile imageTileClickeado = (ImageTile) ev.getSource();
-				Plato platoSeleccionado = (Plato) imageTileClickeado.getReferencia();
+				
 				model.setTilePlatoSeleccionado(imageTileClickeado);
 				model.getTilePlatoSeleccionado().setActive(true);
 				if (ev.getClickCount() >= 2) {
@@ -718,11 +673,6 @@ public class InicioController implements Initializable {
 						App.warning("Advertencia", "Mesa no seleccionada",
 								"Debe seleccionar una mesa antes de añadir un producto en la comanda");
 					} else {
-						System.out.println("Doble click");
-						Mesa mesaSeleccionada = (Mesa) model.getTileMesaSeleccionada().getReferencia();
-//							FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(), mesaSeleccionada,
-//									bebidaSeleccionada, 1);
-
 						/* Actualizar la lista de comandas con la nueva comanda añadida */
 
 						redeclararTasks();
