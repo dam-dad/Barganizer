@@ -16,13 +16,13 @@ import javafx.scene.image.Image;
 
 public class EmpleadoProp {
 
-	private StringProperty nombre;
-	private StringProperty apellido;
-	private ObjectProperty<Sexo> genero;
-	private ObjectProperty<LocalDate> nacimiento;
-	private ObjectProperty<LocalDate> ingreso;
-	private ObjectProperty<Image> foto;
-	private StringProperty password;
+	private StringProperty nombre = new SimpleStringProperty();
+	private StringProperty apellido = new SimpleStringProperty();
+	private ObjectProperty<Sexo> genero = new SimpleObjectProperty<Sexo>();
+	private ObjectProperty<LocalDate> nacimiento = new SimpleObjectProperty<LocalDate>();
+	private ObjectProperty<LocalDate> ingreso = new SimpleObjectProperty<LocalDate>();
+	private ObjectProperty<Image> foto = new SimpleObjectProperty<>();
+	private StringProperty password = new SimpleStringProperty();
 	
 	public EmpleadoProp() {
 		nombre = new SimpleStringProperty(this, "nombre");

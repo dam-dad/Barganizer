@@ -2,6 +2,7 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -91,6 +92,9 @@
                            <image>
                               <Image url="@../../../../../../fotosDAD/prueba.PNG" />
                            </image>
+                           <viewport>
+                              <Rectangle2D height="100.0" width="100.0" />
+                           </viewport>
                         </ImageView>
                         <PasswordField fx:id="passwordText" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                         <Label text="Contraseña:" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
