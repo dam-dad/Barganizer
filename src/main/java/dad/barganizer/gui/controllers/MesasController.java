@@ -129,10 +129,6 @@ public class MesasController implements Initializable {
 			modificarMesaController.setIdLabel(String.valueOf(mesa.getNumero()));
 			modificarMesaController.setActivaCheck(mesa.isActiva());
 
-			System.out.println(modificarMesaController.seleccionado.get().getNumero());
-			System.out.println(modificarMesaController.seleccionado.get().getCantPersonas());
-			System.out.println(modificarMesaController.seleccionado.get().isActiva());
-
 			Stage stage = new Stage();
 			stage.setTitle("Modificar mesa");
 			stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.PNG")));

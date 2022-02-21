@@ -2,7 +2,9 @@ package dad.barganizer.gui.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -11,10 +13,13 @@ import dad.barganizer.App;
 import dad.barganizer.beansprop.ReservaProp;
 import dad.barganizer.db.BarganizerTasks;
 import dad.barganizer.db.FuncionesDB;
+import dad.barganizer.db.beans.Empleado;
+import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Reserva;
 import dad.barganizer.gui.models.ReservasModel;
 import dad.barganizer.thread.HiloEjecutador;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,6 +44,7 @@ public class ReservasController implements Initializable {
 
 	ReservasModel model = new ReservasModel();
 	AñadirReservaController añadirReservaController;
+	ModificarReservaController modificarReservaController;
 
 	// VISTA
 
@@ -47,6 +53,9 @@ public class ReservasController implements Initializable {
 
 	@FXML
 	private Button eliminarReservaButton;
+
+	@FXML
+	private Button editarReservaButton;
 
 	@FXML
 	private TextField empleadText;
@@ -96,14 +105,10 @@ public class ReservasController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
-		
-		ArrayList<ReservaProp> listaProp = new ArrayList<>();
 
-		model.setLista(FXCollections.observableArrayList(listaProp));
 
 		model.seleccionadaProperty().bind(reservasList.getSelectionModel().selectedItemProperty());
-		
+
 		listarReservas();
 
 		reservasList.itemsProperty().bind(model.listaProperty());
@@ -154,6 +159,57 @@ public class ReservasController implements Initializable {
 	}
 
 	@FXML
+	void onEditarrReservaAction(ActionEvent event) {
+
+		try {
+
+			modificarReservaController = new ModificarReservaController();
+			
+			Reserva r = model.getSeleccionada().getReferencia();
+			Empleado e = model.getSeleccionada().getReferencia().getEmpleadoReserva();
+			Mesa m = model.getSeleccionada().getReferencia().getMesaReserva();
+			LocalDate fecha = model.getSeleccionada().getFecha().toLocalDate();
+			LocalTime hora = model.getSeleccionada().getFecha().toLocalTime();
+			
+			
+			modificarReservaController.setAllEmpleadosCombo(FuncionesDB.listarEmpleados(App.getBARGANIZERDB().getSes()));
+			modificarReservaController.setAllMesaCombo(FuncionesDB.listarMesas(App.getBARGANIZERDB().getSes()));
+			
+			modificarReservaController.seleccionado.set(r);
+			modificarReservaController.setEmpleadoCombo(e);
+			modificarReservaController.setMesaCombo(m);
+			modificarReservaController.setPersonasText(model.getSeleccionada().getPersonas());
+			modificarReservaController.setHoraText(String.valueOf(hora));
+			modificarReservaController.setFechaPicker(fecha);
+			
+			
+
+			Stage stage = new Stage();
+			stage.setTitle("Modificar reserva");
+			stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.PNG")));
+			stage.setScene(new Scene(modificarReservaController.getView()));
+			stage.getScene().getStylesheets().setAll("/css/mainView.css");
+
+			// Lineas opcionales pero que permiten que al tener una ventana abierta, la otra
+			// quede deshabilitada
+
+			stage.initOwner(App.primaryStage);
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.showAndWait();
+			
+			reservasList.getItems().clear();
+
+			listarReservas();
+
+		}
+
+		catch (Exception e) {
+			App.error("Error", "Error al modificar", "Debe tener una reserva seleccionada. " +e.getMessage());
+		}
+
+	}
+
+	@FXML
 	void onEliminarReservaAction(ActionEvent event) {
 
 		if (model.getSeleccionada() != null) {
@@ -181,7 +237,7 @@ public class ReservasController implements Initializable {
 
 		tareas.getInicializarReservasTask().setOnSucceeded(e -> {
 
-			List<Reserva> lista = FuncionesDB.listarReservas(App.getBARGANIZERDB().getSes());
+			List<Reserva> lista = tareas.getInicializarReservasTask().getValue();
 
 			ArrayList<ReservaProp> listaProp = new ArrayList<>();
 
