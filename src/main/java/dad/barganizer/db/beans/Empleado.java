@@ -117,4 +117,9 @@ public class Empleado {
 	}
 
 
+	public String toString() {
+		
+		return nombre+ " "+apellidos;
+	}
+	
 }

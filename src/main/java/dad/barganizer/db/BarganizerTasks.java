@@ -11,6 +11,7 @@ import dad.barganizer.db.beans.Comanda;
 import dad.barganizer.db.beans.Empleado;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Plato;
+import dad.barganizer.db.beans.Reserva;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -55,6 +56,17 @@ public class BarganizerTasks {
 			List<Plato> listaPlatos = FuncionesDB.listarPlatos(App.getBARGANIZERDB().getSes());
 
 			return FXCollections.observableArrayList(listaPlatos);
+		}
+	};
+	
+	private Task<ObservableList<Reserva>> inicializarReservasTask = new Task<ObservableList<Reserva>>() {
+
+		@Override
+		protected ObservableList<Reserva> call() throws Exception {
+
+			List<Reserva> listaReserva = FuncionesDB.listarReservas(App.getBARGANIZERDB().getSes());
+
+			return FXCollections.observableArrayList(listaReserva);
 		}
 	};
 	
@@ -153,6 +165,10 @@ public class BarganizerTasks {
 
 	public Task<ObservableList<Mesa>> getInicializarMesasTask() {
 		return inicializarMesasTask;
+	}
+	
+	public Task<ObservableList<Reserva>> getInicializarReservasTask(){
+		return inicializarReservasTask;
 	}
 
 	public Task<ObservableList<Plato>> getInicializarPlatosTask() {

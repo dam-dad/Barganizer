@@ -97,7 +97,7 @@ public class App extends Application {
 		confirm.setHeaderText(header);
 		confirm.setContentText(content);
 		Optional<ButtonType> result = confirm.showAndWait();
-		return (result.get() == ButtonType.YES);
+		return (result.get() == ButtonType.OK);
 	}
 	
 	/** Método que se utilizará para mostrar una advertencia **/

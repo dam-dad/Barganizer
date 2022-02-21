@@ -27,7 +27,6 @@ import javafx.stage.Stage;
 
 public class MesasController implements Initializable {
 
-
 	// MODEL
 
 	MesasModel model = new MesasModel();
@@ -64,17 +63,17 @@ public class MesasController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		listarMesas();
-		
+
 		model.mesaSeleccionadaProperty().addListener((o, ov, nv) -> {
 			if (ov != null && nv != null) {
-				Mesa ref = (Mesa)nv.getReferencia();
+				Mesa ref = (Mesa) nv.getReferencia();
 				ov.setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
 			}
 			if (nv != null) {
-			nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
+				nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
 			}
 		});
-		
+
 		mesasFlow.setOnMouseClicked(e -> {
 
 			if (model.getMesaSeleccionada() != null) {
@@ -83,30 +82,30 @@ public class MesasController implements Initializable {
 			}
 
 		});
-		
+
 	}
 
 	@FXML
 	void onAñadirAction(ActionEvent event) {
-		
+
 		try {
-			
+
 			añadirMesaController = new AñadirMesaController();
-			
+
 		} catch (Exception e) {
-			
-			System.err.println("Error: "+e.getMessage());
+
+			System.err.println("Error: " + e.getMessage());
 		}
-		
+
 		Stage stage = new Stage();
 		stage.setTitle("Añadir mesa");
 		stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.PNG")));
 		stage.setScene(new Scene(añadirMesaController.getView()));
 		stage.getScene().getStylesheets().setAll("/css/mainView.css");
-		
+
 		// Lineas opcionales pero que permiten que al tener una ventana abierta, la otra
 		// quede deshabilitada
-		
+
 		stage.initOwner(App.primaryStage);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.showAndWait();
@@ -114,73 +113,74 @@ public class MesasController implements Initializable {
 		mesasFlow.getChildren().clear();
 
 		listarMesas();
-		
 
 	}
 
 	@FXML
 	void onModificarAction(ActionEvent event) {
-		
+
 		try {
-			
+
 			ModificarMesaController modificarMesaController = new ModificarMesaController();
-			Mesa mesa = (Mesa)(model.getMesaSeleccionada().getReferencia());
-			
+			Mesa mesa = (Mesa) (model.getMesaSeleccionada().getReferencia());
+
 			modificarMesaController.seleccionado.set(mesa);
 			modificarMesaController.setCantidadText(mesa.getCantPersonas());
 			modificarMesaController.setIdLabel(String.valueOf(mesa.getNumero()));
 			modificarMesaController.setActivaCheck(mesa.isActiva());
-			
+
 			System.out.println(modificarMesaController.seleccionado.get().getNumero());
 			System.out.println(modificarMesaController.seleccionado.get().getCantPersonas());
 			System.out.println(modificarMesaController.seleccionado.get().isActiva());
-			
-			
+
 			Stage stage = new Stage();
 			stage.setTitle("Modificar mesa");
 			stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.PNG")));
 			stage.setScene(new Scene(modificarMesaController.getView()));
 			stage.getScene().getStylesheets().setAll("/css/mainView.css");
-			
+
 			// Lineas opcionales pero que permiten que al tener una ventana abierta, la otra
 			// quede deshabilitada
-			
+
 			stage.initOwner(App.primaryStage);
 			stage.initModality(Modality.APPLICATION_MODAL);
-			
+
 			stage.showAndWait();
 
 			mesasFlow.getChildren().clear();
 
 			listarMesas();
-			
-			
+
 		} catch (Exception e) {
-			
-			App.error("Error", "Error al borrar", "Debe tener una mesa seleccionada.");
+
+			App.error("Error", "Error al modificar", "Debe tener una mesa seleccionada.");
 		}
 
 	}
 
 	@FXML
 	void onQuitarAction(ActionEvent event) {
-		
-		try {
-			
-		FuncionesDB.eliminarMesa(App.getBARGANIZERDB().getSes(), (Mesa)(model.getMesaSeleccionada().getReferencia()));
-		App.info("COMPLETADO", "Borrado completado", "Se ha quitado la mesa con éxito");
-		
+
+		if (model.getMesaSeleccionada() != null) {
+
+			if (App.confirm("BORRAR", "PROCESO DE BORRADO", "¿Desea borrar la mesa?")) {
+
+				FuncionesDB.eliminarMesa(App.getBARGANIZERDB().getSes(),
+						(Mesa) (model.getMesaSeleccionada().getReferencia()));
+				App.info("Completado", "Borrado completado", "Se ha completado el borrado con éxito");
+			}
+		}
+
+		else {
+			App.error("Error", "Error al borrar", "Debe tener una mesa seleccionada.");
+		}
+
 		mesasFlow.getChildren().clear();
-		
+
 		listarMesas();
-		
+
 		model.setMesaSeleccionada(null);
-		
-		}
-		
-		catch (Exception e) {
-			App.error("Error", "Error al modificar", "Debe tener una mesa seleccionada.");
-		}
+
 	}
 
 	public void listarMesas() {
@@ -217,7 +217,7 @@ public class MesasController implements Initializable {
 		new HiloEjecutador(App.semaforo, tareas.getInicializarMesasTask()).start();
 
 	}
-	
+
 	public MesasModel getModel() {
 		return model;
 	}
