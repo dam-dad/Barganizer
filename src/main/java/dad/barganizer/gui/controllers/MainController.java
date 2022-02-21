@@ -32,9 +32,10 @@ public class MainController implements Initializable {
     
     // CONTROLADORES
     private InicioController inicioController = new InicioController();
-    private MesasController mesasController = new MesasController();
-    private EmpleadoController empleadoController = new EmpleadoController();
+    private MesasController mesasController;
+    private EmpleadoController empleadoController;
     private ReservasController reservasController = new ReservasController();
+    private CartaController cartaController;
   
     
     //VISTA
@@ -107,7 +108,14 @@ public class MainController implements Initializable {
 	
     @FXML
     void onCartasAction(ActionEvent event) {
-
+    	try {
+			cartaController = new CartaController();
+			root.setCenter(cartaController.getView());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
     }
 
     @FXML
@@ -122,8 +130,14 @@ public class MainController implements Initializable {
 
     @FXML
     void onEmpleadosAction(ActionEvent event) {
+    	try {
+			empleadoController = new EmpleadoController();
+			root.setCenter(empleadoController.getView());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	
-    	root.setCenter(empleadoController.getView());
     }
 
     @FXML
@@ -141,8 +155,15 @@ public class MainController implements Initializable {
 
     @FXML
     void onMesasAction(ActionEvent event) {
-
-    	root.setCenter(mesasController.getView());
+    	try {
+			mesasController = new MesasController();
+			root.setCenter(mesasController.getView());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	
     }
 
     @FXML

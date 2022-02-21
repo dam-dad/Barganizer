@@ -417,12 +417,13 @@ public class InicioController implements Initializable {
 			// Inicialización de un mapa de parámetros para el informe
 			Map<String, Object> parameters = new HashMap<String, Object>();
 
+//			parameters.put(rutaUsuario, parameters)
+			
 			// Generación del informe (combinamos el informe compilado con los datos)
 			JasperPrint print = JasperFillManager.fillReport(report, parameters,
 					new ComandasDataSource(model.getComandasMesa()));
 
 			// exporta el informe a un fichero PDF
-			System.out.println(LocalDateTime.now());
 			String rutaGuardado = directorioReportes.getAbsolutePath() + "\\Ticket"
 					+ LocalDateTime.now().toString().replace('-', '_').replace(':', '_').replace('.', '_') + ".pdf";
 			JasperExportManager.exportReportToPdfFile(print, rutaGuardado);
