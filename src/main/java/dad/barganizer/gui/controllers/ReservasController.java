@@ -152,7 +152,7 @@ public class ReservasController implements Initializable {
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.showAndWait();
 
-		reservasList.getItems().clear();
+		reservasList.refresh();
 
 		listarReservas();
 
@@ -197,7 +197,7 @@ public class ReservasController implements Initializable {
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.showAndWait();
 			
-			reservasList.getItems().clear();
+			reservasList.refresh();
 
 			listarReservas();
 
@@ -226,7 +226,7 @@ public class ReservasController implements Initializable {
 			App.error("Error", "Error al borrar", "Debe tener una reserva seleccionada.");
 		}
 
-		reservasList.getItems().clear();
+		reservasList.refresh();
 
 		listarReservas();
 	}
