@@ -72,6 +72,10 @@ public class TipoPlatoProp {
 		this.platosTipoProperty().set(platosTipo);
 	}
 	
+	@Override
+	public String toString() {
+		return getNombre();
+	}
 	
 	
 }

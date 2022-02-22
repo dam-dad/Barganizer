@@ -105,5 +105,7 @@ public class Plato {
 	public void setCarta(Carta carta) {
 		this.carta = carta;
 	}
+	
+	
 
 }

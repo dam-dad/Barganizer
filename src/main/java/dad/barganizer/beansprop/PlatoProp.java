@@ -22,15 +22,22 @@ public class PlatoProp {
 	private ObjectProperty<Image> foto = new SimpleObjectProperty<Image>();
 	private ObjectProperty<TipoPlato> tipo = new SimpleObjectProperty<TipoPlato>();
 	private DoubleProperty precio = new SimpleDoubleProperty();
-	private ObjectProperty<Carta> carta = new SimpleObjectProperty<Carta>();
+	private ObjectProperty<CartaProp> carta = new SimpleObjectProperty<CartaProp>();
+	private ObjectProperty<Plato> referencia = new SimpleObjectProperty<Plato>();
+	private ObjectProperty<byte[]> bytesfoto = new SimpleObjectProperty<byte[]>();
 
 	public PlatoProp(Plato p) {
 		setId(p.getId());
 		setNombre(p.getNombre());
-		setFoto(new Image(new ByteArrayInputStream(p.getFoto())));
+		setBytesfoto(p.getFoto());
+		setFoto((p.getFoto() != null) ? new Image(new ByteArrayInputStream(p.getFoto())) : null);
 		setTipo(p.getTipoPlato());
 		setPrecio(p.getPrecio());
-		setCarta(p.getCarta());
+		setCarta(new CartaProp(p.getCarta()));
+		setReferencia(p);
+	}
+
+	public PlatoProp() {
 	}
 
 	public final StringProperty nombreProperty() {
@@ -81,15 +88,15 @@ public class PlatoProp {
 		this.precioProperty().set(precio);
 	}
 
-	public final ObjectProperty<Carta> cartaProperty() {
+	public final ObjectProperty<CartaProp> cartaProperty() {
 		return this.carta;
 	}
 
-	public final Carta getCarta() {
+	public final CartaProp getCarta() {
 		return this.cartaProperty().get();
 	}
 
-	public final void setCarta(final Carta carta) {
+	public final void setCarta(final CartaProp carta) {
 		this.cartaProperty().set(carta);
 	}
 
@@ -103,6 +110,30 @@ public class PlatoProp {
 
 	public final void setId(final long id) {
 		this.idProperty().set(id);
+	}
+
+	public final ObjectProperty<Plato> referenciaProperty() {
+		return this.referencia;
+	}
+
+	public final Plato getReferencia() {
+		return this.referenciaProperty().get();
+	}
+
+	public final void setReferencia(final Plato referencia) {
+		this.referenciaProperty().set(referencia);
+	}
+
+	public final ObjectProperty<byte[]> bytesfotoProperty() {
+		return this.bytesfoto;
+	}
+
+	public final byte[] getBytesfoto() {
+		return this.bytesfotoProperty().get();
+	}
+
+	public final void setBytesfoto(final byte[] bytesfoto) {
+		this.bytesfotoProperty().set(bytesfoto);
 	}
 
 }

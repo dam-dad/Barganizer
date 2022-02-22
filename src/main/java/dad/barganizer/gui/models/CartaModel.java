@@ -1,5 +1,6 @@
 package dad.barganizer.gui.models;
 
+import dad.barganizer.ImageTile;
 import dad.barganizer.beansprop.CartaProp;
 import dad.barganizer.beansprop.PlatoProp;
 import javafx.beans.property.ListProperty;
@@ -14,6 +15,8 @@ public class CartaModel {
 	private ListProperty<CartaProp> lista = new SimpleListProperty<CartaProp>(FXCollections.observableArrayList());
 	private ObjectProperty<CartaProp> cartaSeleccionada = new SimpleObjectProperty<CartaProp>();
 	private ObjectProperty<PlatoProp> platoSeleccionado = new SimpleObjectProperty<PlatoProp>();
+	private ObjectProperty<ImageTile> imageTileClickeado = new SimpleObjectProperty<ImageTile>();
+	
 
 	public final ListProperty<CartaProp> listaProperty() {
 		return this.lista;
@@ -49,6 +52,18 @@ public class CartaModel {
 
 	public final void setPlatoSeleccionado(final PlatoProp platoSeleccionado) {
 		this.platoSeleccionadoProperty().set(platoSeleccionado);
+	}
+
+	public final ObjectProperty<ImageTile> imageTileClickeadoProperty() {
+		return this.imageTileClickeado;
+	}
+
+	public final ImageTile getImageTileClickeado() {
+		return this.imageTileClickeadoProperty().get();
+	}
+
+	public final void setImageTileClickeado(final ImageTile imageTileClickeado) {
+		this.imageTileClickeadoProperty().set(imageTileClickeado);
 	}
 
 }
