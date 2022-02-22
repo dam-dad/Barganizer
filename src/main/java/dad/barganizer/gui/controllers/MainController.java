@@ -100,7 +100,9 @@ public class MainController implements Initializable {
 
 			if (nv != null) {
 				model.setNombreEmpleado(model.getEmpleado().getNombre());
-				model.setFoto(new Image(new ByteArrayInputStream(model.getEmpleado().getFoto())));
+				model.setFoto((model.getEmpleado().getFoto() != null)
+						? new Image(new ByteArrayInputStream(model.getEmpleado().getFoto()))
+						: new Image(getClass().getResourceAsStream("/images/unknown_person.jpg")));
 
 				empleadoImageView.imageProperty().bind(model.fotoProperty());
 				empleadoLabel.textProperty().bind(model.nombreEmpleadoProperty());
