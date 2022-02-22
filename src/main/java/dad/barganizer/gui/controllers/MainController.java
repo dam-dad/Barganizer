@@ -1,5 +1,6 @@
 package dad.barganizer.gui.controllers;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
@@ -7,6 +8,7 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXButton;
 
+import dad.barganizer.gui.models.MainModel;
 import eu.hansolo.tilesfx.Tile;
 import eu.hansolo.tilesfx.TileBuilder;
 import eu.hansolo.tilesfx.Tile.SkinType;
@@ -15,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,134 +25,179 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class MainController implements Initializable {
-	
+
 	public static final double TILE_WIDTH = 300;
-    public static final double TILE_HEIGHT = 150;
-    
-    private Tile clockTile;
-    
-    // CONTROLADORES
-    private InicioController inicioController = new InicioController();
-    private MesasController mesasController = new MesasController();
-    private EmpleadoController empleadoController = new EmpleadoController();
-    private ReservasController reservasController = new ReservasController();
-  
-    
-    //VISTA
-    
-    @FXML
-    private JFXButton cartaButton;
+	public static final double TILE_HEIGHT = 150;
 
-    @FXML
-    private Label cerrarSesionLabel;
+	private Tile clockTile;
 
-    @FXML
-    private JFXButton comandasButton;
+	// CONTROLADORES
+	private InicioController inicioController = new InicioController();
+	private MesasController mesasController;
+	private EmpleadoController empleadoController;
+	private ReservasController reservasController = new ReservasController();
+	private CartaController cartaController;
+	private LoginController loginController;
 
-    @FXML
-    private ImageView empleadoImageView;
+	// MODEL
+	private MainModel model = new MainModel();
 
-    @FXML
-    private Label empleadoLabel;
+	// VISTA
 
-    @FXML
-    private JFXButton empleadosButton;
+	@FXML
+	private JFXButton cartaButton;
 
-    @FXML
-    private JFXButton inicioButton;
+	@FXML
+	private Label cerrarSesionLabel;
 
-    @FXML
-    private JFXButton mesaButton;
+	@FXML
+	private JFXButton comandasButton;
 
-    @FXML
-    private JFXButton reservasButton;
+	@FXML
+	private ImageView empleadoImageView;
 
-    @FXML
-    private BorderPane root;
+	@FXML
+	private Label empleadoLabel;
 
-    @FXML
-    private HBox satisfactionWidgetBox;
+	@FXML
+	private JFXButton empleadosButton;
 
-    @FXML
-    private VBox widgetBox;
-    
-    public BorderPane getView() {
-    	return root;
-    }
-    
-    public MainController() throws IOException {
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
-    	loader.setController(this);
-    	loader.load();
-    }
+	@FXML
+	private JFXButton inicioButton;
+
+	@FXML
+	private JFXButton mesaButton;
+
+	@FXML
+	private JFXButton reservasButton;
+
+	@FXML
+	private BorderPane root;
+
+	@FXML
+	private HBox satisfactionWidgetBox;
+
+	@FXML
+	private VBox widgetBox;
+
+	public BorderPane getView() {
+		return root;
+	}
+
+	public MainController() throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
+		loader.setController(this);
+		loader.load();
+	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
-		clockTile = TileBuilder.create()
-                .skinType(SkinType.CLOCK).textSize(TextSize.BIGGER)
-                .title("RELOJ BARGANIZER")
-                .prefSize(TILE_WIDTH, TILE_HEIGHT)
-                .text("Hora local canaria")
-                .dateVisible(true)
-                .locale(Locale.US)
-                .running(true)
-                .build();
-		
+
+		model.empleadoProperty().addListener((o, ov, nv) -> {
+
+			if (nv != null) {
+				model.setNombreEmpleado(model.getEmpleado().getNombre());
+				model.setFoto((model.getEmpleado().getFoto() != null)
+						? new Image(new ByteArrayInputStream(model.getEmpleado().getFoto()))
+						: new Image(getClass().getResourceAsStream("/images/unknown_person.jpg")));
+
+				empleadoImageView.imageProperty().bind(model.fotoProperty());
+				empleadoLabel.textProperty().bind(model.nombreEmpleadoProperty());
+			}
+
+		});
+
+		clockTile = TileBuilder.create().skinType(SkinType.CLOCK).textSize(TextSize.BIGGER).title("RELOJ BARGANIZER")
+				.prefSize(TILE_WIDTH, TILE_HEIGHT).text("Hora local canaria").dateVisible(true).locale(Locale.US)
+				.running(true).build();
+
 		widgetBox.getChildren().addAll(clockTile);
-		
+
 		empleadoImageView.setImage(new Image(getClass().getResourceAsStream("/images/unknown_person.jpg")));
 		root.setCenter(inicioController.getView());
 
 	}
-	
-    @FXML
-    void onCartasAction(ActionEvent event) {
 
-    }
+	@FXML
+	void onCartasAction(ActionEvent event) {
+		try {
+			cartaController = new CartaController();
+			root.setCenter(cartaController.getView());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-    @FXML
-    void onCerrarSesionAction(MouseEvent event) {
+	}
 
-    }
+	@FXML
+	void onCerrarSesionAction(MouseEvent event) {
 
-    @FXML
-    void onComandasAction(ActionEvent event) {
+		Stage stage = (Stage) inicioButton.getScene().getWindow();
+		stage.close();
 
-    }
+		try {
+			loginController = new LoginController();
 
-    @FXML
-    void onEmpleadosAction(ActionEvent event) {
-    	
-    	root.setCenter(empleadoController.getView());
-    }
+			Stage stageLogin = new Stage();
+			stage.setTitle("BARGANIZER");
+			stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.PNG")));
+			stage.setScene(new Scene(loginController.getView()));
+			stage.getScene().getStylesheets().setAll("/css/mainView.css");
 
-    @FXML
-    void onInicioAction(ActionEvent event) {
-    	try {
+			stage.show();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@FXML
+	void onEmpleadosAction(ActionEvent event) {
+		try {
+			empleadoController = new EmpleadoController();
+			root.setCenter(empleadoController.getView());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@FXML
+	void onInicioAction(ActionEvent event) {
+		try {
 			inicioController = new InicioController();
 			root.setCenter(inicioController.getView());
 		} catch (IOException e) {
-			
 			e.printStackTrace();
 		}
-    	
 
-    }
+	}
 
-    @FXML
-    void onMesasAction(ActionEvent event) {
+	@FXML
+	void onMesasAction(ActionEvent event) {
+		try {
+			mesasController = new MesasController();
+			root.setCenter(mesasController.getView());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-    	root.setCenter(mesasController.getView());
-    }
+	}
 
-    @FXML
-    void onReservasAction(ActionEvent event) {
-    	
-    	root.setCenter(reservasController.getView());
+	@FXML
+	void onReservasAction(ActionEvent event) {
 
-    }
+		root.setCenter(reservasController.getView());
+
+	}
+
+	public MainModel getModel() {
+		return model;
+	}
 
 }

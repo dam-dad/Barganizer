@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dad.barganizer.App;
-import dad.barganizer.beansprop.ComandaProp;
 import dad.barganizer.beansprop.EmpleadoProp;
 import dad.barganizer.db.beans.Carta;
-import dad.barganizer.db.beans.Comanda;
 import dad.barganizer.db.beans.Empleado;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Plato;
 import dad.barganizer.db.beans.Reserva;
+import dad.barganizer.db.beans.TipoPlato;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -75,7 +74,6 @@ public class BarganizerTasks {
 		
 		@Override
 		protected ObservableList<Carta> call() throws Exception {
-			
 			List<Carta> listaCartas = FuncionesDB.listarCarta(App.getBARGANIZERDB().getSes());
 			
 			return FXCollections.observableArrayList(listaCartas);
@@ -118,13 +116,7 @@ public class BarganizerTasks {
 		
 		@Override
 		protected ObservableList<Plato> call() throws Exception {
-			List<Plato> listaPostres = null;
-			
-			if (cartaSeleccionada.getNombre().equals("Completa")) {
-				listaPostres = FuncionesDB.listarPostres(App.getBARGANIZERDB().getSes());
-			} else {
-				listaPostres = FuncionesDB.listarPostresCarta(App.getBARGANIZERDB().getSes(), cartaSeleccionada);
-			}
+			List<Plato> listaPostres = FuncionesDB.listarPostres(App.getBARGANIZERDB().getSes());
 			
 			return FXCollections.observableArrayList(listaPostres);
 		}
@@ -154,6 +146,17 @@ public class BarganizerTasks {
 			List<Mesa> listaMesas = FuncionesDB.listarMesasActivas(App.getBARGANIZERDB().getSes());
 
 			return FXCollections.observableArrayList(listaMesas);
+		}
+	};
+	
+	private Task<ObservableList<TipoPlato>> obtenerTiposPlatoTask = new Task<ObservableList<TipoPlato>>() {
+
+		@Override
+		protected ObservableList<TipoPlato> call() throws Exception {
+
+			List<TipoPlato> listaTipos = FuncionesDB.listarTipo(App.getBARGANIZERDB().getSes());
+
+			return FXCollections.observableArrayList(listaTipos);
 		}
 	};
 	
@@ -197,5 +200,9 @@ public class BarganizerTasks {
 	
 	public Task<ObservableList<Mesa>> getObtenerMesasActivasTask() {
 		return obtenerMesasActivasTask;
+	}
+	
+	public Task<ObservableList<TipoPlato>> getObtenerTiposPlatoTask() {
+		return obtenerTiposPlatoTask;
 	}
 }

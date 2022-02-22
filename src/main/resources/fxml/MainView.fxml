@@ -13,10 +13,10 @@
    <top>
       <HBox alignment="CENTER" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER" minWidth="275.0" spacing="5.0" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER" minWidth="275.0" spacing="5.0" styleClass="usuario" HBox.hgrow="ALWAYS">
                <children>
                   <ImageView fx:id="empleadoImageView" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
-                  <VBox alignment="CENTER">
+                  <VBox alignment="CENTER" spacing="5.0">
                      <children>
                         <Label fx:id="empleadoLabel" text="Cabrera Cabrera, Daniel">
                            <font>
@@ -26,17 +26,23 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="cerrarSesionLabel" onMouseClicked="#onCerrarSesionAction" text="Cerrar sesión" textFill="#2738c2">
+                        <Label fx:id="cerrarSesionLabel" onMouseClicked="#onCerrarSesionAction" text="Cerrar sesión" textFill="#2738c2" underline="true">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Label>
                      </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
                   </VBox>
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
             </HBox>
             <VBox fx:id="widgetBox" alignment="TOP_CENTER" maxWidth="300.0" minWidth="150.0" spacing="5.0" HBox.hgrow="ALWAYS">
                <padding>
@@ -49,14 +55,6 @@
                </padding>
                <children>
                   <JFXButton fx:id="inicioButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onInicioAction" prefWidth="125.0" text="Inicio" HBox.hgrow="ALWAYS">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </JFXButton>
-                  <JFXButton fx:id="comandasButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onComandasAction" prefWidth="125.0" text="Comandas" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>

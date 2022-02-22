@@ -278,6 +278,43 @@ public class FuncionesDB {
 			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
 		}
 	}
+	
+	public static void insertarEmpleado(Session ses, String nombre, String apellido, String genero, LocalDate nacimiento,
+			LocalDate ingreso, byte[] foto, byte[] pass) {
+
+		try {
+
+			ses.beginTransaction();
+
+			Empleado empleado = new Empleado();
+			empleado.setNombre(nombre);
+			empleado.setApellidos(apellido);
+			empleado.setGenero(genero);
+			empleado.setFnac(nacimiento);
+			empleado.setFechaIngreso(ingreso);
+			empleado.setFoto(foto);
+			empleado.setPass(pass);
+			ses.persist(empleado);
+			ses.getTransaction().commit();
+
+		} catch (Exception e) {
+			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
+		}
+	}
+	
+	public static void insertarEmpleado(Session ses, Empleado emp) {
+
+		try {
+
+			ses.beginTransaction();
+
+			ses.persist(emp);
+			ses.getTransaction().commit();
+
+		} catch (Exception e) {
+			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
+		}
+	}
 
 	public static void insertarMesa(Session ses, int personas, Boolean activa) {
 

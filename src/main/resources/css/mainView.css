@@ -1,95 +1,74 @@
-.inicio {
-	-fx-font-style: normal;
-    -fx-font-size: 1.1em;
-    -fx-font-family: "Merienda";
-}
+
 
 /* ============================= */
 /* ESTILOS DE LA TABLA DE INICIO */
-.inicioTablaMesas {
-	-fx-background-color: #EFFBBA;
+.table-view .column-header,
+.table-view .column-header-background .filler {
+    -fx-padding: 8.0 15.0 15.0 15.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 8.0;
+    -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #a34313 0.0%, #903b12 100.0%),
+        #9d4024,
+        #d86e3a,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #d86e3a, #c54e2c);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.75) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: bold;
+}
+.table-view .column-header .label{
+   -fx-text-fill: black;
+   -fx-font-weight: bold; 
+   -fx-alignment: CENTER;
+}
+.table-view .cell{
+  -fx-cell-size: 35.0;
+  -fx-alignment: center-left;
+
+  -fx-text-fill: black;
+  -fx-alignment: CENTER;
+   
 }
 
-.cartaFlows {
-	-fx-font-family: "System";
+.table-view .table-row-cell:selected {
+   -fx-background-color: #FFC371; 
+   -fx-text-background-color: black;
 }
 
-.inicioTablaMesas .column-header-background{
-    -fx-background-color: linear-gradient(to bottom, #1dbbdd44, #93f9b944);
-    -fx-background-radius: 7px 7px 0px 0px;
-    -fx-background-insets: 0 11px 0 0;
-    -fx-padding: 0 0 5px 0;
+/* scroll bar starts here */
+
+/* The increment and decrement button CSS class of scrollbar */
+.table-view .increment-button ,.table-view .decrement-button {
+    -fx-background-color:transparent;
+    -fx-background-radius: 2.0em;
+
 }
 
-.inicioTablaMesas .column-header {
+/* The main scrollbar **track** CSS class  */
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track{
     -fx-background-color: transparent;
+    -fx-border-color:derive( #6622CC,80.0%);
+
+    -fx-background-radius: 2.0em;
+    -fx-border-radius:2.0em;
 }
 
-.inicioTablaMesas .table-column{
-	-fx-alignment: CENTER;
-	-fx-cell-size: 10;
-}
-.inicioTablaMesas .table-cell{
-    -fx-border-color: transparent;
-    -fx-padding: 2 0 2 10px;
-}
-.inicioTablaMesas .table-row-cell:hover {
-    -fx-background-color: #93f9b911;
-    -fx-text-background-color: red;
-}
-.inicioTablaMesas .table-row-cell:odd{
-    -fx-background-color: #93f9b911;
-    -fx-background-insets: 0, 0 0 1 0;
-    -fx-padding: 0.0em;
-}
-.inicioTablaMesas .table-row-cell:even{
-    -fx-background-color: #1dbbdd11;
-    -fx-background-insets: 0, 0 0 1 0;
-    -fx-padding: 0.0em;
-}
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+        -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #a34313 0.0%, #903b12 100.0%),
+        #9d4024,
+        #d86e3a,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #d86e3a, #c54e2c);
+    -fx-background-insets: 2.0, 0.0, 0.0;
+    -fx-background-radius: 2.0em;
 
-.inicioTablaMesas .table-row-cell:highlighted {
-    -fx-background-color: #81c483;
-    -fx-background-radius: 15px;
-}
-
-.inicioTablaMesas .table-row-cell:selected {
-    -fx-background-color: #054C31;
-    -fx-border-color: transparent;
-    -fx-background-radius: 15px;
-}
-.inicioTablaMesas .table-row-cell:selected .text {
-	
-}
-
-.inicioTablaMesas .table-row-cell .text {
-	-fx-fill: red;
-}
-
-.inicioGenerarTicket .button{
-		-fx-background-color: 
-        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #449430 0.0%, #3C842A 100.0%),
-        #326625,
-        #7CEC64,
-        radial-gradient(center 50.0% 50.0%, radius 100.0%, #7CEC64, #326625);
-        
-}
-
-.inicioAccionesColumn .button {
-	-fx-background-color: 
-        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #A55252 0.0%, #9C4949 100.0%),
-        #9C4949,
-        #E76161,
-        radial-gradient(center 50.0% 50.0%, radius 100.0%, #E76161, #954242);
-}
-
-.inicioAccionesColumn .button .text {
-	-fx-fill: #F1D964;
 }
 /* ============================= */
 
 .button {
-	-fx-padding: 8.0 15.0 15.0 15.0;
+    -fx-padding: 8.0 15.0 15.0 15.0;
     -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
     -fx-background-radius: 8.0;
     -fx-background-color: 
@@ -114,6 +93,18 @@
     -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
 }
 .button Text {
-    -fx-fill: white;
+    -fx-fill: red;
     -fx-effect: dropshadow( gaussian , #a30000 , 0.0,0.0,0.0,2.0 );
+}
+
+.usuario {
+	-fx-background-radius: 8.0;
+    -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #a34313 0.0%, #903b12 100.0%),
+        #9d4024,
+        #d86e3a,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #d86e3a, #c54e2c);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.75) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: bold;
+    -fx-font-size: 1.1em;
 }

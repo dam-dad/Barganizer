@@ -100,7 +100,7 @@ public class ModificarMesaController implements Initializable {
 
 			FuncionesDB.modificarMesa(App.getBARGANIZERDB().getSes(), m);
 			
-			App.confirm("Completado", "Modificación completada", "Se ha completado la modificación con éxito");
+			App.info("Completado", "Modificación completada", "Se ha completado la modificación con éxito");
 			
 			Stage stage = (Stage) modificarButton.getScene().getWindow();
 			stage.close();
