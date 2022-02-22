@@ -5,17 +5,21 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Date;
-
+import com.mysql.cj.conf.LongProperty;
 import dad.barganizer.db.beans.Empleado;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 
 public class EmpleadoProp {
-
+	
+	private IntegerProperty id = new SimpleIntegerProperty();
 	private StringProperty nombre = new SimpleStringProperty();
 	private StringProperty apellido = new SimpleStringProperty();
 	private ObjectProperty<Sexo> genero = new SimpleObjectProperty<Sexo>();
@@ -25,6 +29,7 @@ public class EmpleadoProp {
 	private StringProperty password = new SimpleStringProperty();
 	
 	public EmpleadoProp() {
+		id = new SimpleIntegerProperty(this, "id");
 		nombre = new SimpleStringProperty(this, "nombre");
 		apellido = new SimpleStringProperty(this, "apellido");
 		genero = new SimpleObjectProperty<Sexo>(this, "genero");
@@ -35,6 +40,7 @@ public class EmpleadoProp {
 	}
 
 	public EmpleadoProp(Empleado e) {
+		id.set(e.getId());
 		nombre.set(e.getNombre());
 		apellido.set(e.getApellidos());
 		genero.set( (e.getGenero().equals("Hombre")) ? Sexo.Hombre:Sexo.Mujer);
@@ -42,10 +48,7 @@ public class EmpleadoProp {
 		ingreso.set(e.getFechaIngreso());
 		foto.set(new Image(new ByteArrayInputStream(e.getFoto())));
 		password.set(new String(e.getPass(), StandardCharsets.UTF_8));
-		
 	}
-	
-	
 	
 	@Override
 	public String toString() {
@@ -155,9 +158,22 @@ public class EmpleadoProp {
 	public final void setPassword(final String password) {
 		this.passwordProperty().set(password);
 	}
+
+	public final IntegerProperty idProperty() {
+		return this.id;
+	}
 	
 
+	public final int getId() {
+		return this.idProperty().get();
+	}
 	
+
+	public final void setId(final int id) {
+		this.idProperty().set(id);
+	}
+	
+
 	
 }
 

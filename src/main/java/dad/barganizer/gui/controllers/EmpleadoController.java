@@ -1,6 +1,9 @@
 package dad.barganizer.gui.controllers;
+
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -27,21 +30,36 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
+
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+
+import org.hibernate.Session;
+
 import dad.barganizer.App;
 import dad.barganizer.beansprop.EmpleadoProp;
 import dad.barganizer.beansprop.Sexo;
 import dad.barganizer.db.BarganizerTasks;
-
 import dad.barganizer.db.FuncionesDB;
+import dad.barganizer.db.HibernateUtil;
 import dad.barganizer.db.beans.Empleado;
-
+import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.gui.models.EmpleadoModel;
 import dad.barganizer.thread.HiloEjecutador;
 import javafx.fxml.Initializable;
@@ -53,6 +71,7 @@ public class EmpleadoController implements Initializable {
 	private ObjectProperty<EmpleadoProp> seleccionado = new SimpleObjectProperty<>();
 	private ListProperty<EmpleadoProp> lista = new SimpleListProperty<>(FXCollections.observableArrayList());
 
+	private IntegerProperty id = new SimpleIntegerProperty();
 	private StringProperty nombre = new SimpleStringProperty();
 	private StringProperty apellidos = new SimpleStringProperty();
 	private ObjectProperty<Sexo> genero = new SimpleObjectProperty<>();
@@ -70,6 +89,9 @@ public class EmpleadoController implements Initializable {
 
 	@FXML
 	private BorderPane borderDerecho;
+	
+	@FXML
+    private Button modificarButton;
 
 	@FXML
 	private Button cambiarImagenButton;
@@ -169,11 +191,12 @@ public class EmpleadoController implements Initializable {
 
 		BarganizerTasks tareas = new BarganizerTasks();
 		tareas.getObtenerEmpleadosTask().setOnSucceeded(e -> {
+			System.out.println(tareas.getObtenerEmpleadosTask().getValue());
 			lista.setAll(tareas.getObtenerEmpleadosTask().getValue());
-			System.out.println(lista);
 		});
 
 		tareas.getObtenerEmpleadosTask().setOnFailed(e -> {
+			System.err.println(tareas.getObtenerEmpleadosTask().getValue());
 			e.getSource().getException().printStackTrace();
 		});
 
@@ -235,70 +258,97 @@ public class EmpleadoController implements Initializable {
 		}
 	}
 
-	@FXML
-	void OnActionAnadir(ActionEvent event) {
-
-		EmpleadoProp empleado = new EmpleadoProp();
-		empleado.setNombre("Nombre");
-		empleado.setApellido("Apellido");
-		lista.add(empleado);
+	private byte[] convertToBytes(ImageView image) throws IOException {
+		try (ByteArrayOutputStream bos = new ByteArrayOutputStream(); ObjectOutput out = new ObjectOutputStream(bos)) {
+			out.writeObject(image);
+			return bos.toByteArray();
+		}
 	}
 
 	@FXML
-	void OnEliminarAction(ActionEvent event) {
+	void OnActionAnadir(ActionEvent event) {
 
 		try {
-			FuncionesDB.eliminarEmpleado(App.getBARGANIZERDB().getSes(),
-					(Empleado) (listaEmpleados.getSelectionModel().getSelectedItems()));
-			App.info("COMPLETADO", "Borrado completado", "Se ha eliminado la mesa con éxito");
 
-			listaEmpleados.refresh();
+			
+			
+			InputStream fnew = getClass().getResourceAsStream("/images/unknown_person.jpg");
+			
+			BufferedImage originalImage = ImageIO.read(fnew);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(originalImage, "jpg", baos);
+			byte[] imagen = baos.toByteArray();
+
+			FuncionesDB.insertarEmpleado(HibernateUtil.getSessionFactory().openSession(), "Nuevo empleado", "Apellidos",
+					"Hombre", LocalDate.now(), LocalDate.now(), fnew.readAllBytes(), "");
+
+			App.info("Completado", "Inserción completado", "Se ha completado la inserción con éxito");
+
+			listaEmpleados.getItems().clear();
 
 			listarEmpleados();
 
 		} catch (Exception e) {
-			App.error("Error", "Error al modificar", "Debe tener un empleado seleccionado.");
-		}
-
-		EmpleadoProp seleccionado = listaEmpleados.getSelectionModel().getSelectedItem();
-
-		if (seleccionado == null) {
-
-			Alert alertaError = new Alert(AlertType.ERROR);
-			alertaError.setTitle("ERROR");
-			alertaError.setHeaderText("No hay ningún empleado seleccionado.");
-			alertaError.showAndWait();
-
-		}
-
-		else {
-
-			Alert alertaConfirm = new Alert(AlertType.CONFIRMATION);
-			alertaConfirm.setTitle("Eliminar empleado");
-			alertaConfirm.setHeaderText(
-					"Se va a eliminar el alumno: " + seleccionado.getNombre() + " " + seleccionado.getApellido());
-			Optional<ButtonType> opcion = alertaConfirm.showAndWait();
-
-			if (opcion.get().equals(ButtonType.OK)) {
-
-				lista.remove(seleccionado);
-			}
+			e.printStackTrace();
 
 		}
 
 	}
 
-	private void listarEmpleados() {
+	@FXML
+	void OnEliminarAction(ActionEvent event) {
+		
 
-		BarganizerTasks tarea = new BarganizerTasks();
+		if (seleccionado != null) {
 
-		tarea.getObtenerEmpleadosTask().setOnSucceeded(e -> {
-			ObservableList<EmpleadoProp> emp = tarea.getObtenerEmpleadosTask().getValue();
-			lista.setValue(emp);
+			if (App.confirm("BORRAR", "PROCESO DE BORRADO", "¿Desea borrar el empleado?")) {
+				
+				 FuncionesDB.eliminarEmpleado(App.getBARGANIZERDB().getSes(), seleccionado.getValue());
+				 
+				 
+				App.info("COMPLETADO", "Borrado completado", "Se ha eliminado al empleado con éxito");
+			}
+
+		} else {
+			App.error("Error", "Error al borrar", "Debe tener una mesa seleccionada.");
 		}
 
-		);
+		listaEmpleados.getItems().clear();
 
+		listarEmpleados();
+
+	}
+
+	@FXML
+    void onModificarButton(ActionEvent event) {
+
+		if (seleccionado != null) {
+			EmpleadoProp empleado = null;
+			empleado.setId(seleccionado.getValue().getId());
+			empleado.setNombre(nombre.getValue());
+			empleado.setApellido(apellidos.getValue());
+			empleado.setGenero(generoCombo.getValue());
+			empleado.setNacimiento(nacimiento.getValue());
+			empleado.setIngreso(ingreso.getValue());
+			empleado.setPassword(password.getValue());
+			empleado.setFoto(imageView.getImage());
+			
+			FuncionesDB.modificarEmpleado(App.getBARGANIZERDB().getSes(), empleado);
+		}
+    }
+
+	private void listarEmpleados() {
+
+		BarganizerTasks tareas = new BarganizerTasks();
+		tareas.getObtenerEmpleadosTask().setOnSucceeded(e -> {
+			lista.setAll(tareas.getObtenerEmpleadosTask().getValue());
+		});
+
+		tareas.getObtenerEmpleadosTask().setOnFailed(e -> {
+			e.getSource().getException().printStackTrace();
+		});
+
+		new HiloEjecutador(App.semaforo, tareas.getObtenerEmpleadosTask()).start();
 	}
 
 	@FXML
