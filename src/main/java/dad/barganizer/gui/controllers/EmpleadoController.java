@@ -280,10 +280,7 @@ public class EmpleadoController implements Initializable {
 			
 			InputStream fnew = getClass().getResourceAsStream("/images/unknown_person.jpg");
 			
-			BufferedImage originalImage = ImageIO.read(fnew);
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(originalImage, "jpg", baos);
-			byte[] imagen = baos.toByteArray();
+			
 
 			FuncionesDB.insertarEmpleado(HibernateUtil.getSessionFactory().openSession(), "Nuevo empleado", "Apellidos",
 					"Hombre", LocalDate.now(), LocalDate.now(), fnew.readAllBytes(), "");
@@ -322,6 +319,8 @@ public class EmpleadoController implements Initializable {
 		listaEmpleados.getItems().clear();
 
 		listarEmpleados();
+		
+		App.info("Completado", "Borrado completado", "Se ha completado el borrado con éxito");
 
 	}
 
@@ -329,7 +328,7 @@ public class EmpleadoController implements Initializable {
     void onModificarButton(ActionEvent event) {
 
 		if (seleccionado != null) {
-			EmpleadoProp empleado = null;
+			EmpleadoProp empleado = new EmpleadoProp();
 			empleado.setId(seleccionado.getValue().getId());
 			empleado.setNombre(nombre.getValue());
 			empleado.setApellido(apellidos.getValue());
@@ -339,7 +338,9 @@ public class EmpleadoController implements Initializable {
 			empleado.setPassword(password.getValue());
 			empleado.setFoto(imageView.getImage());
 			
-			//FuncionesDB.modificarEmpleado(App.getBARGANIZERDB().getSes(), empleado);
+			FuncionesDB.modificarEmpleado(App.getBARGANIZERDB().getSes(), empleado);
+			
+			App.info("Completado", "Modificación completada", "Se ha completado la modificación con éxito");
 		}
     }
 
@@ -363,7 +364,7 @@ public class EmpleadoController implements Initializable {
 		Stage stageChoser = new Stage();
 		FileChooser fileChoser = new FileChooser();
 		stageChoser.initOwner(App.primaryStage);
-		fileChoser.setTitle("Abrir agenda...");
+		fileChoser.setTitle("Abrir imagen...");
 		fileChoser.getExtensionFilters().addAll(new ExtensionFilter("Todos los archivos", "*.*"),
 				new ExtensionFilter("Todos las imágenes", "*.jpg, *.png, *.bmp"));
 
@@ -374,7 +375,7 @@ public class EmpleadoController implements Initializable {
 			try {
 				Image foto = new Image(imagen.toURI().toURL().toExternalForm());
 				imageView.setImage(foto);
-
+				
 			} catch (Exception e) {
 
 				Alert alertaError = new Alert(AlertType.ERROR);

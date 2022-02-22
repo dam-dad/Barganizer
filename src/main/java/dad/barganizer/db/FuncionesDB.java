@@ -1,5 +1,6 @@
 package dad.barganizer.db;
 
+import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -19,6 +20,7 @@ import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Plato;
 import dad.barganizer.db.beans.Reserva;
 import dad.barganizer.db.beans.TipoPlato;
+import javafx.scene.image.Image;
 
 public class FuncionesDB {
 
@@ -258,8 +260,8 @@ public class FuncionesDB {
 		}
 	}
 
-	public static void insertarEmpleado(Session ses, String nombre, String apellido, String genero, LocalDate nacimiento,
-			LocalDate ingreso, byte[] foto, String contrasena) {
+	public static void insertarEmpleado(Session ses, String nombre, String apellido, String genero,
+			LocalDate nacimiento, LocalDate ingreso, byte[] foto, String contrasena) {
 
 		try {
 
@@ -281,10 +283,6 @@ public class FuncionesDB {
 			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
 		}
 	}
-	
-
-	
-
 
 	public static void insertarMesa(Session ses, int personas, Boolean activa) {
 
@@ -480,9 +478,9 @@ public class FuncionesDB {
 			sesion.beginTransaction();
 
 			Comanda c = sesion.get(Comanda.class, comanda.getId());
-			
+
 			if (comanda.getCantidad() > 1) {
-				c.setCantidad(c.getCantidad()-1);
+				c.setCantidad(c.getCantidad() - 1);
 				sesion.save(c);
 			} else {
 				sesion.delete(c);
@@ -730,22 +728,24 @@ public class FuncionesDB {
 			return null;
 		}
 	}
-	
-	public static void modificarEmpleado(Session ses, Empleado e) {
+
+	public static void modificarEmpleado(Session ses, EmpleadoProp empleadoProp) {
 		try {
 
 			ses.beginTransaction();
 
-			Empleado emp = ses.get(Empleado.class, e.getId());
+			Empleado emp = ses.get(Empleado.class, empleadoProp.getId());
 			
-			emp.setNombre(e.getNombre());
-			emp.setApellidos(e.getApellidos());
-			emp.setGenero(e.getGenero());
-			emp.setFnac(e.getFnac());
-			emp.setFoto(e.getFoto());
-			emp.setPass(e.getPass());
-			emp.setFechaIngreso(e.getFechaIngreso());
 			
+
+			emp.setNombre(empleadoProp.getNombre());
+			emp.setApellidos(empleadoProp.getApellido());
+			emp.setGenero(empleadoProp.getGenero().toString());
+			emp.setFnac(empleadoProp.getNacimiento());
+			//emp.setFoto(empleadoProp.getFoto());
+			emp.setPass(empleadoProp.getPassword().getBytes());
+			emp.setFechaIngreso(empleadoProp.getIngreso());
+
 			ses.update(emp);
 
 			ses.getTransaction().commit();
@@ -754,15 +754,15 @@ public class FuncionesDB {
 			ses.getTransaction().rollback();
 		}
 	}
-	
+
 	public static void eliminarComandasMesa(Session ses, Mesa m) {
 		try {
-			
+
 			ses.beginTransaction();
 			ses.createQuery("DELETE FROM Comanda WHERE mesa = " + m.getNumero()).executeUpdate();
-			
+
 			ses.getTransaction().commit();
-			
+
 		} catch (Exception ex) {
 			System.err.println("Hubo un error al eliminar las comandas de la mesa: ");
 			ses.getTransaction().rollback();
