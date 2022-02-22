@@ -12,3 +12,4 @@ buildNumber.properties
 .settings
 .classpath
 .project
+src/main/java/dad/barganizer/db/Prueba.java
