@@ -32,6 +32,7 @@ public class App extends Application {
 		loginController = new LoginController();
 		Font fuente = Font.loadFont(getClass().getResourceAsStream("/Styles/Merienda-Regular.ttf"), 16);
 		Font fuenteNegrita = Font.loadFont(getClass().getResourceAsStream("/Styles/Merienda-Bold.ttf"), 16);
+
 	}
 	
 	@Override

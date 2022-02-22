@@ -1,8 +1,4 @@
-.inicio {
-	-fx-font-style: normal;
-    -fx-font-size: 1.1em;
-    -fx-font-family: "Merienda";
-}
+
 
 /* ============================= */
 /* ESTILOS DE LA TABLA DE INICIO */
@@ -20,23 +16,22 @@
     -fx-font-weight: bold;
 }
 .table-view .column-header .label{
-   -fx-text-fill: white;
+   -fx-text-fill: black;
    -fx-font-weight: bold; 
    -fx-alignment: CENTER;
 }
 .table-view .cell{
   -fx-cell-size: 35.0;
   -fx-alignment: center-left;
-  -fx-background-color: white;
+
   -fx-text-fill: black;
   -fx-alignment: CENTER;
    
 }
-table-view .table-row-cell:selected {
+
+.table-view .table-row-cell:selected {
    -fx-background-color: #FFC371; 
    -fx-text-background-color: black;
-   
-       
 }
 
 /* scroll bar starts here */
@@ -44,48 +39,36 @@ table-view .table-row-cell:selected {
 /* The increment and decrement button CSS class of scrollbar */
 .table-view .increment-button ,.table-view .decrement-button {
     -fx-background-color:transparent;
-	-fx-background-radius: 2.0em;
+    -fx-background-radius: 2.0em;
 
 }
 
 /* The main scrollbar **track** CSS class  */
-.table-view .scroll-bar:horizontal .track,
-.table-view .scroll-bar:vertical .track{
-	-fx-background-color: transparent;
-	-fx-border-color:derive( #6622CC,80.0%);
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color:derive( #6622CC,80.0%);
 
-	-fx-background-radius: 2.0em;
-	-fx-border-radius:2.0em;
+    -fx-background-radius: 2.0em;
+    -fx-border-radius:2.0em;
 }
 
 /* The main scrollbar **thumb** CSS class which we drag every time (movable) */
-.table-view .scroll-bar:horizontal .thumb,
-.table-view .scroll-bar:vertical .thumb {
-    -fx-background-color:derive( #6622CC,90.0%);
-	-fx-background-insets: 2.0, 0.0, 0.0;
-	-fx-background-radius: 2.0em;
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+        -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #a34313 0.0%, #903b12 100.0%),
+        #9d4024,
+        #d86e3a,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #d86e3a, #c54e2c);
+    -fx-background-insets: 2.0, 0.0, 0.0;
+    -fx-background-radius: 2.0em;
 
-}
-
-/* chart properties */
-
-.chart {
-    -fx-padding: 10.0px;
-    -fx-background-color: transparent;
-    -fx-legend-visible: false;
-}
-.chart-plot-background {
-    -fx-background-color:transparent;
-}
-
-.chart-pie {
-    -fx-border-color: derive(-fx-pie-color, 1.0%);
-    -fx-border-width: 0.0px;
 }
 /* ============================= */
 
 .button {
-	-fx-padding: 8.0 15.0 15.0 15.0;
+    -fx-padding: 8.0 15.0 15.0 15.0;
     -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
     -fx-background-radius: 8.0;
     -fx-background-color: 
@@ -112,4 +95,20 @@ table-view .table-row-cell:selected {
 .button Text {
     -fx-fill: red;
     -fx-effect: dropshadow( gaussian , #a30000 , 0.0,0.0,0.0,2.0 );
+}
+
+.usuario {
+	-fx-background-radius: 8.0;
+    -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #a34313 0.0%, #903b12 100.0%),
+        #9d4024,
+        #d86e3a,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #d86e3a, #c54e2c);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.75) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: bold;
+    -fx-font-size: 1.1em;
+}
+
+.inicioAccionesColumn .button {
+	-fx-background-color: #b7b7a4;
 }
