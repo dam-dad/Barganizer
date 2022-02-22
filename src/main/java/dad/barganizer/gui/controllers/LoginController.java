@@ -65,8 +65,8 @@ public class LoginController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		model.nombreProperty().bind(nombreText.textProperty());
-		model.claveProperty().bind(psswdText.textProperty());
+		model.nombreProperty().bindBidirectional(nombreText.textProperty());
+		model.claveProperty().bindBidirectional(psswdText.textProperty());
 
 	}
 
@@ -80,7 +80,9 @@ public class LoginController implements Initializable {
 
 			try {
 				mainController = new MainController();
-
+				
+				mainController.getModel().setEmpleado(model.getEmpleado());
+				
 				Stage stage = new Stage();
 				stage.setTitle("BARGANIZER");
 				stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.PNG")));
@@ -126,8 +128,9 @@ public class LoginController implements Initializable {
 
 			if (!empleadosList.isEmpty()) {
 				validLogin = true;
+				model.setEmpleado(empleadosList.get(0));
 			}
-
+			
 			return validLogin;
 		}
 

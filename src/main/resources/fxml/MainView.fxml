@@ -26,7 +26,7 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="cerrarSesionLabel" onMouseClicked="#onCerrarSesionAction" text="Cerrar sesión" textFill="#2738c2">
+                        <Label fx:id="cerrarSesionLabel" onMouseClicked="#onCerrarSesionAction" text="Cerrar sesión" textFill="#2738c2" underline="true">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
