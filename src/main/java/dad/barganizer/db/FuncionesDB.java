@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import dad.barganizer.App;
 import dad.barganizer.beansprop.ComandaProp;
+import dad.barganizer.beansprop.EmpleadoProp;
 import dad.barganizer.db.beans.Alergeno;
 import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.Comanda;
@@ -92,14 +93,15 @@ public class FuncionesDB {
 	public static List<Empleado> listarEmpleados(Session ses) {
 
 		try {
-
+			ses.beginTransaction();
 			Query consulta = ses.createQuery("from Empleado");
 			List<Empleado> empleadoList = consulta.getResultList();
-
+			ses.getTransaction().commit();
 			return empleadoList;
 
 		} catch (Exception e) {
 			System.err.println("Error.");
+			e.printStackTrace();
 			ses.getTransaction().rollback();
 			return null;
 		}
@@ -257,7 +259,7 @@ public class FuncionesDB {
 	}
 
 	public static void insertarEmpleado(Session ses, String nombre, String apellido, String genero, LocalDate nacimiento,
-			LocalDate ingreso, byte[] foto) {
+			LocalDate ingreso, byte[] foto, String contrasena) {
 
 		try {
 
@@ -270,6 +272,7 @@ public class FuncionesDB {
 			empleado.setFnac(nacimiento);
 			empleado.setFechaIngreso(ingreso);
 			empleado.setFoto(foto);
+			empleado.setPass(contrasena.getBytes());
 
 			ses.persist(empleado);
 			ses.getTransaction().commit();
@@ -279,42 +282,9 @@ public class FuncionesDB {
 		}
 	}
 	
-	public static void insertarEmpleado(Session ses, String nombre, String apellido, String genero, LocalDate nacimiento,
-			LocalDate ingreso, byte[] foto, byte[] pass) {
 
-		try {
-
-			ses.beginTransaction();
-
-			Empleado empleado = new Empleado();
-			empleado.setNombre(nombre);
-			empleado.setApellidos(apellido);
-			empleado.setGenero(genero);
-			empleado.setFnac(nacimiento);
-			empleado.setFechaIngreso(ingreso);
-			empleado.setFoto(foto);
-			empleado.setPass(pass);
-			ses.persist(empleado);
-			ses.getTransaction().commit();
-
-		} catch (Exception e) {
-			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
-		}
-	}
 	
-	public static void insertarEmpleado(Session ses, Empleado emp) {
 
-		try {
-
-			ses.beginTransaction();
-
-			ses.persist(emp);
-			ses.getTransaction().commit();
-
-		} catch (Exception e) {
-			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
-		}
-	}
 
 	public static void insertarMesa(Session ses, int personas, Boolean activa) {
 
@@ -525,13 +495,13 @@ public class FuncionesDB {
 		}
 	}
 
-	public static void eliminarEmpleado(Session sesion, Empleado empleado) {
+	public static void eliminarEmpleado(Session sesion, EmpleadoProp empleadoProp) {
 
 		try {
 
 			sesion.beginTransaction();
 
-			Empleado e = sesion.get(Empleado.class, empleado.getId());
+			Empleado e = sesion.get(Empleado.class, empleadoProp.getId());
 			sesion.delete(e);
 
 			sesion.getTransaction().commit();

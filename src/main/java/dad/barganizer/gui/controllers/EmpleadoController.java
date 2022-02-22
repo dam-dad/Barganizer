@@ -1,5 +1,6 @@
 package dad.barganizer.gui.controllers;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -137,6 +138,9 @@ public class EmpleadoController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		
+		eliminarButton.disableProperty().bind(Bindings.when(seleccionado.isNull()).then(true).otherwise(false));
 
 		NO_PHOTO = new SimpleObjectProperty<Image>(new Image(getClass().getResourceAsStream("/images/prueba.PNG")));
 
@@ -187,6 +191,8 @@ public class EmpleadoController implements Initializable {
 			System.out.println(nv);
 		});
 
+		
+		
 		borderDerecho.setDisable(true);
 
 		BarganizerTasks tareas = new BarganizerTasks();
@@ -333,7 +339,7 @@ public class EmpleadoController implements Initializable {
 			empleado.setPassword(password.getValue());
 			empleado.setFoto(imageView.getImage());
 			
-			FuncionesDB.modificarEmpleado(App.getBARGANIZERDB().getSes(), empleado);
+			//FuncionesDB.modificarEmpleado(App.getBARGANIZERDB().getSes(), empleado);
 		}
     }
 
