@@ -6,6 +6,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
+
+import org.controlsfx.validation.Severity;
+import org.controlsfx.validation.ValidationResult;
+import org.controlsfx.validation.ValidationSupport;
+import org.controlsfx.validation.Validator;
 
 import com.jfoenix.controls.JFXButton;
 
@@ -14,6 +20,7 @@ import dad.barganizer.db.FuncionesDB;
 import dad.barganizer.db.beans.Empleado;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.db.beans.Reserva;
+import dad.barganizer.validators.IntegerValidator;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -68,6 +75,18 @@ public class ModificarReservaController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		Validator<String> horaValidator = (control, value) -> {
+			return ValidationResult.fromMessageIf(horaText, "La hora introducida no es válida.", Severity.ERROR,
+					!Pattern.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]", value) );
+		};
+		
+		ValidationSupport support = new ValidationSupport();
+		support.registerValidator(personasText, true, new IntegerValidator());
+		support.registerValidator(horaText, true, horaValidator);
+		
+		
+		añadirButton.disableProperty().bind(support.invalidProperty());
 
 	}
 

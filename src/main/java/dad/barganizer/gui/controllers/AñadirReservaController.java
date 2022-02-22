@@ -4,6 +4,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
+
+import org.controlsfx.validation.Severity;
+import org.controlsfx.validation.ValidationResult;
+import org.controlsfx.validation.ValidationSupport;
+import org.controlsfx.validation.Validator;
 
 import com.jfoenix.controls.JFXButton;
 
@@ -13,6 +19,7 @@ import dad.barganizer.db.beans.Empleado;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.gui.models.AñadirReservaModel;
 import dad.barganizer.gui.models.ReservasModel;
+import dad.barganizer.validators.IntegerValidator;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -73,6 +80,19 @@ public class AñadirReservaController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
+		
+		Validator<String> horaValidator = (control, value) -> {
+			return ValidationResult.fromMessageIf(horaText, "La hora introducida no es válida.", Severity.ERROR,
+					!Pattern.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]", value) );
+		};
+		
+		ValidationSupport support = new ValidationSupport();
+		support.registerValidator(personasText, true, new IntegerValidator());
+		support.registerValidator(horaText, true, horaValidator);
+		
+		
+		añadirButton.disableProperty().bind(support.invalidProperty());
+		
 		
 		mesaCombo.setItems(FXCollections.observableArrayList(FuncionesDB.listarMesas(App.getBARGANIZERDB().getSes())));
 		empleadoCombo.setItems(FXCollections.observableArrayList(FuncionesDB.listarEmpleados(App.getBARGANIZERDB().getSes())));
