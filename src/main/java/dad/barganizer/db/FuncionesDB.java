@@ -171,7 +171,7 @@ public class FuncionesDB {
 		}
 	}
 
-	public static void insertarPlato(Session ses, String nombre, TipoPlato tipo, Double precio, byte[] foto, Carta c) {
+	public static void insertarPlato(Session ses, String nombre, TipoPlato tipo, double precio, byte[] foto, Carta c) {
 
 		try {
 
@@ -193,24 +193,6 @@ public class FuncionesDB {
 		}
 	}
 
-	public static void insertarBebida(Session ses, String nombre, byte[] foto, Double precio) {
-
-		try {
-
-			ses.beginTransaction();
-
-			Plato bebida = new Plato();
-			bebida.setNombre(nombre);
-			bebida.setFoto(foto);
-			bebida.setPrecio(precio);
-			bebida.setTipoPlato(ses.get(TipoPlato.class, 3));
-			ses.persist(bebida);
-			ses.getTransaction().commit();
-
-		} catch (Exception e) {
-			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
-		}
-	}
 
 	public static void insertarAlergeno(Session ses, String nombre, byte[] foto, Double precio) {
 
