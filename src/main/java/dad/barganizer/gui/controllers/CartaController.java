@@ -117,7 +117,7 @@ public class CartaController implements Initializable {
 		/* Listener para detectar cambios en la lista */
 		model.listaProperty().addListener((o, ov, nv) -> {
 			System.out.println("LISTAPROPERTY --- " + ov + "---NV: " + nv);
-			
+
 			if (model.getIndiceAnterior() > -1 && cartasList.getSelectionModel().getSelectedIndex() == -1) {
 				cartasList.getSelectionModel().select(model.getIndiceAnterior());
 			}
@@ -380,9 +380,9 @@ public class CartaController implements Initializable {
 
 			// Refresco de la lista
 			BarganizerTasks tareas = new BarganizerTasks();
-			
+
 			tareas.getInicializarCartaPropTask().setOnSucceeded(e -> {
-				
+
 				ObservableList<CartaProp> l = tareas.getInicializarCartaPropTask().getValue();
 				System.out.println("INICIALIZARCARTAPROPTASK: " + l);
 				model.setLista(l);
@@ -409,7 +409,6 @@ public class CartaController implements Initializable {
 				borrarCartaTask.setOnSucceeded(e -> {
 					App.info("Éxito", "Carta eliminada", "Se ha eliminado la carta correctamente");
 
-					
 				});
 
 				redeclararTask();
@@ -436,7 +435,8 @@ public class CartaController implements Initializable {
 	void onAddPlatoAction(ActionEvent event) {
 		try {
 			addPlatoController = new AddPlatoController();
-			addPlatoController.getModel().setCartaSeleccionada(cartasList.getItems().get(cartasList.getSelectionModel().getSelectedIndex()).getReferencia());
+			addPlatoController.getModel().setCartaSeleccionada(
+					cartasList.getItems().get(cartasList.getSelectionModel().getSelectedIndex()).getReferencia());
 			BarganizerTasks tareas = new BarganizerTasks();
 
 			tareas.getObtenerTiposPlatoTask().setOnSucceeded(e -> {
@@ -458,7 +458,7 @@ public class CartaController implements Initializable {
 			addPlatoStage.initOwner(App.primaryStage);
 			addPlatoStage.initModality(Modality.APPLICATION_MODAL);
 			addPlatoStage.showAndWait();
-			
+
 			// Al añadirse el plato se deberá refrescar la lista
 			redeclararTask();
 			inicializarCartaTask.setOnSucceeded(e -> {
@@ -467,7 +467,7 @@ public class CartaController implements Initializable {
 			});
 
 			new HiloEjecutador(App.semaforo, inicializarCartaTask).start();
-			
+
 		} catch (IOException e) {
 			App.error("Error - Excepción", "Error cargando controlador", "Detalles: " + e.getMessage());
 		}
@@ -491,7 +491,7 @@ public class CartaController implements Initializable {
 					model.setImageTileClickeado(null);
 					model.setPlatoSeleccionado(null);
 					model.setCartaSeleccionada(model.getLista().get(model.getIndiceAnterior()));
-					
+
 				});
 
 				borrarPlatoTask.setOnFailed(e -> {

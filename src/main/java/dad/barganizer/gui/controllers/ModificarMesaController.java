@@ -25,11 +25,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ModificarMesaController implements Initializable {
-	
-	// MODEL
-	
-	public ObjectProperty<Mesa> seleccionado = new SimpleObjectProperty<>();
 
+	// MODEL
+
+	public ObjectProperty<Mesa> seleccionado = new SimpleObjectProperty<>();
 
 	@FXML
 	private JFXCheckBox activaCheck;
@@ -48,7 +47,6 @@ public class ModificarMesaController implements Initializable {
 
 	@FXML
 	private VBox root;
-	
 
 	public VBox getView() {
 		return root;
@@ -62,18 +60,15 @@ public class ModificarMesaController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
-		
+
 		ValidationSupport support = new ValidationSupport();
 		support.registerValidator(cantidadText, true, new IntegerValidator());
 		modificarButton.disableProperty().bind(support.invalidProperty());
-		
 
 	}
 
 	@FXML
 	void onCancelarAction(ActionEvent event) {
-
 
 		Stage stage = (Stage) cancelarButton.getScene().getWindow();
 		stage.close();
@@ -82,27 +77,26 @@ public class ModificarMesaController implements Initializable {
 	@FXML
 	void onModificarAction(ActionEvent event) {
 
-		
 		try {
-			
+
 			Mesa m = new Mesa();
 			m.setNumero(seleccionado.get().getNumero());
 			m.setCantPersonas(Integer.parseInt(cantidadText.getText()));
 			m.setActiva(activaCheck.isSelected());
 
 			FuncionesDB.modificarMesa(App.getBARGANIZERDB().getSes(), m);
-			
+
 			App.info("Completado", "Modificación completada", "Se ha completado la modificación con éxito");
-			
+
 			Stage stage = (Stage) modificarButton.getScene().getWindow();
 			stage.close();
 
 		} catch (Exception e) {
 
-			App.error("Error", "Error al añadir","No se ha podido completar la modificación.");
+			App.error("Error", "Error al añadir", "No se ha podido completar la modificación.");
 		}
 	}
-	
+
 	public JFXCheckBox getActivaCheck() {
 		return activaCheck;
 	}
@@ -124,7 +118,8 @@ public class ModificarMesaController implements Initializable {
 	}
 
 	public void setIdLabel(String idLabel) {
-		this.idLabel.setText(idLabel);;
+		this.idLabel.setText(idLabel);
+		;
 	}
 
 }

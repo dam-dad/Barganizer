@@ -457,11 +457,11 @@ public class InicioController implements Initializable {
 
 		@Override
 		protected ObservableList<ComandaProp> call() throws Exception {
-			
+
 			System.out.println("ACTUALIZACIÓN DE COMANDA MESA. VALORES: MESA Nº"
 					+ ((Mesa) model.getTileMesaSeleccionada().getReferencia()).getNumero()
 					+ ((Plato) model.getTilePlatoSeleccionado().getReferencia()).getNombre());
-			
+
 			FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(),
 					(Mesa) model.getTileMesaSeleccionada().getReferencia(),
 					(Plato) model.getTilePlatoSeleccionado().getReferencia(), 1);
@@ -505,14 +505,13 @@ public class InicioController implements Initializable {
 			return null;
 		};
 	};
-	
 
 	private void redeclararTasks() {
 		actualizarComandasMesaTask = new Task<ObservableList<ComandaProp>>() {
 
 			@Override
 			protected ObservableList<ComandaProp> call() throws Exception {
-				
+
 				List<Comanda> listaComandas = FuncionesDB.listarComandasMesa(App.getBARGANIZERDB().getSes(),
 						(Mesa) model.getTileMesaSeleccionada().getReferencia());
 

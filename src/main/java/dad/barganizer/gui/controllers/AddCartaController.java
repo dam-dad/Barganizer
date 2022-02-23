@@ -22,64 +22,64 @@ import javafx.stage.Stage;
 public class AddCartaController implements Initializable {
 
 	private AddCartaModel model = new AddCartaModel();
-	
-    @FXML
-    private Button addButton;
 
-    @FXML
-    private HBox buttonsBox;
+	@FXML
+	private Button addButton;
 
-    @FXML
-    private Button cancelButton;
+	@FXML
+	private HBox buttonsBox;
 
-    @FXML
-    private TextField nombreText;
+	@FXML
+	private Button cancelButton;
 
-    @FXML
-    private VBox view;
-    
+	@FXML
+	private TextField nombreText;
 
-    @FXML
-    void onAddAction(ActionEvent event) {
-    	
-    	insertarCartaTask.setOnSucceeded(e -> {
-    		App.info("Éxito", "Carta insertada", "Se ha insertado la carta " + model.getNombre() + " correctamente");
-    		App.getBARGANIZERDB().resetSesion();
-    		Stage stage = (Stage) addButton.getScene().getWindow();
-    		stage.close();
-    	});
-    	
-    	insertarCartaTask.setOnFailed(e -> {
-    		App.error("Error", "Carta no insertada", "La carta no pudo ser insertada. Detalles: " + e.getSource().getException().getMessage());
-    	});
-    	
-    	new HiloEjecutador(App.semaforo, insertarCartaTask).start();
-    	
-    }
+	@FXML
+	private VBox view;
 
-    @FXML
-    void onCancelAction(ActionEvent event) {
+	@FXML
+	void onAddAction(ActionEvent event) {
+
+		insertarCartaTask.setOnSucceeded(e -> {
+			App.info("Éxito", "Carta insertada", "Se ha insertado la carta " + model.getNombre() + " correctamente");
+			App.getBARGANIZERDB().resetSesion();
+			Stage stage = (Stage) addButton.getScene().getWindow();
+			stage.close();
+		});
+
+		insertarCartaTask.setOnFailed(e -> {
+			App.error("Error", "Carta no insertada",
+					"La carta no pudo ser insertada. Detalles: " + e.getSource().getException().getMessage());
+		});
+
+		new HiloEjecutador(App.semaforo, insertarCartaTask).start();
+
+	}
+
+	@FXML
+	void onCancelAction(ActionEvent event) {
 		Stage stage = (Stage) cancelButton.getScene().getWindow();
 		stage.close();
-    }
-    
-    public AddCartaController() throws IOException {
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AddCartaView.fxml"));
-    	loader.setController(this);
-    	loader.load();
-    }
+	}
+
+	public AddCartaController() throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AddCartaView.fxml"));
+		loader.setController(this);
+		loader.load();
+	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 		nombreText.textProperty().bindBidirectional(model.nombreProperty());
-		
+
 	}
-	
+
 	public VBox getView() {
 		return view;
 	}
-	
+
 	private Task<Void> insertarCartaTask = new Task<Void>() {
 
 		@Override
@@ -89,7 +89,7 @@ public class AddCartaController implements Initializable {
 			return null;
 		}
 	};
-	
+
 	public void redeclararTask() {
 		insertarCartaTask = new Task<Void>() {
 
@@ -106,4 +106,3 @@ public class AddCartaController implements Initializable {
 		return model;
 	}
 }
-

@@ -19,7 +19,7 @@
 	<field name="Precio" class="java.lang.Double"/>
 	<field name="Cantidad" class="java.lang.Integer"/>
 	<field name="Cuantia" class="java.lang.Double"/>
-	<field name="Total" class="java.lang.Double"/>
+	<field name="Total" class="java.lang.String"/>
 	<field name="rutalogo" class="java.lang.String"/>
 	<field name="rutalogoder" class="java.lang.String"/>
 	<field name="foto" class="javafx.scene.image.Image"/>
@@ -30,7 +30,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="136" splitType="Stretch">
+		<band height="140" splitType="Stretch">
 			<image onErrorType="Icon">
 				<reportElement x="0" y="0" width="164" height="126" uuid="ddc15723-2728-421f-b95e-2df9faf64ce1"/>
 				<imageExpression><![CDATA[$F{rutalogo}]]></imageExpression>

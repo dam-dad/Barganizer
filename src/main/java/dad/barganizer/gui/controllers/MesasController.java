@@ -67,10 +67,9 @@ public class MesasController implements Initializable {
 
 		model.mesaSeleccionadaProperty().addListener((o, ov, nv) -> {
 			if (ov != null && nv != null) {
-				if (((Mesa)ov.getReferencia()).isActiva()) {
-				ov.setBackgroundColor(Color.DARKGREEN);
-				}
-				else {
+				if (((Mesa) ov.getReferencia()).isActiva()) {
+					ov.setBackgroundColor(Color.DARKGREEN);
+				} else {
 					ov.setBackgroundColor(Color.CRIMSON);
 				}
 			}
@@ -82,16 +81,16 @@ public class MesasController implements Initializable {
 		mesasFlow.setOnMouseClicked(e -> {
 
 			if (model.getMesaSeleccionada() != null) {
-				if (((Mesa)model.getMesaSeleccionada().getReferencia()).isActiva()) {
+				if (((Mesa) model.getMesaSeleccionada().getReferencia()).isActiva()) {
 					model.getMesaSeleccionada().setBackgroundColor(Color.DARKGREEN);
 					model.setMesaSeleccionada(null);
 				}
-				
+
 				else {
 					model.getMesaSeleccionada().setBackgroundColor(Color.CRIMSON);
 					model.setMesaSeleccionada(null);
 				}
-				
+
 			}
 
 		});
@@ -178,8 +177,7 @@ public class MesasController implements Initializable {
 					FuncionesDB.eliminarMesa(App.getBARGANIZERDB().getSes(),
 							(Mesa) (model.getMesaSeleccionada().getReferencia()));
 					App.info("Completado", "Borrado completado", "Se ha completado el borrado con éxito");
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					App.error("Error", "Error al borrar", "No puede borrar una mesa con una comanda activa.");
 				}
 
@@ -207,22 +205,21 @@ public class MesasController implements Initializable {
 			model.setListaMesas(res);
 
 			for (Mesa mesa : res) {
-				
+
 				if (mesa.isActiva()) {
 					ImageTile img = new ImageTile(mesa);
 					img.setBackgroundColor(Color.DARKGREEN);
 					mesasFlow.getChildren().add(img);
 				}
-				
+
 				else {
-					
+
 					ImageTile img = new ImageTile(mesa);
 					img.setBackgroundColor(Color.CRIMSON);
 					mesasFlow.getChildren().add(img);
-					
+
 				}
-				
-				
+
 			}
 
 			ObservableList<Node> l = mesasFlow.getChildren();

@@ -43,10 +43,16 @@ public class EmpleadoProp {
 		genero.set( (e.getGenero().equals("Hombre")) ? Sexo.Hombre:Sexo.Mujer);
 		nacimiento.set(e.getFnac());
 		ingreso.set(e.getFechaIngreso());
-		ByteArrayInputStream bais = new ByteArrayInputStream(e.getFoto());
-		setBytesFoto(bais.readAllBytes());
-		Image f = new Image(new ByteArrayInputStream(e.getFoto()));
-		foto.set(f);
+		if (e.getFoto() != null) {
+			ByteArrayInputStream bais = new ByteArrayInputStream(e.getFoto());
+			setBytesFoto(bais.readAllBytes());
+			Image f = new Image(new ByteArrayInputStream(e.getFoto()));
+			foto.set(f);
+		} else {
+			foto.set(null);
+		}
+		
+		
 		password.set(new String(e.getPass(), StandardCharsets.UTF_8));
 	}
 	

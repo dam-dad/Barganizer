@@ -76,9 +76,9 @@ public class LoginController implements Initializable {
 
 			try {
 				mainController = new MainController();
-				
+
 				mainController.getModel().setEmpleado(model.getEmpleado());
-				
+
 				Stage stage = new Stage();
 				stage.setTitle("BARGANIZER");
 				stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.PNG")));
@@ -118,14 +118,15 @@ public class LoginController implements Initializable {
 			ses.beginTransaction();
 
 			@SuppressWarnings("unchecked")
-			List<Empleado> empleadosList = ses.createQuery("FROM Empleado WHERE nombre = '" + model.getNombre()
-					+ "' AND pass = '" + model.getClave() + "'").list();
+			List<Empleado> empleadosList = ses.createQuery(
+					"FROM Empleado WHERE nombre = '" + model.getNombre() + "' AND pass = '" + model.getClave() + "'")
+					.list();
 
 			if (!empleadosList.isEmpty()) {
 				validLogin = true;
 				model.setEmpleado(empleadosList.get(0));
 			}
-			
+
 			return validLogin;
 		}
 

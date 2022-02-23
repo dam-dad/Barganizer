@@ -31,41 +31,39 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class AñadirReservaController implements Initializable {
-	
-	
+
 	AñadirReservaModel model = new AñadirReservaModel();
 
-    @FXML
-    private JFXButton añadirButton;
+	@FXML
+	private JFXButton añadirButton;
 
-    @FXML
-    private JFXButton eliminarButton;
+	@FXML
+	private JFXButton eliminarButton;
 
-    @FXML
-    private TextField empleadText;
+	@FXML
+	private TextField empleadText;
 
-    @FXML
-    private DatePicker fechaPicker;
+	@FXML
+	private DatePicker fechaPicker;
 
-    @FXML
-    private TextField horaText;
+	@FXML
+	private TextField horaText;
 
-    @FXML
-    private TextField mesaText;
+	@FXML
+	private TextField mesaText;
 
-    @FXML
-    private TextField personasText;
-    
-    @FXML
-    private ComboBox<Mesa> mesaCombo;
-    
-    @FXML
-    private ComboBox<Empleado> empleadoCombo;
+	@FXML
+	private TextField personasText;
 
-    @FXML
-    private VBox root;
+	@FXML
+	private ComboBox<Mesa> mesaCombo;
 
-    
+	@FXML
+	private ComboBox<Empleado> empleadoCombo;
+
+	@FXML
+	private VBox root;
+
 	public VBox getView() {
 		return root;
 	}
@@ -79,25 +77,23 @@ public class AñadirReservaController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		
 		Validator<String> horaValidator = (control, value) -> {
 			return ValidationResult.fromMessageIf(horaText, "La hora introducida no es válida.", Severity.ERROR,
-					!Pattern.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]", value) );
+					!Pattern.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]", value));
 		};
-		
+
 		ValidationSupport support = new ValidationSupport();
 		support.registerValidator(personasText, true, new IntegerValidator());
 		support.registerValidator(horaText, true, horaValidator);
-		
-		
+
 		añadirButton.disableProperty().bind(support.invalidProperty());
-		
-		
+
 		mesaCombo.setItems(FXCollections.observableArrayList(FuncionesDB.listarMesas(App.getBARGANIZERDB().getSes())));
-		empleadoCombo.setItems(FXCollections.observableArrayList(FuncionesDB.listarEmpleados(App.getBARGANIZERDB().getSes())));
+		empleadoCombo.setItems(
+				FXCollections.observableArrayList(FuncionesDB.listarEmpleados(App.getBARGANIZERDB().getSes())));
 		mesaCombo.getSelectionModel().select(0);
 		empleadoCombo.getSelectionModel().select(0);
-		
+
 		model.empleadoSeleccionadoProperty().bind(empleadoCombo.getSelectionModel().selectedItemProperty());
 		model.mesaSeleccionadaProperty().bind(mesaCombo.getSelectionModel().selectedItemProperty());
 		model.personasProperty().bind(personasText.textProperty());
@@ -106,31 +102,34 @@ public class AñadirReservaController implements Initializable {
 
 	}
 
-    @FXML
-    void onAñadirAction(ActionEvent event) {
-    	
-    	try {
+	@FXML
+	void onAñadirAction(ActionEvent event) {
+
+		try {
 			String time = model.getHora();
 			LocalTime hora = LocalTime.parse(time);
-			
-			FuncionesDB.insertarReserva(App.getBARGANIZERDB().getSes(), model.getMesaSeleccionada(), model.getEmpleadoSeleccionado(), model.getFecha().atTime(hora), Integer.parseInt(model.getPersonas()));
+
+			FuncionesDB.insertarReserva(App.getBARGANIZERDB().getSes(), model.getMesaSeleccionada(),
+					model.getEmpleadoSeleccionado(), model.getFecha().atTime(hora),
+					Integer.parseInt(model.getPersonas()));
 
 			App.info("Completado", "Inserción completado", "Se ha completado la inserción con éxito");
-			
+
 			Stage stage = (Stage) añadirButton.getScene().getWindow();
 			stage.close();
-			
+
 		} catch (Exception e) {
 
-			App.error("Error", "Error al añadir","No se ha podido completar la inserción. Revise que los datos introducidos son correctos.");
-			
-		}
-    }
+			App.error("Error", "Error al añadir",
+					"No se ha podido completar la inserción. Revise que los datos introducidos son correctos.");
 
-    @FXML
-    void onCancelarAction(ActionEvent event) {
+		}
+	}
+
+	@FXML
+	void onCancelarAction(ActionEvent event) {
 
 		Stage stage = (Stage) eliminarButton.getScene().getWindow();
 		stage.close();
-    }
+	}
 }

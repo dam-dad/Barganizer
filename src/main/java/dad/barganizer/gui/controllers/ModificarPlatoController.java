@@ -85,23 +85,19 @@ public class ModificarPlatoController implements Initializable {
 		nombrePlatoText.textProperty().addListener((o, ov, nv) -> {
 			System.out.println("Textfield --- OV: " + ov + "--- NV: " + nv);
 		});
-		
+
 		cartaCombo.itemsProperty().addListener((o, ov, nv) -> {
 			System.out.println("CartaCOMBO - - - OV: " + ov + "--- NV: " + nv);
 		});
 
-		
-		
 		tipoCombo.itemsProperty().bind(model.listaTiposProperty());
 		cartaCombo.itemsProperty().bind(model.listaCartasProperty());
 
-		
-		
 		ValidationSupport support = new ValidationSupport();
-        support.registerValidator(precioText, true, new DoubleValidator());
-        support.registerValidator(nombrePlatoText, true, new NombrePlatoValidator());
-        modificarButton.disableProperty().bind(support.invalidProperty());
-		
+		support.registerValidator(precioText, true, new DoubleValidator());
+		support.registerValidator(nombrePlatoText, true, new NombrePlatoValidator());
+		modificarButton.disableProperty().bind(support.invalidProperty());
+
 		onActualizarListaAction(null);
 	}
 
@@ -116,16 +112,15 @@ public class ModificarPlatoController implements Initializable {
 	private void bindAll() {
 		nombrePlatoText.textProperty().bindBidirectional(model.getPlatoModificar().nombreProperty());
 
-		precioText.setText(""+model.getPlatoModificar().getPrecio());
+		precioText.setText("" + model.getPlatoModificar().getPrecio());
 //		precioText.textProperty().bindBidirectional(model.getPlatoModificar().precioProperty(),
 //				new NumberStringConverter());
-		
+
 		cartaCombo.valueProperty().bindBidirectional(model.getPlatoModificar().getCarta().referenciaProperty());
 		tipoCombo.valueProperty().bindBidirectional(model.getPlatoModificar().tipoProperty());
 		imgPlatoView.imageProperty().bindBidirectional(model.getPlatoModificar().fotoProperty());
 
 	}
-
 
 	@FXML
 	void onCancelAction(ActionEvent event) {
@@ -145,7 +140,7 @@ public class ModificarPlatoController implements Initializable {
 					new ExtensionFilter("Todos las imágenes", "*.jpg, *.png, *.bmp"));
 
 			File imagen = fileChoser.showOpenDialog(stageChoser);
-			
+
 			if (imagen != null) {
 				FileInputStream fis = new FileInputStream(imagen);
 				if (fis != null) {
@@ -156,7 +151,8 @@ public class ModificarPlatoController implements Initializable {
 			} else {
 				InputStream is = getClass().getResourceAsStream("/images/platounknown.png");
 				model.getPlatoModificar().setBytesfoto(is.readAllBytes());
-				model.getPlatoModificar().setFoto(new Image(getClass().getResourceAsStream("/images/platounknown.png")));
+				model.getPlatoModificar()
+						.setFoto(new Image(getClass().getResourceAsStream("/images/platounknown.png")));
 			}
 
 		} catch (FileNotFoundException e) {
@@ -176,17 +172,17 @@ public class ModificarPlatoController implements Initializable {
 		protected Void call() throws Exception {
 			Plato nuevo = model.getPlatoModificar().getReferencia();
 			nuevo.setNombre(model.getPlatoModificar().getNombre());
-			
+
 			nuevo.setFoto(model.getPlatoModificar().getBytesfoto());
 			nuevo.setTipoPlato(model.getPlatoModificar().getTipo());
 			nuevo.setPrecio(Double.parseDouble(precioText.getText()));
-			
+
 			nuevo.setCarta(cartaCombo.getSelectionModel().getSelectedItem());
-			
+
 			System.out.println("ActualizarPlatoTask: " + nuevo);
 			System.out.println("Index cartacombo:" + cartaCombo.getSelectionModel().getSelectedIndex());
 			FuncionesDB.modificarPlato(App.getBARGANIZERDB().getSes(), nuevo);
-			
+
 			return null;
 		}
 	};
@@ -198,7 +194,7 @@ public class ModificarPlatoController implements Initializable {
 			actualizarPlatoTask.getValue();
 			System.out.println("Plato actualizado");
 			App.info("Actualizado", "Plato actualizado", "El plato ha sido actualizado satisfactoriamente");
-			
+
 			Stage stage = (Stage) modificarButton.getScene().getWindow();
 			stage.close();
 //			onActualizarListaAction(null);
@@ -213,7 +209,7 @@ public class ModificarPlatoController implements Initializable {
 
 		new HiloEjecutador(App.semaforo, actualizarPlatoTask).start();
 	}
-	
+
 	void onActualizarListaAction(ActionEvent event) {
 		BarganizerTasks tareas = new BarganizerTasks();
 

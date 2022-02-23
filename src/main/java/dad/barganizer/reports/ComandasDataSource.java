@@ -67,7 +67,7 @@ public class ComandasDataSource implements JRDataSource {
 			for (ComandaProp comanda : comandas) {
 				suma += (comanda.getPrecioUnidad() * comanda.getCantidad());
 			}
-			valor = suma;
+			valor = String.format("%.2f €", suma);
 			break;
 		}
 		return valor;

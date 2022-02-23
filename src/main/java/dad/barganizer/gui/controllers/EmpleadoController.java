@@ -50,8 +50,6 @@ import javafx.fxml.Initializable;
 
 public class EmpleadoController implements Initializable {
 
-	
-
 	private ObjectProperty<EmpleadoProp> seleccionado = new SimpleObjectProperty<>();
 	private ListProperty<EmpleadoProp> lista = new SimpleListProperty<>(FXCollections.observableArrayList());
 
@@ -66,7 +64,7 @@ public class EmpleadoController implements Initializable {
 	private ObjectProperty<Image> nuevaFoto = new SimpleObjectProperty<>();
 	private ObjectProperty<EmpleadoProp> empleadoMod = new SimpleObjectProperty<EmpleadoProp>();
 	private ObjectProperty<byte[]> bytesFotoRecogida = new SimpleObjectProperty<>();
-	
+
 	@FXML
 	private Button anadirButton;
 
@@ -75,9 +73,9 @@ public class EmpleadoController implements Initializable {
 
 	@FXML
 	private BorderPane borderDerecho;
-	
+
 	@FXML
-    private Button modificarButton;
+	private Button modificarButton;
 
 	@FXML
 	private Button cambiarImagenButton;
@@ -123,8 +121,7 @@ public class EmpleadoController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
-		
+
 		eliminarButton.disableProperty().bind(Bindings.when(seleccionado.isNull()).then(true).otherwise(false));
 
 		NO_PHOTO = new SimpleObjectProperty<Image>(new Image(getClass().getResourceAsStream("/images/prueba.PNG")));
@@ -156,8 +153,6 @@ public class EmpleadoController implements Initializable {
 			System.out.println(nv);
 		});
 
-		
-		
 		borderDerecho.setDisable(true);
 
 		BarganizerTasks tareas = new BarganizerTasks();
@@ -225,11 +220,7 @@ public class EmpleadoController implements Initializable {
 
 		try {
 
-			
-			
 			InputStream fnew = getClass().getResourceAsStream("/images/unknown_person.jpg");
-			
-			
 
 			FuncionesDB.insertarEmpleado(HibernateUtil.getSessionFactory().openSession(), "Nuevo empleado", "Apellidos",
 					"Hombre", LocalDate.now(), LocalDate.now(), fnew.readAllBytes(), "");
@@ -249,15 +240,13 @@ public class EmpleadoController implements Initializable {
 
 	@FXML
 	void OnEliminarAction(ActionEvent event) {
-		
 
 		if (seleccionado != null) {
 
 			if (App.confirm("BORRAR", "PROCESO DE BORRADO", "¿Desea borrar el empleado?")) {
-				
-				 FuncionesDB.eliminarEmpleado(App.getBARGANIZERDB().getSes(), seleccionado.getValue());
-				 
-				 
+
+				FuncionesDB.eliminarEmpleado(App.getBARGANIZERDB().getSes(), seleccionado.getValue());
+
 				App.info("COMPLETADO", "Borrado completado", "Se ha eliminado al empleado con éxito");
 			}
 
@@ -268,13 +257,13 @@ public class EmpleadoController implements Initializable {
 		listaEmpleados.getItems().clear();
 
 		listarEmpleados();
-		
+
 		App.info("Completado", "Borrado completado", "Se ha completado el borrado con éxito");
 
 	}
 
 	@FXML
-    void onModificarButton(ActionEvent event) {
+	void onModificarButton(ActionEvent event) {
 
 		if (seleccionado != null) {
 			EmpleadoProp empleado = new EmpleadoProp();
@@ -291,29 +280,25 @@ public class EmpleadoController implements Initializable {
 
 				@Override
 				protected Void call() throws Exception {
-					
+
 					FuncionesDB.modificarEmpleado(App.getBARGANIZERDB().getSes(), empleado);
-					
+
 					return null;
 				}
 			};
-			
+
 			insertarEmpleadoTask.setOnSucceeded(e -> {
 				App.info("Completado", "Modificación completada", "Se ha completado la modificación con éxito");
 			});
-			
+
 			insertarEmpleadoTask.setOnFailed(e -> {
 				App.info("Error", "Modificación no completada", "No se pudo modificar el empleado");
 			});
-			
+
 			new HiloEjecutador(App.semaforo, insertarEmpleadoTask).start();
-			
-			
-			
-			
-			
+
 		}
-    }
+	}
 
 	private void listarEmpleados() {
 
@@ -349,7 +334,7 @@ public class EmpleadoController implements Initializable {
 				Image foto = new Image(imagen.toURI().toURL().toExternalForm());
 				imageView.setImage(foto);
 				fis.close();
-				
+
 			} catch (Exception e) {
 
 				Alert alertaError = new Alert(AlertType.ERROR);
@@ -361,31 +346,25 @@ public class EmpleadoController implements Initializable {
 		}
 	}
 
-
 	public final ObjectProperty<Image> nuevaFotoProperty() {
 		return this.nuevaFoto;
 	}
-	
 
 	public final Image getNuevaFoto() {
 		return this.nuevaFotoProperty().get();
 	}
-	
 
 	public final void setNuevaFoto(final Image nuevaFoto) {
 		this.nuevaFotoProperty().set(nuevaFoto);
 	}
-	
 
 	public final ObjectProperty<EmpleadoProp> empleadoModProperty() {
 		return this.empleadoMod;
 	}
-	
 
 	public final EmpleadoProp getEmpleadoMod() {
 		return this.empleadoModProperty().get();
 	}
-	
 
 	public final void setEmpleadoMod(final EmpleadoProp empleadoMod) {
 		this.empleadoModProperty().set(empleadoMod);
@@ -394,20 +373,13 @@ public class EmpleadoController implements Initializable {
 	public final ObjectProperty<byte[]> bytesFotoRecogidaProperty() {
 		return this.bytesFotoRecogida;
 	}
-	
 
 	public final byte[] getBytesFotoRecogida() {
 		return this.bytesFotoRecogidaProperty().get();
 	}
-	
 
 	public final void setBytesFotoRecogida(final byte[] bytesFotoRecogida) {
 		this.bytesFotoRecogidaProperty().set(bytesFotoRecogida);
 	}
-	
-	
-	
-	
-	
 
 }

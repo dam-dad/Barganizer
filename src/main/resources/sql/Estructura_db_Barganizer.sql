@@ -96,5 +96,4 @@ INSERT INTO tipo_plato (nombre) VALUES
 ("Entrante"),
 ("Principal"),
 ("Bebida"),
-("Postre"),
-("Vegetariano");
+("Postre");

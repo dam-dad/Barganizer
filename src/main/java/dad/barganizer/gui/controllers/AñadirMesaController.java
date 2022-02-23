@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 
 public class AñadirMesaController implements Initializable {
 
-	
 	// VISTA
 
 	@FXML
@@ -51,7 +50,6 @@ public class AñadirMesaController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-
 		ValidationSupport support = new ValidationSupport();
 		support.registerValidator(cantidadText, true, new IntegerValidator());
 		añadirButton.disableProperty().bind(support.invalidProperty());
@@ -62,16 +60,17 @@ public class AñadirMesaController implements Initializable {
 
 		try {
 
-			FuncionesDB.insertarMesa(App.getBARGANIZERDB().getSes(), Integer.parseInt(cantidadText.getText()), activaCheck.isSelected());
-			
+			FuncionesDB.insertarMesa(App.getBARGANIZERDB().getSes(), Integer.parseInt(cantidadText.getText()),
+					activaCheck.isSelected());
+
 			App.info("Completado", "Inserción completado", "Se ha completado la inserción con éxito");
-			
+
 			Stage stage = (Stage) añadirButton.getScene().getWindow();
 			stage.close();
 
 		} catch (Exception e) {
 
-			App.error("Error", "Error al añadir","No se ha podido completar la inserción");
+			App.error("Error", "Error al añadir", "No se ha podido completar la inserción");
 		}
 
 	}

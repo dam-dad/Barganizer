@@ -104,7 +104,6 @@ public class ReservasController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-
 		model.seleccionadaProperty().bind(reservasList.getSelectionModel().selectedItemProperty());
 
 		listarReservas();
@@ -162,25 +161,23 @@ public class ReservasController implements Initializable {
 		try {
 
 			modificarReservaController = new ModificarReservaController();
-			
+
 			Reserva r = model.getSeleccionada().getReferencia();
 			Empleado e = model.getSeleccionada().getReferencia().getEmpleadoReserva();
 			Mesa m = model.getSeleccionada().getReferencia().getMesaReserva();
 			LocalDate fecha = model.getSeleccionada().getFecha().toLocalDate();
 			LocalTime hora = model.getSeleccionada().getFecha().toLocalTime();
-			
-			
-			modificarReservaController.setAllEmpleadosCombo(FuncionesDB.listarEmpleados(App.getBARGANIZERDB().getSes()));
+
+			modificarReservaController
+					.setAllEmpleadosCombo(FuncionesDB.listarEmpleados(App.getBARGANIZERDB().getSes()));
 			modificarReservaController.setAllMesaCombo(FuncionesDB.listarMesas(App.getBARGANIZERDB().getSes()));
-			
+
 			modificarReservaController.seleccionado.set(r);
 			modificarReservaController.setEmpleadoCombo(e);
 			modificarReservaController.setMesaCombo(m);
 			modificarReservaController.setPersonasText(model.getSeleccionada().getPersonas());
 			modificarReservaController.setHoraText(String.valueOf(hora));
 			modificarReservaController.setFechaPicker(fecha);
-			
-			
 
 			Stage stage = new Stage();
 			stage.setTitle("Modificar reserva");
@@ -194,7 +191,7 @@ public class ReservasController implements Initializable {
 			stage.initOwner(App.primaryStage);
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.showAndWait();
-			
+
 			reservasList.refresh();
 
 			listarReservas();

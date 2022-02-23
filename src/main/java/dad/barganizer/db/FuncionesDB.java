@@ -2,14 +2,11 @@ package dad.barganizer.db;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import dad.barganizer.App;
-import dad.barganizer.beansprop.ComandaProp;
 import dad.barganizer.beansprop.EmpleadoProp;
 import dad.barganizer.db.beans.Alergeno;
 import dad.barganizer.db.beans.Carta;

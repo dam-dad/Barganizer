@@ -35,7 +35,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ModificarReservaController implements Initializable {
-	
+
 	public ObjectProperty<Reserva> seleccionado = new SimpleObjectProperty<>();
 
 	@FXML
@@ -74,48 +74,45 @@ public class ModificarReservaController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 		Validator<String> horaValidator = (control, value) -> {
 			return ValidationResult.fromMessageIf(horaText, "La hora introducida no es válida.", Severity.ERROR,
-					!Pattern.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]", value) );
+					!Pattern.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]", value));
 		};
-		
+
 		ValidationSupport support = new ValidationSupport();
 		support.registerValidator(personasText, true, new IntegerValidator());
 		support.registerValidator(horaText, true, horaValidator);
-		
-		
+
 		añadirButton.disableProperty().bind(support.invalidProperty());
 
 	}
 
 	@FXML
 	void onAñadirAction(ActionEvent event) {
-		
 
 		try {
-			
+
 			String time = horaText.getText();
 			LocalTime hora = LocalTime.parse(time);
-			
+
 			Reserva reserva = new Reserva();
 			reserva.setId(seleccionado.get().getId());
 			reserva.setMesaReserva(mesaCombo.getSelectionModel().getSelectedItem());
 			reserva.setEmpleadoReserva(empleadoCombo.getSelectionModel().getSelectedItem());
 			reserva.setCantPersonas(Integer.parseInt(personasText.getText()));
 			reserva.setFecha(fechaPicker.getValue().atTime(hora));
-			
 
 			FuncionesDB.modificarReserva(App.getBARGANIZERDB().getSes(), reserva);
-			
+
 			App.info("Completado", "Modificación completada", "Se ha completado la modificación con éxito");
-			
+
 			Stage stage = (Stage) añadirButton.getScene().getWindow();
 			stage.close();
 
 		} catch (Exception e) {
 
-			App.error("Error", "Error al modificar","No se ha podido completar la modificación.");
+			App.error("Error", "Error al modificar", "No se ha podido completar la modificación.");
 		}
 
 	}
@@ -127,7 +124,7 @@ public class ModificarReservaController implements Initializable {
 		stage.close();
 
 	}
-	
+
 	public DatePicker getFechaPicker() {
 		return fechaPicker;
 	}
@@ -167,7 +164,7 @@ public class ModificarReservaController implements Initializable {
 	public void setEmpleadoCombo(Empleado empleado) {
 		this.empleadoCombo.getSelectionModel().select(empleado);
 	}
-	
+
 	public void setAllMesaCombo(List<Mesa> lista) {
 		this.mesaCombo.setItems(FXCollections.observableArrayList(lista));
 	}
