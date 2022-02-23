@@ -161,9 +161,14 @@ public class MesasController implements Initializable {
 
 			if (App.confirm("BORRAR", "PROCESO DE BORRADO", "¿Desea borrar la mesa?")) {
 
-				FuncionesDB.eliminarMesa(App.getBARGANIZERDB().getSes(),
-						(Mesa) (model.getMesaSeleccionada().getReferencia()));
-				App.info("Completado", "Borrado completado", "Se ha completado el borrado con éxito");
+				try {
+					FuncionesDB.eliminarMesa(App.getBARGANIZERDB().getSes(),
+							(Mesa) (model.getMesaSeleccionada().getReferencia()));
+					App.info("Completado", "Borrado completado", "Se ha completado el borrado con éxito");
+				}
+				catch (Exception e) {
+					App.error("Error", "Error al borrar", "No puede borrar una mesa con una comanda activa.");
+				}
 
 			}
 		}

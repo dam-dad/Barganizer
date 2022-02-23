@@ -102,7 +102,7 @@
    <bottom>
       <HBox fx:id="satisfactionWidgetBox" alignment="CENTER" BorderPane.alignment="CENTER">
          <children>
-            <Label contentDisplay="CENTER" text="DANIEL CABRERA CABRERA, RUBÉN PABLO JORGE DÍAZ Y MARVIN N'GABU">
+            <Label contentDisplay="CENTER" text="DANIEL CABRERA CABRERA, RUBÉN PABLO JORGE DÍAZ Y MARVIN N'GABU GARCÍA">
                <font>
                   <Font size="24.0" />
                </font>
