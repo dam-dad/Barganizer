@@ -1,8 +1,5 @@
 package dad.barganizer.gui.models;
 
-import dad.barganizer.beansprop.CartaProp;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 

@@ -1,6 +1,5 @@
 package dad.barganizer.gui.models;
 
-
 import dad.barganizer.db.beans.Empleado;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
