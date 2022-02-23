@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.controlsfx.validation.ValidationSupport;
 
 import dad.barganizer.App;
 import dad.barganizer.db.BarganizerTasks;
@@ -17,6 +18,8 @@ import dad.barganizer.db.beans.Plato;
 import dad.barganizer.db.beans.TipoPlato;
 import dad.barganizer.gui.models.ModificarPlatoModel;
 import dad.barganizer.thread.HiloEjecutador;
+import dad.barganizer.validators.DoubleValidator;
+import dad.barganizer.validators.NombrePlatoValidator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -79,23 +82,27 @@ public class ModificarPlatoController implements Initializable {
 			bindAll();
 
 		});
-		
-
-
 
 		nombrePlatoText.textProperty().addListener((o, ov, nv) -> {
 			System.out.println("Textfield --- OV: " + ov + "--- NV: " + nv);
 		});
-
 		
 		cartaCombo.itemsProperty().addListener((o, ov, nv) -> {
 			System.out.println("CartaCOMBO - - - OV: " + ov + "--- NV: " + nv);
 		});
 
 		
+		
 		tipoCombo.itemsProperty().bind(model.listaTiposProperty());
 		cartaCombo.itemsProperty().bind(model.listaCartasProperty());
 
+		
+		
+		ValidationSupport support = new ValidationSupport();
+        support.registerValidator(precioText, true, new DoubleValidator());
+        support.registerValidator(nombrePlatoText, true, new NombrePlatoValidator());
+        modificarButton.disableProperty().bind(support.invalidProperty());
+		
 		onActualizarListaAction(null);
 	}
 
@@ -110,8 +117,9 @@ public class ModificarPlatoController implements Initializable {
 	private void bindAll() {
 		nombrePlatoText.textProperty().bindBidirectional(model.getPlatoModificar().nombreProperty());
 
-		precioText.textProperty().bindBidirectional(model.getPlatoModificar().precioProperty(),
-				new NumberStringConverter());
+		precioText.setText(""+model.getPlatoModificar().getPrecio());
+//		precioText.textProperty().bindBidirectional(model.getPlatoModificar().precioProperty(),
+//				new NumberStringConverter());
 		
 		cartaCombo.valueProperty().bindBidirectional(model.getPlatoModificar().getCarta().referenciaProperty());
 		tipoCombo.valueProperty().bindBidirectional(model.getPlatoModificar().tipoProperty());
@@ -188,7 +196,6 @@ public class ModificarPlatoController implements Initializable {
 	void onModificarPlatoAction(ActionEvent event) {
 
 		actualizarPlatoTask.setOnSucceeded(e -> {
-			App.getBARGANIZERDB().resetSesion();
 			actualizarPlatoTask.getValue();
 			System.out.println("Plato actualizado");
 			App.info("Actualizado", "Plato actualizado", "El plato ha sido actualizado satisfactoriamente");
@@ -203,7 +210,6 @@ public class ModificarPlatoController implements Initializable {
 			App.error("Error", "Error actualizando plato",
 					"Se ha producido un error durante la actualización del plato. Detalles: "
 							+ e.getSource().getException().getMessage());
-			e.getSource().getException().printStackTrace();
 		});
 
 		new HiloEjecutador(App.semaforo, actualizarPlatoTask).start();

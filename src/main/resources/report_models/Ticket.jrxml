@@ -20,6 +20,9 @@
 	<field name="Cantidad" class="java.lang.Integer"/>
 	<field name="Cuantia" class="java.lang.Double"/>
 	<field name="Total" class="java.lang.Double"/>
+	<field name="rutalogo" class="java.lang.String"/>
+	<field name="rutalogoder" class="java.lang.String"/>
+	<field name="foto" class="javafx.scene.image.Image"/>
 	<variable name="Total1" class="java.lang.Integer" resetType="Column" calculation="Count">
 		<variableExpression><![CDATA[$F{Total}]]></variableExpression>
 	</variable>
@@ -29,8 +32,8 @@
 	<title>
 		<band height="136" splitType="Stretch">
 			<image onErrorType="Icon">
-				<reportElement key="logoizq" x="0" y="0" width="164" height="126" uuid="ddc15723-2728-421f-b95e-2df9faf64ce1"/>
-				<imageExpression><![CDATA["/src/main/resources/images/barganizer.PNG"]]></imageExpression>
+				<reportElement x="0" y="0" width="164" height="126" uuid="ddc15723-2728-421f-b95e-2df9faf64ce1"/>
+				<imageExpression><![CDATA[$F{rutalogo}]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement style="Title" x="170" y="0" width="263" height="62" uuid="1a652692-054a-40f3-ade5-68d8da36626d"/>
@@ -52,8 +55,8 @@
 				<text><![CDATA[]]></text>
 			</staticText>
 			<image onErrorType="Icon">
-				<reportElement key="logoder" x="432" y="0" width="122" height="104" uuid="5d64e5b3-07bb-48ab-89dc-15c0c46bb19a"/>
-				<imageExpression><![CDATA["/src/main/resources/images/barganizer.PNG"]]></imageExpression>
+				<reportElement x="432" y="0" width="122" height="104" uuid="5d64e5b3-07bb-48ab-89dc-15c0c46bb19a"/>
+				<imageExpression><![CDATA[$F{rutalogoder}]]></imageExpression>
 			</image>
 		</band>
 	</title>
@@ -61,7 +64,7 @@
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="48" splitType="Stretch">
+		<band height="60" splitType="Stretch">
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="555" height="1" uuid="1a61a836-d137-48b1-ad67-6ff64600bf93">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -92,7 +95,7 @@
 				<text><![CDATA[Cantidad]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="100" y="1" width="180" height="40" forecolor="#FFFFFF" backcolor="#030303" uuid="5d3d886c-77dd-4d0e-b261-27a848ca7e94"/>
+				<reportElement mode="Opaque" x="100" y="0" width="180" height="41" forecolor="#FFFFFF" backcolor="#030303" uuid="5d3d886c-77dd-4d0e-b261-27a848ca7e94"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -114,7 +117,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="30" splitType="Stretch">
+		<band height="48" splitType="Stretch">
 			<frame>
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="555" height="30" uuid="a98495d8-3c8d-4fa0-81f5-30c3efc2f766"/>
 				<textField textAdjust="StretchHeight">

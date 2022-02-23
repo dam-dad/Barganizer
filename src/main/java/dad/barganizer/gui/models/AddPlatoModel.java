@@ -26,8 +26,11 @@ public class AddPlatoModel {
 
 	private ListProperty<Carta> listaCartas = new SimpleListProperty<Carta>();
 	private ListProperty<TipoPlato> listaTipos = new SimpleListProperty<TipoPlato>();
-	
+
 	private ObjectProperty<Carta> cartaSeleccionada = new SimpleObjectProperty<>();
+
+	private StringProperty precioFormat = new SimpleStringProperty();
+	private DoubleProperty precioValue = new SimpleDoubleProperty();
 
 	public final StringProperty nombreProperty() {
 		return this.nombre;
@@ -128,17 +131,37 @@ public class AddPlatoModel {
 	public final ObjectProperty<Carta> cartaSeleccionadaProperty() {
 		return this.cartaSeleccionada;
 	}
-	
 
 	public final Carta getCartaSeleccionada() {
 		return this.cartaSeleccionadaProperty().get();
 	}
-	
 
 	public final void setCartaSeleccionada(final Carta cartaSeleccionada) {
 		this.cartaSeleccionadaProperty().set(cartaSeleccionada);
 	}
-	
 
-	
+	public final StringProperty precioFormatProperty() {
+		return this.precioFormat;
+	}
+
+	public final String getPrecioFormat() {
+		return this.precioFormatProperty().get();
+	}
+
+	public final void setPrecioFormat(final String precioFormat) {
+		this.precioFormatProperty().set(precioFormat);
+	}
+
+	public final DoubleProperty precioValueProperty() {
+		return this.precioValue;
+	}
+
+	public final double getPrecioValue() {
+		return this.precioValueProperty().get();
+	}
+
+	public final void setPrecioValue(final double precioValue) {
+		this.precioValueProperty().set(precioValue);
+	}
+
 }

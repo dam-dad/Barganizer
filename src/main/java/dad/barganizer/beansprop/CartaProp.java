@@ -1,6 +1,5 @@
 package dad.barganizer.beansprop;
 
-import java.util.List;
 
 import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.Plato;

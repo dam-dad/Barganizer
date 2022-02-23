@@ -46,7 +46,7 @@ public class CartaController implements Initializable {
 	private Stage addPlatoStage;
 	private AddCartaController addCartaController;
 	private Stage addCartaStage;
-	
+
 	private CartaModel model = new CartaModel();
 
 	@FXML
@@ -81,7 +81,7 @@ public class CartaController implements Initializable {
 
 	@FXML
 	private Button delPlatoButton;
-	
+
 	@FXML
 	private HBox platosButtonBox;
 
@@ -91,8 +91,6 @@ public class CartaController implements Initializable {
 	@FXML
 	private ImageView delPlatoImg;
 
-
-
 	public CartaController() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CartaView.fxml"));
 		loader.setController(this);
@@ -101,10 +99,10 @@ public class CartaController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 		// Bindings y Listeners
 		cartasList.itemsProperty().bind(model.listaProperty());
-		
+
 		/* Listener para detectar cambios en la propiedad de carta seleccionada */
 		model.cartaSeleccionadaProperty().addListener((o, ov, nv) -> {
 			System.out.println("CARTA SELECCIONADA --- " + ov + "---NV: " + nv);
@@ -137,22 +135,26 @@ public class CartaController implements Initializable {
 			}
 
 		});
-		
-		/* Controlamos los cambios en el índice de la lista para así decidir
-		 * de qué forma tratar el mostrado de tiles. */
+
+		/*
+		 * Controlamos los cambios en el índice de la lista para así decidir de qué
+		 * forma tratar el mostrado de tiles.
+		 */
 		cartasList.getSelectionModel().selectedIndexProperty().addListener((o, ov, nv) -> {
 			System.out.println("CARTASLIST SELECTION MODEL SELECTED INDEX OV: --- " + ov + "---NV: " + nv);
 			if (nv.intValue() > -1) {
-				model.setImageTileClickeado(null); // Siempre que se cambie de lista, se deseleccionará el último tile clickeado
+				model.setImageTileClickeado(null); // Siempre que se cambie de lista, se deseleccionará el último tile
+													// clickeado
 				// Cambiamos la carta seleccionada a la indicada en el índice
-				model.setCartaSeleccionada(cartasList.getItems().get(cartasList.getSelectionModel().getSelectedIndex()));
+				model.setCartaSeleccionada(
+						cartasList.getItems().get(cartasList.getSelectionModel().getSelectedIndex()));
 				model.setCartaCheckSeleccionada(true); // Propertie que asegura que la carta está seleccionada
-				
+
 				// Guardamos una referencia al índice clickeado
 				model.setIndiceAnterior(nv.intValue());
-				
+
 				// Refrescamos los tiles según la carta seleccionada
-				
+
 				platosFlow.getChildren().clear(); // Limpiamos los nodos de platos
 				platosBox.getChildren().clear();
 				platosBox.getChildren().addAll(platosFlow, platosButtonBox);
@@ -161,10 +163,9 @@ public class CartaController implements Initializable {
 				for (Plato plato : cartasList.getItems().get(nv.intValue()).getListaPlatos()) {
 					platosFlow.getChildren().add(new ImageTile(plato));
 				}
-				
+
 				prepararNodosPlatos();
-				
-				
+
 			} else {
 				// Si no hay carta seleccionada, limpiamos los nodos
 				model.setCartaSeleccionada(null);
@@ -172,14 +173,14 @@ public class CartaController implements Initializable {
 				platosBox.getChildren().clear();
 				// Restablecemos la label y el panel de botones
 				platosBox.getChildren().addAll(defaultLabel, platosButtonBox);
-				
-				// El índice anterior se mantendrá, en caso de que un cambio en el índice de la carta sea
-				// debido a una operación de refresco poder actuar y controlar el mostrado de tiles
+
+				// El índice anterior se mantendrá, en caso de que un cambio en el índice de la
+				// carta sea
+				// debido a una operación de refresco poder actuar y controlar el mostrado de
+				// tiles
 				// ante esas situaciones
 			}
-			
-			
-			
+
 		});
 
 		platosBox.setOnMouseClicked(e -> {
@@ -308,21 +309,23 @@ public class CartaController implements Initializable {
 				return FXCollections.observableArrayList(listaProps);
 			}
 		};
-		
+
 		borrarPlatoTask = new Task<Void>() {
-			
+
 			protected Void call() throws Exception {
-				FuncionesDB.eliminarPlato(App.getBARGANIZERDB().getSes(), (Plato)model.getImageTileClickeado().getReferencia());
-				
+				FuncionesDB.eliminarPlato(App.getBARGANIZERDB().getSes(),
+						(Plato) model.getImageTileClickeado().getReferencia());
+
 				return null;
 			};
 		};
-		
-		borrarCartaTask = new Task<Void>(){
+
+		borrarCartaTask = new Task<Void>() {
 			protected Void call() throws Exception {
-				FuncionesDB.eliminarPlatosCarta(App.getBARGANIZERDB().getSes(), model.getCartaSeleccionada().getReferencia());
+				FuncionesDB.eliminarPlatosCarta(App.getBARGANIZERDB().getSes(),
+						model.getCartaSeleccionada().getReferencia());
 				FuncionesDB.eliminarCarta(App.getBARGANIZERDB().getSes(), model.getCartaSeleccionada().getReferencia());
-				
+
 				return null;
 			};
 		};
@@ -340,28 +343,30 @@ public class CartaController implements Initializable {
 			return FXCollections.observableArrayList(listaProps);
 		}
 	};
-	
+
 	private Task<Void> borrarPlatoTask = new Task<Void>() {
-		
+
 		protected Void call() throws Exception {
-			FuncionesDB.eliminarPlato(App.getBARGANIZERDB().getSes(), (Plato)model.getImageTileClickeado().getReferencia());
-			
+			FuncionesDB.eliminarPlato(App.getBARGANIZERDB().getSes(),
+					(Plato) model.getImageTileClickeado().getReferencia());
+
 			return null;
 		};
 	};
-	
-	private Task<Void> borrarCartaTask = new Task<Void>(){
+
+	private Task<Void> borrarCartaTask = new Task<Void>() {
 		protected Void call() throws Exception {
-			FuncionesDB.eliminarPlatosCarta(App.getBARGANIZERDB().getSes(), model.getCartaSeleccionada().getReferencia());
+			FuncionesDB.eliminarPlatosCarta(App.getBARGANIZERDB().getSes(),
+					model.getCartaSeleccionada().getReferencia());
 			FuncionesDB.eliminarCarta(App.getBARGANIZERDB().getSes(), model.getCartaSeleccionada().getReferencia());
-			
+
 			return null;
 		};
 	};
-	
+
 	@FXML
 	void onAddCartaAction(ActionEvent event) {
-		
+
 		try {
 			addCartaController = new AddCartaController();
 			addCartaStage = new Stage();
@@ -372,17 +377,23 @@ public class CartaController implements Initializable {
 			addCartaStage.initOwner(App.primaryStage);
 			addCartaStage.initModality(Modality.APPLICATION_MODAL);
 			addCartaStage.showAndWait();
-			
-			
-			// Refresco de la lista
-			inicializarCartaTask.setOnSucceeded(e -> {
-				model.setLista(inicializarCartaTask.getValue());
-				redeclararTask();
-			});
 
-			new HiloEjecutador(App.semaforo, inicializarCartaTask).start();
+			// Refresco de la lista
+			BarganizerTasks tareas = new BarganizerTasks();
 			
-			
+			tareas.getInicializarCartaPropTask().setOnSucceeded(e -> {
+				
+				ObservableList<CartaProp> l = tareas.getInicializarCartaPropTask().getValue();
+				System.out.println("INICIALIZARCARTAPROPTASK: " + l);
+				model.setLista(l);
+			});
+//			redeclararTask();
+//			inicializarCartaTask.setOnSucceeded(e -> {
+//				model.setLista(inicializarCartaTask.getValue());
+//			});
+
+			new HiloEjecutador(App.semaforo, tareas.getInicializarCartaPropTask()).start();
+
 		} catch (IOException e) {
 			App.error("Error", "Excepción cargando controlador", "Detalles: " + e.getMessage());
 		}
@@ -392,29 +403,32 @@ public class CartaController implements Initializable {
 	@FXML
 	void onDelCartaAction(ActionEvent event) {
 		if (cartasList.getSelectionModel().getSelectedIndex() > -1 && model.getCartaSeleccionada() != null) {
-			if (App.confirm("Confirmación borrado de carta", "¿Seguro que desea eliminar esta carta?", "Esto eliminará también sus platos relacionados. ¿Continuar?")) {
-				
+			if (App.confirm("Confirmación borrado de carta", "¿Seguro que desea eliminar esta carta?",
+					"Esto eliminará también sus platos relacionados. ¿Continuar?")) {
+
 				borrarCartaTask.setOnSucceeded(e -> {
 					App.info("Éxito", "Carta eliminada", "Se ha eliminado la carta correctamente");
+
 					
 				});
-				
+
+				redeclararTask();
 				inicializarCartaTask.setOnSucceeded(ev -> {
 					model.setLista(inicializarCartaTask.getValue());
 					model.setCartaSeleccionada(null);
 					model.setImageTileClickeado(null);
 					model.setIndiceAnterior(-1);
-					redeclararTask();
 				});
 				new HiloEjecutador(App.semaforo, borrarCartaTask).start();
 				new HiloEjecutador(App.semaforo, inicializarCartaTask).start();
-				
+
 				prepararNodosPlatos();
-				
+
 			}
-			
+
 		} else {
-			App.warning("Advertencia", "Carta no seleccionada", "Debe seleccionar una carta previamente para poder ser eliminada");
+			App.warning("Advertencia", "Carta no seleccionada",
+					"Debe seleccionar una carta previamente para poder ser eliminada");
 		}
 	}
 
@@ -422,7 +436,7 @@ public class CartaController implements Initializable {
 	void onAddPlatoAction(ActionEvent event) {
 		try {
 			addPlatoController = new AddPlatoController();
-			addPlatoController.getModel().setCartaSeleccionada(model.getCartaSeleccionada().getReferencia());
+			addPlatoController.getModel().setCartaSeleccionada(cartasList.getItems().get(cartasList.getSelectionModel().getSelectedIndex()).getReferencia());
 			BarganizerTasks tareas = new BarganizerTasks();
 
 			tareas.getObtenerTiposPlatoTask().setOnSucceeded(e -> {
@@ -431,7 +445,6 @@ public class CartaController implements Initializable {
 					listaAdd.add(cp.getReferencia());
 				}
 				addPlatoController.getModel().setListaCartas(FXCollections.observableArrayList(listaAdd));
-				addPlatoController.getCartaCombo().getSelectionModel().select(Math.toIntExact(model.getCartaSeleccionada().getReferencia().getId()));
 				addPlatoController.getModel().setListaTipos(tareas.getObtenerTiposPlatoTask().getValue());
 			});
 
@@ -447,10 +460,10 @@ public class CartaController implements Initializable {
 			addPlatoStage.showAndWait();
 			
 			// Al añadirse el plato se deberá refrescar la lista
+			redeclararTask();
 			inicializarCartaTask.setOnSucceeded(e -> {
 				model.setLista(inicializarCartaTask.getValue());
 				cartasList.getSelectionModel().select(model.getCartaSeleccionada());
-				redeclararTask();
 			});
 
 			new HiloEjecutador(App.semaforo, inicializarCartaTask).start();
@@ -463,45 +476,49 @@ public class CartaController implements Initializable {
 
 	@FXML
 	void onDelPlatoAction(ActionEvent event) {
-		
+
 		if (model.getImageTileClickeado() != null) {
 			// Si se clickeó en un plato, procedemos a su eliminación
 			if (App.confirm("Barganzier - Borrar plato",
 					"Eliminar plato " + ((Plato) model.getImageTileClickeado().getReferencia()).getNombre(),
 					"¿Estás seguro?")) {
-				
-				// Obtenemos el índice de la carta de la lista para posteriormente seleccionarla después del borrado
-				model.setIndiceAnterior(cartasList.getSelectionModel().getSelectedIndex());
 
+				// Obtenemos el índice de la carta de la lista para posteriormente seleccionarla
+				// después del borrado
+				model.setIndiceAnterior(cartasList.getSelectionModel().getSelectedIndex());
+				redeclararTask();
 				borrarPlatoTask.setOnSucceeded(e -> {
-					App.info("Éxito", "Plato eliminado", "Se ha eliminado el plato con éxito");
-//					App.getBARGANIZERDB().resetSesion();
 					model.setImageTileClickeado(null);
-					redeclararTask();
+					model.setPlatoSeleccionado(null);
+					model.setCartaSeleccionada(model.getLista().get(model.getIndiceAnterior()));
+					
 				});
-				
+
 				borrarPlatoTask.setOnFailed(e -> {
-					App.error("Error", "Eliminación de plato", "Se ha producido un error eliminando el plato. Es posible que se encuentre activo en una comanda.\nDetalles: " + e.getSource().getException().getMessage());
+					App.error("Error", "Eliminación de plato",
+							"Se ha producido un error eliminando el plato. Es posible que se encuentre activo en una comanda.\nDetalles: "
+									+ e.getSource().getException().getMessage());
 				});
-				
+
 				inicializarCartaTask.setOnSucceeded(e -> {
-					model.setLista(inicializarCartaTask.getValue());
-					redeclararTask();
+
+					ObservableList<CartaProp> res = inicializarCartaTask.getValue();
+					System.out.println("INICIALIZACIÓN CARTA POST-BORRADO: LISTA: " + res);
+					model.setLista(res);
+//					App.info("Éxito", "Plato eliminado", "Se ha eliminado el plato con éxito");
 				});
-				
+
 				inicializarCartaTask.setOnFailed(e -> {
-					App.error("Error", "Error re-listando la carta", "Se ha producido un error re-listando la carta. Detalles: " + e.getSource().getMessage());
+					App.error("Error", "Error re-listando la carta",
+							"Se ha producido un error re-listando la carta. Detalles: " + e.getSource().getMessage());
 				});
-				
+
 				new HiloEjecutador(App.semaforo, borrarPlatoTask).start();
 				// Al borrar el plato ejecutamos de nuevo la tarea que actualiza la carta
-				
+
 				new HiloEjecutador(App.semaforo, inicializarCartaTask).start();
-				
-				
-				
+
 			}
-			
 
 		}
 	}

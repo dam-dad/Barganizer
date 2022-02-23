@@ -8,12 +8,17 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.controlsfx.validation.ValidationSupport;
+import org.controlsfx.validation.Validator;
+
 import dad.barganizer.App;
 import dad.barganizer.db.FuncionesDB;
 import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.TipoPlato;
 import dad.barganizer.gui.models.AddPlatoModel;
 import dad.barganizer.thread.HiloEjecutador;
+import dad.barganizer.validators.DoubleValidator;
+import dad.barganizer.validators.NombrePlatoValidator;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -67,12 +72,42 @@ public class AddPlatoController implements Initializable {
 		loader.setController(this);
 		loader.load();
 	}
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+
+		nombrePlatoText.textProperty().bindBidirectional(model.nombreProperty());
+//		precioText.textProperty().bindBidirectional(model.precioProperty(), new NumberStringConverter());
+		model.precioProperty().bind(model.precioValueProperty());
+		model.cartaProperty().bind(cartaCombo.valueProperty());
+		model.tipoProperty().bind(tipoCombo.valueProperty());
+		imgPlatoView.imageProperty().bindBidirectional(model.fotoProperty());
+		tipoCombo.itemsProperty().bind(model.listaTiposProperty());
+		cartaCombo.itemsProperty().bind(model.listaCartasProperty());
+		
+		
+		model.cartaSeleccionadaProperty().addListener((o, ov, nv) -> {
+			System.out.println("ADDPLATOCONTROLLER CAMBIO --- OV: "+ ov + "---NV: " + nv);
+			if (nv != null) {
+				cartaCombo.getSelectionModel().select(nv);
+			}
+		});
+		
+		
+		tipoCombo.itemsProperty().addListener((o, ov, nv) -> {
+			tipoCombo.getSelectionModel().select(0);
+		});
+		
+		ValidationSupport support = new ValidationSupport();
+        support.registerValidator(precioText, true, new DoubleValidator());
+        support.registerValidator(nombrePlatoText, true, new NombrePlatoValidator());
+        addPlatoButton.disableProperty().bind(support.invalidProperty());
+	}
 
 	@FXML
 	void onAddPlatoAction(ActionEvent event) {
 
 		insertarPlatoTask.setOnSucceeded(e -> {
-			App.getBARGANIZERDB().resetSesion();
 			App.info("Éxito", "Plato insertado", "Se ha insertado el plato correctamente");
 
 			Stage stg = (Stage) addPlatoButton.getScene().getWindow();
@@ -83,6 +118,8 @@ public class AddPlatoController implements Initializable {
 			App.error("Error", "Inserción de plato", "Se produjo un error durante la inserción de platos. Detalles: "
 					+ e.getSource().getException().getMessage());
 		});
+		
+		
 
 		new HiloEjecutador(App.semaforo, insertarPlatoTask).start();
 
@@ -131,25 +168,7 @@ public class AddPlatoController implements Initializable {
 		stage.close();
 	}
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
 
-		nombrePlatoText.textProperty().bindBidirectional(model.nombreProperty());
-		precioText.textProperty().bindBidirectional(model.precioProperty(), new NumberStringConverter());
-		cartaCombo.valueProperty().bindBidirectional(model.cartaProperty());
-		tipoCombo.valueProperty().bindBidirectional(model.tipoProperty());
-		imgPlatoView.imageProperty().bindBidirectional(model.fotoProperty());
-		tipoCombo.itemsProperty().bind(model.listaTiposProperty());
-		cartaCombo.itemsProperty().bind(model.listaCartasProperty());
-		
-		model.cartaSeleccionadaProperty().addListener((o, ov, nv) -> {
-			if (nv != null) {
-				cartaCombo.getSelectionModel().select(nv);
-			}
-		});
-		
-
-	}
 
 	public GridPane getView() {
 		return view;
@@ -160,7 +179,7 @@ public class AddPlatoController implements Initializable {
 		@Override
 		protected Void call() throws Exception {
 			FuncionesDB.insertarPlato(App.getBARGANIZERDB().getSes(), model.getNombre(), model.getTipo(),
-					model.getPrecio(), model.getBytesFoto(), model.getCarta());
+					Double.parseDouble(precioText.getText()), model.getBytesFoto(), model.getCarta());
 
 			return null;
 		}

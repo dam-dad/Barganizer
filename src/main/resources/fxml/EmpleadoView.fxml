@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="view" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <SplitPane dividerPositions="0.25" VBox.vgrow="ALWAYS">
          <items>
@@ -92,12 +92,12 @@
                            </GridPane.margin>
                         </Button>
                         <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="3" GridPane.valignment="CENTER">
-                           <image>
-                              <Image url="@../../../../../../fotosDAD/prueba.PNG" />
-                           </image>
                            <viewport>
                               <Rectangle2D />
                            </viewport>
+                           <image>
+                              <Image url="@../images/prueba.PNG" />
+                           </image>
                         </ImageView>
                         <PasswordField fx:id="passwordText" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                         <Label text="Contraseña:" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />

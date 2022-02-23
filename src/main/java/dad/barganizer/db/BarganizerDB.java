@@ -1,17 +1,7 @@
 package dad.barganizer.db;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
-import dad.barganizer.db.beans.Alergeno;
-import dad.barganizer.db.beans.Comanda;
-import dad.barganizer.db.beans.Empleado;
-import dad.barganizer.db.beans.Mesa;
-import dad.barganizer.db.beans.Plato;
-import dad.barganizer.db.beans.Reserva;
-import dad.barganizer.db.beans.TipoPlato;
+
 
 /**
  * Representa la sesión general de la aplicación. Esta clase es un encapsulado

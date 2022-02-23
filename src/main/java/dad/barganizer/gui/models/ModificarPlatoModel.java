@@ -21,6 +21,7 @@ public class ModificarPlatoModel {
 	private ObjectProperty<Carta> valorCartaCombo = new SimpleObjectProperty<>();
 
 	private ObjectProperty<PlatoProp> platoModificado = new SimpleObjectProperty<>(new PlatoProp());
+	
 
 	public final ObjectProperty<PlatoProp> platoModificarProperty() {
 		return this.platoModificar;

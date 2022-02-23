@@ -21,7 +21,7 @@ public class TipoPlato {
 	@Column(name = "id", columnDefinition = "INT(3)", nullable = false)
 	private long id;
 	
-	@Column(name = "nombre", nullable = false, columnDefinition = "ENUM('Entrante', 'Principal', 'Bebida', 'Postre', 'Vegetariano')")
+	@Column(name = "nombre", nullable = false, columnDefinition = "ENUM('Entrante', 'Principal', 'Bebida', 'Postre')")
 	private String nombre;
 	
 	// Relación 1:N

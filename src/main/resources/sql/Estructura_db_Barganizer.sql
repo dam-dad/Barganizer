@@ -30,7 +30,7 @@ CREATE TABLE alergeno(
 
 CREATE TABLE tipo_plato(
 	id INT(2) PRIMARY KEY AUTO_INCREMENT,
-	nombre enum("Entrante", "Principal", "Bebida","Postre", "Vegetariano") NOT NULL
+	nombre enum("Entrante", "Principal", "Bebida","Postre") NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=UTF8 COLLATE=utf8_spanish_ci;
 
 CREATE TABLE plato(

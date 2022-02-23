@@ -657,13 +657,13 @@ public class FuncionesDB {
 			p.setPrecio(plato.getPrecio());
 			p.setTipoPlato(plato.getTipoPlato());
 			p.setCarta(plato.getCarta());
-			p.setAlergenos(plato.getAlergenos());
 			sesion.update(p);
 
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			System.out.println("No se puede modificar el registro: " + e.getMessage());
 			sesion.getTransaction().rollback();
+			throw e;
 		}
 
 	}

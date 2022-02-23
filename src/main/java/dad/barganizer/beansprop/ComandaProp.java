@@ -1,5 +1,7 @@
 package dad.barganizer.beansprop;
 
+import java.io.ByteArrayInputStream;
+
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
 import dad.barganizer.db.beans.Comanda;
@@ -13,16 +15,20 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.image.Image;
 
-public class ComandaProp extends RecursiveTreeObject<ComandaProp>{
+public class ComandaProp extends RecursiveTreeObject<ComandaProp> {
 
 	private LongProperty numMesa = new SimpleLongProperty();
 	private StringProperty nombrePlato = new SimpleStringProperty();
 	private IntegerProperty cantidad = new SimpleIntegerProperty();
 	private DoubleProperty precioUnidad = new SimpleDoubleProperty();
 	private DoubleProperty precioTotal = new SimpleDoubleProperty();
-	
+
 	private ObjectProperty<Comanda> referencia = new SimpleObjectProperty<Comanda>();
+
+	private String rutaLogo = "images/barganizer.PNG";
+	private Image fotoPlato;
 
 	public ComandaProp(Comanda c) {
 		setNumMesa(c.getMesa().getNumero());
@@ -30,6 +36,8 @@ public class ComandaProp extends RecursiveTreeObject<ComandaProp>{
 		setCantidad(c.getCantidad());
 		setPrecioUnidad(c.getPlato().getPrecio());
 		setReferencia(c);
+		fotoPlato = new Image((c.getPlato().getFoto() != null) ? new ByteArrayInputStream(c.getPlato().getFoto())
+				: getClass().getResourceAsStream("/images/platounknown.png"));
 	}
 
 	public final LongProperty numMesaProperty() {
@@ -100,17 +108,29 @@ public class ComandaProp extends RecursiveTreeObject<ComandaProp>{
 	public final ObjectProperty<Comanda> referenciaProperty() {
 		return this.referencia;
 	}
-	
 
 	public final Comanda getReferencia() {
 		return this.referenciaProperty().get();
 	}
-	
 
 	public final void setReferencia(final Comanda referencia) {
 		this.referenciaProperty().set(referencia);
 	}
-	
-	
-	
+
+	public String getRutaLogo() {
+		return rutaLogo;
+	}
+
+	public void setRutaLogo(String rutaLogo) {
+		this.rutaLogo = rutaLogo;
+	}
+
+	public Image getFotoPlato() {
+		return fotoPlato;
+	}
+
+	public void setFotoPlato(Image fotoPlato) {
+		this.fotoPlato = fotoPlato;
+	}
+
 }

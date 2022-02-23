@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dad.barganizer.App;
+import dad.barganizer.beansprop.CartaProp;
 import dad.barganizer.beansprop.EmpleadoProp;
 import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.Empleado;
@@ -160,6 +161,19 @@ public class BarganizerTasks {
 		}
 	};
 	
+	private Task<ObservableList<CartaProp>> inicializarCartaPropTask = new Task<ObservableList<CartaProp>>() {
+
+		@Override
+		protected ObservableList<CartaProp> call() throws Exception {
+			List<Carta> listaCartas = FuncionesDB.listarCarta(App.getBARGANIZERDB().getSes());
+			List<CartaProp> listaProps = new ArrayList<>();
+			for (Carta carta : listaCartas) {
+				listaProps.add(new CartaProp(carta));
+			}
+			return FXCollections.observableArrayList(listaProps);
+		}
+	};
+	
 
 
 	public Task<ObservableList<Plato>> getInicializarBebidasTask() {
@@ -204,5 +218,9 @@ public class BarganizerTasks {
 	
 	public Task<ObservableList<TipoPlato>> getObtenerTiposPlatoTask() {
 		return obtenerTiposPlatoTask;
+	}
+	
+	public Task<ObservableList<CartaProp>> getInicializarCartaPropTask() {
+		return inicializarCartaPropTask;
 	}
 }

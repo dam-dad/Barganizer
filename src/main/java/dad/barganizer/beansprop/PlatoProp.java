@@ -2,7 +2,6 @@ package dad.barganizer.beansprop;
 
 import java.io.ByteArrayInputStream;
 
-import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.Plato;
 import dad.barganizer.db.beans.TipoPlato;
 import javafx.beans.property.DoubleProperty;

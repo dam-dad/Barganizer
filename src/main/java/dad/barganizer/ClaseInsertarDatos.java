@@ -3,7 +3,6 @@ package dad.barganizer;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.DecimalFormat;
 
 import org.hibernate.HibernateException;
@@ -12,7 +11,7 @@ import dad.barganizer.db.HibernateUtil;
 import dad.barganizer.db.beans.Carta;
 import dad.barganizer.db.beans.TipoPlato;
 
-public class Main2 {
+public class ClaseInsertarDatos {
 
 	public static void main(String[] args) {
 

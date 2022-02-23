@@ -1,9 +1,11 @@
 package dad.barganizer.reports;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import dad.barganizer.beansprop.ComandaProp;
 import javafx.collections.ObservableList;
+import javafx.scene.image.Image;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
@@ -52,6 +54,14 @@ public class ComandasDataSource implements JRDataSource{
 		case "Cuantia":
 			valor = (comandas.get(index).getCantidad()*(comandas.get(index).getPrecioUnidad()));
 			break;
+		case "rutalogo":
+			valor = (comandas.get(index).getRutaLogo());
+			break;
+		case "rutalogoder":
+			valor = "report_models/coffee_stain.png";
+			break;
+		case "foto":
+			valor = comandas.get(index).getFotoPlato();
 		case "Total":
 			double suma = 0;
 			for (ComandaProp comanda : comandas) {

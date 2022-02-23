@@ -169,7 +169,9 @@ public class InicioController implements Initializable {
 
 				redeclararTasks();
 
+				System.out.println("Ejecutando actualización de comandas desde el nuevo valor de la mesa ");
 				new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
+
 			}
 
 			if (nv == null) {
@@ -284,7 +286,6 @@ public class InicioController implements Initializable {
 					System.out.println("Mesa seleccionada: " + seleccionada.getNumero());
 
 					model.setTileMesaSeleccionada(imageTileClickeado);
-
 				});
 			}
 		});
@@ -399,7 +400,8 @@ public class InicioController implements Initializable {
 	@FXML
 	void onGenerarTicketAction(ActionEvent event) {
 
-		// Sólo Windows. Los tickets se guardarán en el directorio del usuario, en la carpeta tickets.
+		// Sólo Windows. Los tickets se guardarán en el directorio del usuario, en la
+		// carpeta tickets.
 		String rutaUsuario = System.getenv("USERPROFILE");
 		System.out.println(rutaUsuario);
 		File directorioReportes = new File(rutaUsuario + "\\tickets");
@@ -410,7 +412,7 @@ public class InicioController implements Initializable {
 		if (!directorioReportes.exists()) {
 			directorioReportes.mkdir();
 		}
-		
+
 		JasperReport report;
 		try {
 			// Compilamos el informe
@@ -422,7 +424,7 @@ public class InicioController implements Initializable {
 			parameters.put("logoizq", getClass().getResourceAsStream("/images/barganizer.png"));
 			parameters.put("logoder", getClass().getResourceAsStream("/images/plato/plato.png"));
 //			parameters.put(rutaUsuario, parameters)
-			
+
 			// Generación del informe (combinamos el informe compilado con los datos)
 			JasperPrint print = JasperFillManager.fillReport(report, parameters,
 					new ComandasDataSource(model.getComandasMesa()));
@@ -455,7 +457,11 @@ public class InicioController implements Initializable {
 
 		@Override
 		protected ObservableList<ComandaProp> call() throws Exception {
-
+			
+			System.out.println("ACTUALIZACIÓN DE COMANDA MESA. VALORES: MESA Nº"
+					+ ((Mesa) model.getTileMesaSeleccionada().getReferencia()).getNumero()
+					+ ((Plato) model.getTilePlatoSeleccionado().getReferencia()).getNombre());
+			
 			FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(),
 					(Mesa) model.getTileMesaSeleccionada().getReferencia(),
 					(Plato) model.getTilePlatoSeleccionado().getReferencia(), 1);
@@ -492,28 +498,28 @@ public class InicioController implements Initializable {
 			return null;
 		};
 	};
-	
+
 	private Task<Void> eliminarComandaIndexTask = new Task<Void>() {
 		protected Void call() throws Exception {
-			FuncionesDB.eliminarComanda(App.getBARGANIZERDB().getSes(),
-					model.getComandaIndex().getReferencia());
+			FuncionesDB.eliminarComanda(App.getBARGANIZERDB().getSes(), model.getComandaIndex().getReferencia());
 			return null;
 		};
 	};
+	
 
 	private void redeclararTasks() {
 		actualizarComandasMesaTask = new Task<ObservableList<ComandaProp>>() {
 
 			@Override
 			protected ObservableList<ComandaProp> call() throws Exception {
-				App.getBARGANIZERDB().resetSesion();
+				
 				List<Comanda> listaComandas = FuncionesDB.listarComandasMesa(App.getBARGANIZERDB().getSes(),
 						(Mesa) model.getTileMesaSeleccionada().getReferencia());
 
 				List<ComandaProp> listaProps = new ArrayList<>();
 
-				for (Comanda comanda : listaComandas) {
-					listaProps.add(new ComandaProp(comanda));
+				for (Comanda cmn : listaComandas) {
+					listaProps.add(new ComandaProp(cmn));
 				}
 
 				return FXCollections.observableArrayList(listaProps);
@@ -521,9 +527,10 @@ public class InicioController implements Initializable {
 		};
 
 		actualizarComandasMesaTask.setOnSucceeded(e -> {
+			ObservableList<ComandaProp> l = actualizarComandasMesaTask.getValue();
+			System.out.println("ACTUALIZAR COMANDAS TASK: " + l);
 
-			
-			model.setComandasMesa(actualizarComandasMesaTask.getValue());
+			model.setComandasMesa(l);
 			double preciototal = 0;
 
 			if (model.getComandasMesa() != null) {
@@ -531,9 +538,17 @@ public class InicioController implements Initializable {
 					preciototal += (c.getCantidad() * c.getPrecioUnidad());
 				}
 
-				totalComandaLabel.setText("Precio total: " + preciototal + "€");
+				String.format("Precio Total: %.2f€", preciototal);
+				totalComandaLabel.setText(String.format("Precio Total: %.2f€", preciototal));
 			}
 
+		});
+
+		actualizarComandasMesaTask.setOnFailed(e -> {
+			System.out.println(e.getSource().toString());
+			System.out.println(
+					"Error en la tarea de comandas mesa task. Detalles: " + e.getSource().getException().getMessage());
+			e.getSource().getException().printStackTrace();
 		});
 
 		insertarComandaMesa = new Task<Void>() {
@@ -555,11 +570,10 @@ public class InicioController implements Initializable {
 				return null;
 			};
 		};
-		
+
 		eliminarComandaIndexTask = new Task<Void>() {
 			protected Void call() throws Exception {
-				FuncionesDB.eliminarComanda(App.getBARGANIZERDB().getSes(),
-						model.getComandaIndex().getReferencia());
+				FuncionesDB.eliminarComanda(App.getBARGANIZERDB().getSes(), model.getComandaIndex().getReferencia());
 				return null;
 			};
 		};
@@ -576,7 +590,8 @@ public class InicioController implements Initializable {
 					private Button quitarButton = new Button();
 
 					{
-						ImageView imgViewQuitar = new ImageView(new Image(getClass().getResourceAsStream("/images/minus.png")));
+						ImageView imgViewQuitar = new ImageView(
+								new Image(getClass().getResourceAsStream("/images/minus.png")));
 						imgViewQuitar.setFitHeight(40);
 						imgViewQuitar.setFitWidth(40);
 						quitarButton.setGraphic(imgViewQuitar);
@@ -586,8 +601,9 @@ public class InicioController implements Initializable {
 							// Acciones a realizar al clickear el botón
 //							FuncionesDB.eliminarComanda(App.getBARGANIZERDB().getSes(), comanda.getReferencia());
 							redeclararTasks();
-							
+
 							new HiloEjecutador(App.semaforo, eliminarComandaIndexTask).start();
+							System.out.println("Ejecutando actualización de comandas desde botón de quitar");
 							new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
 						});
 
@@ -615,7 +631,7 @@ public class InicioController implements Initializable {
 		for (Node node : l) {
 			node.setOnMouseClicked(ev -> {
 				ImageTile imageTileClickeado = (ImageTile) ev.getSource();
-				
+
 				model.setTilePlatoSeleccionado(imageTileClickeado);
 				model.getTilePlatoSeleccionado().setActive(true);
 				if (ev.getClickCount() >= 2) {
@@ -626,7 +642,7 @@ public class InicioController implements Initializable {
 						/* Actualizar la lista de comandas con la nueva comanda añadida */
 						redeclararTasks();
 						new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
-
+						System.out.println("Ejecutando actualización de comandas desde bebidas");
 						new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
 
 					}
@@ -653,7 +669,7 @@ public class InicioController implements Initializable {
 
 						redeclararTasks();
 						new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
-
+						System.out.println("Ejecutando actualización de comandas desde entrantes");
 						new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
 
 					}
@@ -679,7 +695,7 @@ public class InicioController implements Initializable {
 
 						redeclararTasks();
 						new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
-
+						System.out.println("Ejecutando actualización de comandas desde postres");
 						new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
 
 					}
@@ -694,7 +710,7 @@ public class InicioController implements Initializable {
 		for (Node node : l) {
 			node.setOnMouseClicked(ev -> {
 				ImageTile imageTileClickeado = (ImageTile) ev.getSource();
-				
+
 				model.setTilePlatoSeleccionado(imageTileClickeado);
 				model.getTilePlatoSeleccionado().setActive(true);
 				if (ev.getClickCount() >= 2) {
@@ -706,7 +722,7 @@ public class InicioController implements Initializable {
 
 						redeclararTasks();
 						new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
-
+						System.out.println("Ejecutando actualización de comandas desde platos");
 						new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
 
 					}
