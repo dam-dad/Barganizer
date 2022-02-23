@@ -92,21 +92,21 @@ public class FuncionesDB {
 
 	public static List<Empleado> listarEmpleados(Session ses) {
 
-        try {
-            ses.beginTransaction();
-            Query consulta = ses.createQuery("from Empleado");
-            List<Empleado> empleadoList = consulta.getResultList();
-            ses.getTransaction().commit();
-            return empleadoList;
+		try {
+			ses.beginTransaction();
+			Query consulta = ses.createQuery("from Empleado");
+			List<Empleado> empleadoList = consulta.getResultList();
+			ses.getTransaction().commit();
+			return empleadoList;
 
-        } catch (Exception e) {
-            System.err.println("Error.");
-            e.printStackTrace();
-            ses.getTransaction().rollback();
-            return null;
-        }
+		} catch (Exception e) {
+			System.err.println("Error.");
+			e.printStackTrace();
+			ses.getTransaction().rollback();
+			return null;
+		}
 
-    }
+	}
 
 	public static List<Mesa> listarMesas(Session ses) {
 
@@ -193,7 +193,6 @@ public class FuncionesDB {
 		}
 	}
 
-
 	public static void insertarAlergeno(Session ses, String nombre, byte[] foto, Double precio) {
 
 		try {
@@ -240,31 +239,29 @@ public class FuncionesDB {
 		}
 	}
 
-
 	public static void insertarEmpleado(Session ses, String nombre, String apellido, String genero,
-            LocalDate nacimiento, LocalDate ingreso, byte[] foto, String contrasena) {
+			LocalDate nacimiento, LocalDate ingreso, byte[] foto, String contrasena) {
 
-        try {
+		try {
 
-            ses.beginTransaction();
+			ses.beginTransaction();
 
-            Empleado empleado = new Empleado();
-            empleado.setNombre(nombre);
-            empleado.setApellidos(apellido);
-            empleado.setGenero(genero);
-            empleado.setFnac(nacimiento);
-            empleado.setFechaIngreso(ingreso);
-            empleado.setFoto(foto);
-            empleado.setPass(contrasena.getBytes());
+			Empleado empleado = new Empleado();
+			empleado.setNombre(nombre);
+			empleado.setApellidos(apellido);
+			empleado.setGenero(genero);
+			empleado.setFnac(nacimiento);
+			empleado.setFechaIngreso(ingreso);
+			empleado.setFoto(foto);
+			empleado.setPass(contrasena.getBytes());
 
-            ses.persist(empleado);
-            ses.getTransaction().commit();
+			ses.persist(empleado);
+			ses.getTransaction().commit();
 
-        } catch (Exception e) {
-            System.err.println("No se ha podido completar la inserción: " + e.getMessage());
-        }
-    }
-
+		} catch (Exception e) {
+			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
+		}
+	}
 
 	public static void insertarEmpleado(Session ses, String nombre, String apellido, String genero,
 			LocalDate nacimiento, LocalDate ingreso, byte[] foto, byte[] pass) {
@@ -288,8 +285,6 @@ public class FuncionesDB {
 			System.err.println("No se ha podido completar la inserción: " + e.getMessage());
 		}
 	}
-
-
 
 	public static void insertarMesa(Session ses, int personas, Boolean activa) {
 
@@ -439,8 +434,11 @@ public class FuncionesDB {
 			sesion.getTransaction().commit();
 
 		} catch (Exception e) {
-			App.error("Error", "Error al borrar", "No puede borrar una mesa con una comanda activa.");
+			// App.error("Error", "Error al borrar", "No puede borrar una mesa con una
+			// comanda activa.");
+
 			sesion.getTransaction().rollback();
+			throw e;
 		}
 	}
 
@@ -502,20 +500,20 @@ public class FuncionesDB {
 
 	public static void eliminarEmpleado(Session sesion, EmpleadoProp empleadoProp) {
 
-        try {
+		try {
 
-            sesion.beginTransaction();
+			sesion.beginTransaction();
 
-            Empleado e = sesion.get(Empleado.class, empleadoProp.getId());
-            sesion.delete(e);
+			Empleado e = sesion.get(Empleado.class, empleadoProp.getId());
+			sesion.delete(e);
 
-            sesion.getTransaction().commit();
+			sesion.getTransaction().commit();
 
-        } catch (Exception e) {
-            System.out.println("No se puede eliminar el registro: " + e.getMessage());
-            sesion.getTransaction().rollback();
-        }
-    }
+		} catch (Exception e) {
+			System.out.println("No se puede eliminar el registro: " + e.getMessage());
+			sesion.getTransaction().rollback();
+		}
+	}
 
 	public static void eliminarPlato(Session sesion, Plato plato) {
 
@@ -737,30 +735,28 @@ public class FuncionesDB {
 	}
 
 	public static void modificarEmpleado(Session ses, EmpleadoProp empleadoProp) {
-        try {
+		try {
 
-            ses.beginTransaction();
+			ses.beginTransaction();
 
-            Empleado emp = ses.get(Empleado.class, empleadoProp.getId());
+			Empleado emp = ses.get(Empleado.class, empleadoProp.getId());
 
+			emp.setNombre(empleadoProp.getNombre());
+			emp.setApellidos(empleadoProp.getApellido());
+			emp.setGenero(empleadoProp.getGenero().toString());
+			emp.setFnac(empleadoProp.getNacimiento());
+			// emp.setFoto(empleadoProp.getFoto());
+			emp.setPass(empleadoProp.getPassword().getBytes());
+			emp.setFechaIngreso(empleadoProp.getIngreso());
 
+			ses.update(emp);
 
-            emp.setNombre(empleadoProp.getNombre());
-            emp.setApellidos(empleadoProp.getApellido());
-            emp.setGenero(empleadoProp.getGenero().toString());
-            emp.setFnac(empleadoProp.getNacimiento());
-            //emp.setFoto(empleadoProp.getFoto());
-            emp.setPass(empleadoProp.getPassword().getBytes());
-            emp.setFechaIngreso(empleadoProp.getIngreso());
-
-            ses.update(emp);
-
-            ses.getTransaction().commit();
-        } catch (Exception ex) {
-            System.out.println("No se puede modificar el registro: " + ex.getMessage());
-            ses.getTransaction().rollback();
-        }
-    }
+			ses.getTransaction().commit();
+		} catch (Exception ex) {
+			System.out.println("No se puede modificar el registro: " + ex.getMessage());
+			ses.getTransaction().rollback();
+		}
+	}
 
 	public static void eliminarComandasMesa(Session ses, Mesa m) {
 		try {
@@ -789,12 +785,12 @@ public class FuncionesDB {
 			throw e;
 		}
 	}
-	
+
 	public static Carta obtenerCarta(Session ses, String nombre) {
 		try {
 			ses.beginTransaction();
 			Carta retorno = null;
-			List<Carta> res = ses.createQuery("FROM Carta WHERE nombre LIKE '"+nombre+"'").list();
+			List<Carta> res = ses.createQuery("FROM Carta WHERE nombre LIKE '" + nombre + "'").list();
 			if (res.size() == 1) {
 				retorno = res.get(0);
 			}
@@ -803,22 +799,22 @@ public class FuncionesDB {
 		} catch (Exception e) {
 			App.error("Error", "Excepción obteniendo carta", "Detalles: " + e.getMessage());
 			return null;
-			
+
 		}
 	}
-	
+
 	public static void eliminarPlatosCarta(Session ses, Carta c) {
 		try {
 			ses.beginTransaction();
 			ses.createQuery("DELETE FROM Plato WHERE carta = " + c.getId()).executeUpdate();
 			ses.getTransaction().commit();
-			
+
 		} catch (Exception e) {
 			ses.getTransaction().rollback();
-			App.error("Error", "Error eliminando platos de la carta", "Es posible que algún plato se encuentre en una comanda activa. Detalles: " + e.getMessage());
-			
+			App.error("Error", "Error eliminando platos de la carta",
+					"Es posible que algún plato se encuentre en una comanda activa. Detalles: " + e.getMessage());
+
 		}
 	}
 
 }
-
