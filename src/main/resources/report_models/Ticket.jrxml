@@ -29,7 +29,7 @@
 	<title>
 		<band height="136" splitType="Stretch">
 			<image onErrorType="Icon">
-				<reportElement x="0" y="0" width="164" height="126" uuid="ddc15723-2728-421f-b95e-2df9faf64ce1"/>
+				<reportElement key="logoizq" x="0" y="0" width="164" height="126" uuid="ddc15723-2728-421f-b95e-2df9faf64ce1"/>
 				<imageExpression><![CDATA["/src/main/resources/images/barganizer.PNG"]]></imageExpression>
 			</image>
 			<staticText>
@@ -52,7 +52,7 @@
 				<text><![CDATA[]]></text>
 			</staticText>
 			<image onErrorType="Icon">
-				<reportElement x="432" y="0" width="122" height="104" uuid="5d64e5b3-07bb-48ab-89dc-15c0c46bb19a"/>
+				<reportElement key="logoder" x="432" y="0" width="122" height="104" uuid="5d64e5b3-07bb-48ab-89dc-15c0c46bb19a"/>
 				<imageExpression><![CDATA["/src/main/resources/images/barganizer.PNG"]]></imageExpression>
 			</image>
 		</band>

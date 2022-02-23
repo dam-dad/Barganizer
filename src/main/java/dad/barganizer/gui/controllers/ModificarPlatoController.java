@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -78,6 +79,7 @@ public class ModificarPlatoController implements Initializable {
 			bindAll();
 
 		});
+		
 
 
 
@@ -136,12 +138,18 @@ public class ModificarPlatoController implements Initializable {
 					new ExtensionFilter("Todos las imágenes", "*.jpg, *.png, *.bmp"));
 
 			File imagen = fileChoser.showOpenDialog(stageChoser);
+			
 			if (imagen != null) {
-				FileInputStream fis;
-				fis = new FileInputStream(imagen);
-				model.getPlatoModificar().setBytesfoto(fis.readAllBytes());
-				fis.close();
-				model.getPlatoModificar().setFoto(new Image(imagen.toURI().toURL().toExternalForm()));
+				FileInputStream fis = new FileInputStream(imagen);
+				if (fis != null) {
+					model.getPlatoModificar().setBytesfoto(fis.readAllBytes());
+					fis.close();
+					model.getPlatoModificar().setFoto(new Image(imagen.toURI().toURL().toExternalForm()));
+				}
+			} else {
+				InputStream is = getClass().getResourceAsStream("/images/platounknown.png");
+				model.getPlatoModificar().setBytesfoto(is.readAllBytes());
+				model.getPlatoModificar().setFoto(new Image(getClass().getResourceAsStream("/images/platounknown.png")));
 			}
 
 		} catch (FileNotFoundException e) {

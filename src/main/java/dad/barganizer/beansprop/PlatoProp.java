@@ -30,7 +30,7 @@ public class PlatoProp {
 		setId(p.getId());
 		setNombre(p.getNombre());
 		setBytesfoto(p.getFoto());
-		setFoto((p.getFoto() != null) ? new Image(new ByteArrayInputStream(p.getFoto())) : null);
+		setFoto((p.getFoto() != null) ? new Image(new ByteArrayInputStream(p.getFoto())) : new Image(getClass().getResourceAsStream("/images/platounknown.png")));
 		setTipo(p.getTipoPlato());
 		setPrecio(p.getPrecio());
 		setCarta(new CartaProp(p.getCarta()));

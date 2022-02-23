@@ -2,6 +2,8 @@ package dad.barganizer.beansprop;
 
 
 
+import java.io.FileNotFoundException;
+
 import dad.barganizer.db.beans.Plato;
 import dad.barganizer.db.beans.TipoPlato;
 import javafx.beans.property.ListProperty;
@@ -19,7 +21,7 @@ public class TipoPlatoProp {
 	private StringProperty nombre = new SimpleStringProperty();
 	private ListProperty<PlatoProp> platosTipo = new SimpleListProperty<>(FXCollections.observableArrayList());
 	
-	public TipoPlatoProp(TipoPlato tp) {
+	public TipoPlatoProp(TipoPlato tp) throws FileNotFoundException {
 		setId(tp.getId());
 		setNombre(tp.getNombre());
 		

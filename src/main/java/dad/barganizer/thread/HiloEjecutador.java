@@ -2,6 +2,7 @@ package dad.barganizer.thread;
 
 import java.util.concurrent.Semaphore;
 
+import dad.barganizer.App;
 import javafx.concurrent.Task;
 
 public class HiloEjecutador extends Thread {
@@ -22,6 +23,7 @@ public class HiloEjecutador extends Thread {
 			
 			tarea.run(); // Ejecutamos la tarea
 			
+			App.getBARGANIZERDB().resetSesion();
 			semaforo.release(); // Liberamos el permiso una vez se ejecute la tarea
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

@@ -41,6 +41,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -417,6 +419,8 @@ public class InicioController implements Initializable {
 			// Inicialización de un mapa de parámetros para el informe
 			Map<String, Object> parameters = new HashMap<String, Object>();
 
+			parameters.put("logoizq", getClass().getResourceAsStream("/images/barganizer.png"));
+			parameters.put("logoder", getClass().getResourceAsStream("/images/plato/plato.png"));
 //			parameters.put(rutaUsuario, parameters)
 			
 			// Generación del informe (combinamos el informe compilado con los datos)
@@ -569,10 +573,13 @@ public class InicioController implements Initializable {
 			public TableCell<ComandaProp, Void> call(TableColumn<ComandaProp, Void> param) {
 				final TableCell<ComandaProp, Void> celda = new TableCell<ComandaProp, Void>() {
 
-					private Button quitarButton = new Button("Quitar");
+					private Button quitarButton = new Button();
 
 					{
-
+						ImageView imgViewQuitar = new ImageView(new Image(getClass().getResourceAsStream("/images/minus.png")));
+						imgViewQuitar.setFitHeight(40);
+						imgViewQuitar.setFitWidth(40);
+						quitarButton.setGraphic(imgViewQuitar);
 						quitarButton.setOnAction(e -> {
 							ComandaProp comanda = getTableView().getItems().get(getIndex());
 							model.setComandaIndex(comanda);
