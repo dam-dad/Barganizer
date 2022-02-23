@@ -2,7 +2,7 @@
 
 Aplicación de gestión de un negocio de restauración.
 
-<img src="C:\Users\marvin\Desktop\barganizer.PNG" style="zoom: 150%;" />
+![Image text](https://github.com/dam-dad/Barganizer/blob/main/src/main/resources/images/barganizer.PNG)
 
 
 
