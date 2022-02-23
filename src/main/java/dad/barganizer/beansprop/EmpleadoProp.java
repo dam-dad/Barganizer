@@ -23,6 +23,7 @@ public class EmpleadoProp {
 	private ObjectProperty<LocalDate> ingreso = new SimpleObjectProperty<LocalDate>();
 	private ObjectProperty<Image> foto = new SimpleObjectProperty<>();
 	private StringProperty password = new SimpleStringProperty();
+	private ObjectProperty<byte[]> bytesFoto = new SimpleObjectProperty<byte[]>();
 	
 	public EmpleadoProp() {
 		id = new SimpleIntegerProperty(this, "id");
@@ -42,7 +43,10 @@ public class EmpleadoProp {
 		genero.set( (e.getGenero().equals("Hombre")) ? Sexo.Hombre:Sexo.Mujer);
 		nacimiento.set(e.getFnac());
 		ingreso.set(e.getFechaIngreso());
-		foto.set(new Image(new ByteArrayInputStream(e.getFoto())));
+		ByteArrayInputStream bais = new ByteArrayInputStream(e.getFoto());
+		setBytesFoto(bais.readAllBytes());
+		Image f = new Image(new ByteArrayInputStream(e.getFoto()));
+		foto.set(f);
 		password.set(new String(e.getPass(), StandardCharsets.UTF_8));
 	}
 	
@@ -168,6 +172,21 @@ public class EmpleadoProp {
 	public final void setId(final int id) {
 		this.idProperty().set(id);
 	}
+
+	public final ObjectProperty<byte[]> bytesFotoProperty() {
+		return this.bytesFoto;
+	}
+	
+
+	public final byte[] getBytesFoto() {
+		return this.bytesFotoProperty().get();
+	}
+	
+
+	public final void setBytesFoto(final byte[] bytesFoto) {
+		this.bytesFotoProperty().set(bytesFoto);
+	}
+	
 	
 
 	

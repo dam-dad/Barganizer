@@ -2,7 +2,6 @@ package dad.barganizer.gui.controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import org.controlsfx.validation.ValidationSupport;
@@ -11,18 +10,11 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 
 import dad.barganizer.App;
-import dad.barganizer.ImageTile;
 import dad.barganizer.db.FuncionesDB;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.validators.IntegerValidator;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

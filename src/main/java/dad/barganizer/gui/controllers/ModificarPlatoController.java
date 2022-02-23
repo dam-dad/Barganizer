@@ -36,7 +36,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.util.converter.NumberStringConverter;
 
 public class ModificarPlatoController implements Initializable {
 

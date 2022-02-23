@@ -2,18 +2,12 @@ package dad.barganizer.gui.controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import dad.barganizer.App;
-import dad.barganizer.beansprop.CartaProp;
 import dad.barganizer.db.FuncionesDB;
-import dad.barganizer.db.beans.Carta;
-import dad.barganizer.db.beans.TipoPlato;
 import dad.barganizer.gui.models.AddCartaModel;
 import dad.barganizer.thread.HiloEjecutador;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

@@ -142,7 +142,6 @@ public class MainController implements Initializable {
 		try {
 			loginController = new LoginController();
 
-			Stage stageLogin = new Stage();
 			stage.setTitle("BARGANIZER");
 			stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.PNG")));
 			stage.setScene(new Scene(loginController.getView()));

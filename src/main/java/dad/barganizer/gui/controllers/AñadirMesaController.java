@@ -8,11 +8,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 
 import dad.barganizer.App;
-import dad.barganizer.ImageTile;
 import dad.barganizer.db.FuncionesDB;
 import dad.barganizer.validators.IntegerValidator;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

@@ -1,23 +1,20 @@
 package dad.barganizer.gui.controllers;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
@@ -31,8 +28,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
-
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,38 +36,25 @@ import java.io.InputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-
-import org.hibernate.Session;
-
 import dad.barganizer.App;
 import dad.barganizer.beansprop.EmpleadoProp;
 import dad.barganizer.beansprop.Sexo;
 import dad.barganizer.db.BarganizerTasks;
 import dad.barganizer.db.FuncionesDB;
 import dad.barganizer.db.HibernateUtil;
-import dad.barganizer.db.beans.Empleado;
-import dad.barganizer.db.beans.Mesa;
-import dad.barganizer.gui.models.EmpleadoModel;
 import dad.barganizer.thread.HiloEjecutador;
 import javafx.fxml.Initializable;
 
 public class EmpleadoController implements Initializable {
 
-	private EmpleadoModel model = new EmpleadoModel();
+	
 
 	private ObjectProperty<EmpleadoProp> seleccionado = new SimpleObjectProperty<>();
 	private ListProperty<EmpleadoProp> lista = new SimpleListProperty<>(FXCollections.observableArrayList());
 
-	private IntegerProperty id = new SimpleIntegerProperty();
 	private StringProperty nombre = new SimpleStringProperty();
 	private StringProperty apellidos = new SimpleStringProperty();
 	private ObjectProperty<Sexo> genero = new SimpleObjectProperty<>();
@@ -81,7 +63,10 @@ public class EmpleadoController implements Initializable {
 	private ObjectProperty<Image> foto = new SimpleObjectProperty<>();
 	private StringProperty password = new SimpleStringProperty();
 	private ObjectProperty<EmpleadoProp> empleado = new SimpleObjectProperty<>();
-
+	private ObjectProperty<Image> nuevaFoto = new SimpleObjectProperty<>();
+	private ObjectProperty<EmpleadoProp> empleadoMod = new SimpleObjectProperty<EmpleadoProp>();
+	private ObjectProperty<byte[]> bytesFotoRecogida = new SimpleObjectProperty<>();
+	
 	@FXML
 	private Button anadirButton;
 
@@ -163,26 +148,6 @@ public class EmpleadoController implements Initializable {
 		empleado.bind(seleccionado);
 		seleccionado.bind(listaEmpleados.getSelectionModel().selectedItemProperty());
 
-		/*
-		 * model.nombreProperty().bindBidirectional(nombreText.textProperty());
-		 * model.apellidosProperty().bindBidirectional(apellidosText.textProperty());
-		 * model.generoProperty().bindBidirectional(generoCombo.valueProperty());
-		 * model.nacimientoProperty().bindBidirectional(nacimientoFecha.valueProperty())
-		 * ; model.ingresoProperty().bindBidirectional(ingresoFecha.valueProperty());
-		 * model.passwordProperty().bindBidirectional(passwordText.textProperty());
-		 * generoCombo.getItems().addAll(Sexo.values());
-		 * 
-		 * model.empleadoProperty().bind(listaEmpleados.itemsProperty());
-		 * model.seleccionadoProperty().bind(listaEmpleados.getSelectionModel().
-		 * selectedItemProperty());
-		 * 
-		 * 
-		 * listaEmpleados.itemsProperty().bind(model.listaProperty());
-		 * model.empleadoProperty().bind(model.seleccionadoProperty());
-		 * model.seleccionadoProperty().bind(listaEmpleados.getSelectionModel().
-		 * selectedItemProperty());
-		 */
-
 		empleado.addListener(this::onEmpleadoChanged);
 		seleccionado.addListener(this::onSeleccionadoChanged);
 
@@ -233,15 +198,6 @@ public class EmpleadoController implements Initializable {
 			password.unbindBidirectional(ov.passwordProperty());
 			foto.unbindBidirectional(ov.fotoProperty());
 
-			/*
-			 * model.nombreProperty().unbindBidirectional(ov.nombreProperty());
-			 * model.apellidosProperty().unbindBidirectional(ov.apellidoProperty());
-			 * model.generoProperty().unbindBidirectional(ov.generoProperty());
-			 * model.nacimientoProperty().unbindBidirectional(ov.nacimientoProperty());
-			 * model.ingresoProperty().unbindBidirectional(ov.ingresoProperty());
-			 * model.passwordProperty().unbindBidirectional(ov.passwordProperty());
-			 * model.fotoProperty().unbindBidirectional(ov.fotoProperty());
-			 */
 		}
 
 		if (nv != null) {
@@ -253,17 +209,10 @@ public class EmpleadoController implements Initializable {
 			ingreso.bindBidirectional(nv.ingresoProperty());
 			password.bindBidirectional(nv.passwordProperty());
 			foto.bindBidirectional(nv.fotoProperty());
-			/*
-			 * model.nombreProperty().bindBidirectional(nv.nombreProperty());
-			 * model.apellidosProperty().bindBidirectional(nv.apellidoProperty());
-			 * model.generoProperty().bindBidirectional(nv.generoProperty());
-			 * model.nacimientoProperty().bindBidirectional(nv.nacimientoProperty());
-			 * model.ingresoProperty().bindBidirectional(nv.ingresoProperty());
-			 * model.fotoProperty().bindBidirectional(nv.fotoProperty());
-			 */
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private byte[] convertToBytes(ImageView image) throws IOException {
 		try (ByteArrayOutputStream bos = new ByteArrayOutputStream(); ObjectOutput out = new ObjectOutputStream(bos)) {
 			out.writeObject(image);
@@ -336,11 +285,33 @@ public class EmpleadoController implements Initializable {
 			empleado.setNacimiento(nacimiento.getValue());
 			empleado.setIngreso(ingreso.getValue());
 			empleado.setPassword(password.getValue());
-			empleado.setFoto(imageView.getImage());
+			empleado.setFoto(foto.getValue());
+			empleado.setBytesFoto(bytesFotoRecogida.get());
+			Task<Void> insertarEmpleadoTask = new Task<Void>() {
+
+				@Override
+				protected Void call() throws Exception {
+					
+					FuncionesDB.modificarEmpleado(App.getBARGANIZERDB().getSes(), empleado);
+					
+					return null;
+				}
+			};
 			
-			FuncionesDB.modificarEmpleado(App.getBARGANIZERDB().getSes(), empleado);
+			insertarEmpleadoTask.setOnSucceeded(e -> {
+				App.info("Completado", "Modificación completada", "Se ha completado la modificación con éxito");
+			});
 			
-			App.info("Completado", "Modificación completada", "Se ha completado la modificación con éxito");
+			insertarEmpleadoTask.setOnFailed(e -> {
+				App.info("Error", "Modificación no completada", "No se pudo modificar el empleado");
+			});
+			
+			new HiloEjecutador(App.semaforo, insertarEmpleadoTask).start();
+			
+			
+			
+			
+			
 		}
     }
 
@@ -373,13 +344,15 @@ public class EmpleadoController implements Initializable {
 		if (imagen != null) {
 
 			try {
+				FileInputStream fis = new FileInputStream(imagen);
+				setBytesFotoRecogida(fis.readAllBytes());
 				Image foto = new Image(imagen.toURI().toURL().toExternalForm());
 				imageView.setImage(foto);
+				fis.close();
 				
 			} catch (Exception e) {
 
 				Alert alertaError = new Alert(AlertType.ERROR);
-				Stage stage = (Stage) alertaError.getDialogPane().getScene().getWindow();
 				alertaError.initOwner(App.primaryStage);
 				alertaError.setTitle("Error");
 				alertaError.setHeaderText("Error al cargar la imagen.");
@@ -387,5 +360,54 @@ public class EmpleadoController implements Initializable {
 			}
 		}
 	}
+
+
+	public final ObjectProperty<Image> nuevaFotoProperty() {
+		return this.nuevaFoto;
+	}
+	
+
+	public final Image getNuevaFoto() {
+		return this.nuevaFotoProperty().get();
+	}
+	
+
+	public final void setNuevaFoto(final Image nuevaFoto) {
+		this.nuevaFotoProperty().set(nuevaFoto);
+	}
+	
+
+	public final ObjectProperty<EmpleadoProp> empleadoModProperty() {
+		return this.empleadoMod;
+	}
+	
+
+	public final EmpleadoProp getEmpleadoMod() {
+		return this.empleadoModProperty().get();
+	}
+	
+
+	public final void setEmpleadoMod(final EmpleadoProp empleadoMod) {
+		this.empleadoModProperty().set(empleadoMod);
+	}
+
+	public final ObjectProperty<byte[]> bytesFotoRecogidaProperty() {
+		return this.bytesFotoRecogida;
+	}
+	
+
+	public final byte[] getBytesFotoRecogida() {
+		return this.bytesFotoRecogidaProperty().get();
+	}
+	
+
+	public final void setBytesFotoRecogida(final byte[] bytesFotoRecogida) {
+		this.bytesFotoRecogidaProperty().set(bytesFotoRecogida);
+	}
+	
+	
+	
+	
+	
 
 }

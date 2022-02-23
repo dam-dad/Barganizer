@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
 import com.jfoenix.controls.JFXButton;
@@ -13,9 +12,7 @@ import com.jfoenix.controls.JFXButton;
 import dad.barganizer.App;
 import dad.barganizer.db.HibernateUtil;
 import dad.barganizer.db.beans.Empleado;
-import dad.barganizer.db.beans.Plato;
 import dad.barganizer.gui.models.LoginModel;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +22,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class LoginController implements Initializable {
@@ -121,8 +117,7 @@ public class LoginController implements Initializable {
 
 			ses.beginTransaction();
 
-			byte[] claveBytes = model.getClave().getBytes();
-
+			@SuppressWarnings("unchecked")
 			List<Empleado> empleadosList = ses.createQuery("FROM Empleado WHERE nombre = '" + model.getNombre()
 					+ "' AND pass = '" + model.getClave() + "'").list();
 

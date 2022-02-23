@@ -18,7 +18,6 @@ import dad.barganizer.db.FuncionesDB;
 import dad.barganizer.db.beans.Empleado;
 import dad.barganizer.db.beans.Mesa;
 import dad.barganizer.gui.models.AñadirReservaModel;
-import dad.barganizer.gui.models.ReservasModel;
 import dad.barganizer.validators.IntegerValidator;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;

@@ -9,7 +9,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import org.controlsfx.validation.ValidationSupport;
-import org.controlsfx.validation.Validator;
 
 import dad.barganizer.App;
 import dad.barganizer.db.FuncionesDB;
@@ -33,7 +32,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.util.converter.NumberStringConverter;
 
 public class AddPlatoController implements Initializable {
 

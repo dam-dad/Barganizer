@@ -745,7 +745,7 @@ public class FuncionesDB {
 			emp.setApellidos(empleadoProp.getApellido());
 			emp.setGenero(empleadoProp.getGenero().toString());
 			emp.setFnac(empleadoProp.getNacimiento());
-			// emp.setFoto(empleadoProp.getFoto());
+			emp.setFoto(empleadoProp.getBytesFoto());
 			emp.setPass(empleadoProp.getPassword().getBytes());
 			emp.setFechaIngreso(empleadoProp.getIngreso());
 
