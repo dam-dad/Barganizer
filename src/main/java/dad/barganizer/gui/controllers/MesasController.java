@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -66,19 +67,31 @@ public class MesasController implements Initializable {
 
 		model.mesaSeleccionadaProperty().addListener((o, ov, nv) -> {
 			if (ov != null && nv != null) {
-				Mesa ref = (Mesa) nv.getReferencia();
-				ov.setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
+				if (((Mesa)ov.getReferencia()).isActiva()) {
+				ov.setBackgroundColor(Color.DARKGREEN);
+				}
+				else {
+					ov.setBackgroundColor(Color.CRIMSON);
+				}
 			}
 			if (nv != null) {
-				nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
+				nv.setBackgroundColor(ImageTile.TILE_SELECTED_MESAS);
 			}
 		});
 
 		mesasFlow.setOnMouseClicked(e -> {
 
 			if (model.getMesaSeleccionada() != null) {
-				model.getMesaSeleccionada().setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
-				model.setMesaSeleccionada(null);
+				if (((Mesa)model.getMesaSeleccionada().getReferencia()).isActiva()) {
+					model.getMesaSeleccionada().setBackgroundColor(Color.DARKGREEN);
+					model.setMesaSeleccionada(null);
+				}
+				
+				else {
+					model.getMesaSeleccionada().setBackgroundColor(Color.CRIMSON);
+					model.setMesaSeleccionada(null);
+				}
+				
 			}
 
 		});
@@ -194,7 +207,22 @@ public class MesasController implements Initializable {
 			model.setListaMesas(res);
 
 			for (Mesa mesa : res) {
-				mesasFlow.getChildren().add(new ImageTile(mesa));
+				
+				if (mesa.isActiva()) {
+					ImageTile img = new ImageTile(mesa);
+					img.setBackgroundColor(Color.DARKGREEN);
+					mesasFlow.getChildren().add(img);
+				}
+				
+				else {
+					
+					ImageTile img = new ImageTile(mesa);
+					img.setBackgroundColor(Color.CRIMSON);
+					mesasFlow.getChildren().add(img);
+					
+				}
+				
+				
 			}
 
 			ObservableList<Node> l = mesasFlow.getChildren();
