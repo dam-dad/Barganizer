@@ -164,6 +164,7 @@ public class MesasController implements Initializable {
 				FuncionesDB.eliminarMesa(App.getBARGANIZERDB().getSes(),
 						(Mesa) (model.getMesaSeleccionada().getReferencia()));
 				App.info("Completado", "Borrado completado", "Se ha completado el borrado con éxito");
+
 			}
 		}
 

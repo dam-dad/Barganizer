@@ -204,7 +204,7 @@ public class ReservasController implements Initializable {
 		}
 
 		catch (Exception e) {
-			App.error("Error", "Error al modificar", "Debe tener una reserva seleccionada. " +e.getMessage());
+			App.error("Error", "Error al modificar", "Debe tener una reserva seleccionada. ");
 		}
 
 	}
