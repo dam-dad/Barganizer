@@ -30,6 +30,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * Controler que nos permite añadir reservas recogiendo los datos pasados por la vista.
+ *
+ */
 public class AñadirReservaController implements Initializable {
 
 	AñadirReservaModel model = new AñadirReservaModel();
@@ -102,6 +107,10 @@ public class AñadirReservaController implements Initializable {
 
 	}
 
+	/**
+	 * 
+	 * Botón que nos permite añadir los datos en la base de datos llamando a la función.
+	 */
 	@FXML
 	void onAñadirAction(ActionEvent event) {
 
