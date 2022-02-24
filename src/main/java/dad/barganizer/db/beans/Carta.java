@@ -12,6 +12,13 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * 
+ * Esta clase representa el mapeo de la tabla carta que contiene un
+ * identificador autonumérico y un nombre.
+ *
+ */
+
 @Entity
 @Table(name = "carta")
 public class Carta {

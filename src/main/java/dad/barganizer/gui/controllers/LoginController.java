@@ -24,6 +24,13 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * Controlador que nos permite loguearnos en la aplicación recogiendo el nombre
+ * y contraseña de un usuario.
+ *
+ */
+
 public class LoginController implements Initializable {
 
 	// MODEL
@@ -107,6 +114,12 @@ public class LoginController implements Initializable {
 
 		javafx.application.Platform.exit();
 	}
+
+	/**
+	 * 
+	 * Método que busca los datos del empleado pasado por los TextField y comprueba
+	 * si existe en la base de datos.
+	 */
 
 	public boolean checkLogin() {
 

@@ -13,6 +13,13 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * 
+ * Esta clase representa el mapeo de la tabla tipoPlato que contiene un
+ * identificador autonumérico y un campo String.
+ *
+ */
+
 @Entity
 @Table(name = "tipo_plato")
 public class TipoPlato {
@@ -20,15 +27,14 @@ public class TipoPlato {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", columnDefinition = "INT(3)", nullable = false)
 	private long id;
-	
+
 	@Column(name = "nombre", nullable = false, columnDefinition = "ENUM('Entrante', 'Principal', 'Bebida', 'Postre')")
 	private String nombre;
-	
+
 	// Relación 1:N
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "tipoPlato")
 	private List<Plato> platosTipo = new ArrayList<Plato>();
-	
-	
+
 	public long getId() {
 		return id;
 	}
@@ -52,11 +58,10 @@ public class TipoPlato {
 	public void setPlatosTipo(List<Plato> platosTipo) {
 		this.platosTipo = platosTipo;
 	}
-	
+
 	@Override
 	public String toString() {
 		return getNombre();
 	}
-	
-	
+
 }

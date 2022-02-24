@@ -18,6 +18,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * Controler que nos permite añadir mesas recogiendo los valores de un TextField y un CheckBox.
+ *
+ */
+
 public class AñadirMesaController implements Initializable {
 
 	// VISTA

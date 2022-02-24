@@ -24,6 +24,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+
+/**
+ * 
+ * Controlador que nos permite modificar los valores de una mesa seleccionada.
+ *
+ */
+
 public class ModificarMesaController implements Initializable {
 
 	// MODEL

@@ -13,6 +13,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * 
+ * Esta clase representa el mapeo de la tabla mesa que contiene un campo
+ * autonumérico y campos int y boolean.
+ *
+ */
 @Entity
 @Table(name = "mesa")
 public class Mesa {
@@ -31,8 +37,6 @@ public class Mesa {
 
 	@OneToMany(mappedBy = "mesaReserva", cascade = { CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
 	private List<Reserva> reservasList = new ArrayList<Reserva>();
-	
-	
 
 	public long getNumero() {
 		return numero;
@@ -73,12 +77,11 @@ public class Mesa {
 	public void setReservasList(List<Reserva> reservasList) {
 		this.reservasList = reservasList;
 	}
-	
-	
+
 	public String toString() {
-		
+
 		return String.valueOf(numero);
-		
+
 	}
 
 }

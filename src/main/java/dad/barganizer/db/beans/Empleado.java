@@ -12,6 +12,13 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * 
+ * Esta clase representa el mapeo de la tabla empleado que contiene un
+ * identificador autonumérico, y columnas de tipo Varchar, String, Date o byte[].
+ *
+ */
+
 @Entity
 @Table(name = "empleado")
 public class Empleado {
@@ -65,8 +72,6 @@ public class Empleado {
 		this.genero = genero;
 	}
 
-	
-
 	public LocalDate getFnac() {
 		return fnac;
 	}
@@ -115,10 +120,9 @@ public class Empleado {
 		Pass = pass;
 	}
 
-
 	public String toString() {
-		
-		return nombre+ " "+apellidos;
+
+		return nombre + " " + apellidos;
 	}
-	
+
 }

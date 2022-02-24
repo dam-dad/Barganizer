@@ -48,11 +48,17 @@ import dad.barganizer.db.HibernateUtil;
 import dad.barganizer.thread.HiloEjecutador;
 import javafx.fxml.Initializable;
 
+/**
+ * 
+ * Controlador que te permite listar los empleados, así como crear, eliminar o
+ * modificar uno de estos.
+ *
+ */
+
 public class EmpleadoController implements Initializable {
 
 	private ObjectProperty<EmpleadoProp> seleccionado = new SimpleObjectProperty<>();
 	private ListProperty<EmpleadoProp> lista = new SimpleListProperty<>(FXCollections.observableArrayList());
-
 	private StringProperty nombre = new SimpleStringProperty();
 	private StringProperty apellidos = new SimpleStringProperty();
 	private ObjectProperty<Sexo> genero = new SimpleObjectProperty<>();
@@ -300,6 +306,10 @@ public class EmpleadoController implements Initializable {
 		}
 	}
 
+	/**
+	 * Método que nos permite listar empleados y al que llamamos en diferentes
+	 * botones como el crear o eliminar empleado.
+	 */
 	private void listarEmpleados() {
 
 		BarganizerTasks tareas = new BarganizerTasks();

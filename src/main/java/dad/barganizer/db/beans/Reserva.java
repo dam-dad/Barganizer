@@ -15,32 +15,39 @@ import javax.persistence.Table;
 @Table(name = "reserva")
 public class Reserva {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", columnDefinition = "INT(11)", nullable = false)
-    private long id;
+	/**
+	 * 
+	 * Esta clase representa el mapeo de la reserva que contiene un identificador
+	 * autonumérico y campos LocalDateTome o Int.
+	 * 
+	 */
 
-    //@Column(name = "mesa", nullable = false, columnDefinition = "INT(3)")
-    //private int mesa;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", columnDefinition = "INT(11)", nullable = false)
+	private long id;
 
-    //@Column(name = "emp", nullable = false, columnDefinition = "INT(3)")
-    //private int empleado;
+	// @Column(name = "mesa", nullable = false, columnDefinition = "INT(3)")
+	// private int mesa;
 
-    @Column(name = "fechaHora", nullable = false, columnDefinition = "DATETIME")
-    private LocalDateTime fecha;
+	// @Column(name = "emp", nullable = false, columnDefinition = "INT(3)")
+	// private int empleado;
 
-    @Column(name = "cantPersonas", nullable = false, columnDefinition = "INT(2)")
-    private int cantPersonas;
+	@Column(name = "fechaHora", nullable = false, columnDefinition = "DATETIME")
+	private LocalDateTime fecha;
 
-    // Relación N:1
-    @ManyToOne
-    @JoinColumn(name = "mesa")
-    private Mesa mesaReserva;
+	@Column(name = "cantPersonas", nullable = false, columnDefinition = "INT(2)")
+	private int cantPersonas;
 
-    // Relación N:1
-    @ManyToOne
-    @JoinColumn(name = "emp")
-    private Empleado empleadoReserva;
+	// Relación N:1
+	@ManyToOne
+	@JoinColumn(name = "mesa")
+	private Mesa mesaReserva;
+
+	// Relación N:1
+	@ManyToOne
+	@JoinColumn(name = "emp")
+	private Empleado empleadoReserva;
 
 	public long getId() {
 		return id;
@@ -81,6 +88,5 @@ public class Reserva {
 	public void setEmpleadoReserva(Empleado empleadoReserva) {
 		this.empleadoReserva = empleadoReserva;
 	}
-    
-    
+
 }

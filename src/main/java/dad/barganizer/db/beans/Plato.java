@@ -17,6 +17,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * 
+ * Esta clase representa el mapeo de la tabla plato que contiene un
+ * identificador autonumérico y campos String o byte[].
+ *
+ */
+
 @Entity
 @Table(name = "plato")
 public class Plato {
@@ -42,7 +49,7 @@ public class Plato {
 	@JoinTable(name = "plato_alergeno", joinColumns = @JoinColumn(name = "plato", nullable = false), inverseJoinColumns = @JoinColumn(name = "alergeno", nullable = false))
 	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Alergeno> alergenos;
-	
+
 	@OneToMany(mappedBy = "plato", cascade = { CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
 	private List<Comanda> comandasList = new ArrayList<Comanda>();
 
@@ -105,7 +112,5 @@ public class Plato {
 	public void setCarta(Carta carta) {
 		this.carta = carta;
 	}
-	
-	
 
 }

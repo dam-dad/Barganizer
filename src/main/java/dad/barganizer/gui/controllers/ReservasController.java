@@ -36,6 +36,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalDateTimeStringConverter;
 
+/**
+ * 
+ * Controlador que nos permite el manejo de las reservas, pudiendo crear,
+ * editar o eliminar dichas reservas.
+ *
+ */
+
 public class ReservasController implements Initializable {
 
 	// MODEL
@@ -226,6 +233,10 @@ public class ReservasController implements Initializable {
 		listarReservas();
 	}
 
+	/**
+	 * Método que nos permite listar las reservas y al que llamamos en diferentes
+	 * botones como el crear, editar o eliminar reservas.
+	 */
 	public void listarReservas() {
 
 		BarganizerTasks tareas = new BarganizerTasks();
