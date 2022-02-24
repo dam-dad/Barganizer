@@ -27,6 +27,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Controlador que gestiona la ventana principal tras el login del empleado.
+ * Será el encargado de gestionar las llamadas a los demás controllers asignados
+ * a cada pestaña/botón del menú principal. Controlará el cierre de cesión. *
+ */
 public class MainController implements Initializable {
 
 	public static final double TILE_WIDTH = 300;
@@ -120,19 +125,25 @@ public class MainController implements Initializable {
 		root.setCenter(inicioController.getView());
 
 	}
-
+	/**
+	 * Botón que llama al controlador de gestión de Carta
+	 * @param event
+	 */
 	@FXML
 	void onCartasAction(ActionEvent event) {
 		try {
 			cartaController = new CartaController();
 			root.setCenter(cartaController.getView());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
-
+	
+	/**
+	 * Label que al clickear cierra la sesión del usuario
+	 * @param event
+	 */
 	@FXML
 	void onCerrarSesionAction(MouseEvent event) {
 
@@ -155,6 +166,10 @@ public class MainController implements Initializable {
 
 	}
 
+	/**
+	 * Botón que llama al controlador de gestión de Empleado
+	 * @param event
+	 */
 	@FXML
 	void onEmpleadosAction(ActionEvent event) {
 		try {
@@ -166,6 +181,10 @@ public class MainController implements Initializable {
 
 	}
 
+	/**
+	 * Botón que llama al controlador de gestión de Inicio
+	 * @param event
+	 */
 	@FXML
 	void onInicioAction(ActionEvent event) {
 		try {
@@ -176,7 +195,11 @@ public class MainController implements Initializable {
 		}
 
 	}
-
+	
+	/**
+	 * Botón que llama al controlador de gestión de Mesa
+	 * @param event
+	 */
 	@FXML
 	void onMesasAction(ActionEvent event) {
 		try {
@@ -188,6 +211,10 @@ public class MainController implements Initializable {
 
 	}
 
+	/**
+	 * Botón que llama al controlador de gestión de Reserva
+	 * @param event
+	 */
 	@FXML
 	void onReservasAction(ActionEvent event) {
 
