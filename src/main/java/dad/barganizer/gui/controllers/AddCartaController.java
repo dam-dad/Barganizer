@@ -20,6 +20,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class AddCartaController implements Initializable {
+	
+	/**
+	 * Controlador que nos permite añadir cartas con el uso de tareas.
+	 */
 
 	private AddCartaModel model = new AddCartaModel();
 
@@ -80,6 +84,9 @@ public class AddCartaController implements Initializable {
 		return view;
 	}
 
+	/**
+	 * Tarea que usamos para insertar los datos de la carta en la base de datos.
+	 */
 	private Task<Void> insertarCartaTask = new Task<Void>() {
 
 		@Override
@@ -90,6 +97,9 @@ public class AddCartaController implements Initializable {
 		}
 	};
 
+	/**
+	 * Con este método volvemos a declarar una tarea anteriormente consumida.
+	 */
 	public void redeclararTask() {
 		insertarCartaTask = new Task<Void>() {
 

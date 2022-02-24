@@ -35,6 +35,10 @@ import javafx.stage.FileChooser.ExtensionFilter;
 
 public class AddPlatoController implements Initializable {
 
+	/**
+	 * Controlador que nos permite añadir platos con el uso de tareas.
+	 */
+
 	// Model
 	private AddPlatoModel model = new AddPlatoModel();
 
@@ -166,8 +170,14 @@ public class AddPlatoController implements Initializable {
 		return view;
 	}
 
+	/**
+	 * Tarea que nos permite añadir un plato en la base de datos.
+	 */
 	private Task<Void> insertarPlatoTask = new Task<Void>() {
 
+		/**
+		 * Método con el que llamamos a la funcion para insertar los platos.
+		 */
 		@Override
 		protected Void call() throws Exception {
 			FuncionesDB.insertarPlato(App.getBARGANIZERDB().getSes(), model.getNombre(), model.getTipo(),
