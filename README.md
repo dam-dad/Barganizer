@@ -55,7 +55,8 @@ Podremos generar el ticket o factura de las mesas que dispongan de elementos en 
 - La mesa seleccionada se marcará en verde, igual que el elemento de la carta seleccionado.
 - Se podrán borrar elementos de la comanda.
 
-![inicio](https://user-images.githubusercontent.com/90828057/155431875-3d9b134f-34ae-4b7a-8a5f-e5c54c336cf1.PNG)
+![inicio](https://user-images.githubusercontent.com/90828057/155436229-399c85cf-c74c-4f0b-b83f-652d1852258a.PNG)
+
 
 #### Mesas
 
@@ -101,7 +102,8 @@ La pestaña "Carta" nos permite gestionar tanto la carta como los platos que la 
 - Si desea borrar una carta se borrarán todos los platos asignados a ella.
 - Para modificar un plato debe hacer doble click sobre él.
 
-![carta](https://user-images.githubusercontent.com/90828057/155431948-4e51b6c1-5efe-45ec-a3ae-8af6e6cd04d9.PNG)
+
+![carta](https://user-images.githubusercontent.com/90828057/155436252-7ef514f2-d19f-4d6b-a455-814cc73f2062.PNG)
 
 
 
@@ -114,4 +116,5 @@ La pestaña "Empleado" será la encargada de la gestión de empleados del sistem
 - Al añadir empleado se añade con datos pre-definidos.
 - Para modificar un empleado debe seleccionarlo en la lista, lo que habilitará el formulario de la derecha. En el formulario puede modificar los datos deseados y debe pulsar el botón "Modificar".
 
-![empleado](https://user-images.githubusercontent.com/90828057/155431961-4666a0f4-e7de-4682-af9d-11b8e0e61294.PNG)
+![empleado](https://user-images.githubusercontent.com/90828057/155436269-d4db8ecb-cd86-4a51-ab20-8e50fdb3f2fe.PNG)
+
