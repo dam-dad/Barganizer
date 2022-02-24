@@ -53,8 +53,28 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 
+/**
+ * InicioController es el controlador cuya vista se incrusta en el controlador
+ * principal de la aplicación (MainController), y se encarga de proporcionarle
+ * al usuario una interfaz 'easy-to-use' en la cual interactúa con los registros
+ * de la base de datos, los cuales serán representados en forma de Tiles con la
+ * ayuda de TilesFX.
+ * 
+ * Desde InicioController se podrán añadir platos a las mesas activas (mesas
+ * ocupadas en el restaurante) y gestionar sus comandas. Se podrá añadir y
+ * quitar elementos de la misma y generar un ticket en base al consumo de los
+ * clientes. Una vez generado el ticket, la mesa se declara como inactiva y
+ * desaparece de su FlowPane correspondiente.
+ * 
+ * Será posible filtrar los platos por carta, según la que desee el usuario. (A
+ * excepción de las bebidas y los postres, que son considerados 'estáticos' y
+ * por lo tanto podrán ser visualizados en todos los tipos de carta)
+ * 
+ * Se muestran los platos según su tipo, divididos en pestañas.
+ **/
 public class InicioController implements Initializable {
 
+	/** Constante que define la ruta del modelo JRXML **/
 	private static final String JRXML_TICKET_MODEL = "/report_models/Ticket.jrxml";
 
 	// Models
@@ -127,7 +147,11 @@ public class InicioController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		/** Eventos onMouseClicked de los FlowPanes **/
+		/*
+		 * Eventos onMouseClicked de los FlowPanes, que nos ayudarán a deseleccionar los
+		 * tiles que representan los platos si el usuario clickea en cualquier lugar de
+		 * su FlowPane que no sea un nodo Tile
+		 */
 		bebidasFlow.setOnMouseClicked(e -> {
 
 			if (model.getTilePlatoSeleccionado() != null) {
@@ -156,10 +180,13 @@ public class InicioController implements Initializable {
 			}
 		});
 
-		/* Listeners de los tipos de tiles seleccionables del modelo */
+		/*
+		 * Listener de los tipos de tiles seleccionables de las mesas, que nos ayudará a
+		 * apuntar la selección de un tile de mesa a su correspondiente nuevo valor de
+		 * selección.
+		 */
 
 		model.tileMesaSeleccionadaProperty().addListener((o, ov, nv) -> {
-			System.out.println("TileMesaSeleccionada --- OV: " + ov + " --- NV: " + nv);
 			if (ov != null && nv != null) {
 				ov.setBackgroundColor(ImageTile.TILE_DEFAULT_COLOR);
 			}
@@ -169,7 +196,6 @@ public class InicioController implements Initializable {
 
 				redeclararTasks();
 
-				System.out.println("Ejecutando actualización de comandas desde el nuevo valor de la mesa ");
 				new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
 
 			}
@@ -180,7 +206,11 @@ public class InicioController implements Initializable {
 			}
 
 		});
-
+		/*
+		 * Listener de los tipos de tiles seleccionables de los platos, que nos ayudará
+		 * a apuntar la selección de un tile de mesa a su correspondiente nuevo valor de
+		 * selección.
+		 */
 		model.tilePlatoSeleccionadoProperty().addListener((o, ov, nv) -> {
 			System.out.println("TILE-PLATO-SELEC-: OV: " + ov + " --- NV:" + nv);
 			// Si no había ningún tile de plato seleccionado previamente
@@ -194,10 +224,6 @@ public class InicioController implements Initializable {
 				nv.setBackgroundColor(ImageTile.TILE_SELECTED_COLOR);
 			}
 
-		});
-
-		model.comandasMesaProperty().addListener((o, ov, nv) -> {
-			System.out.println("Comandas mesa --- OV: " + ov + "--- NV: " + nv);
 		});
 
 		cartaCombo.getSelectionModel().selectedItemProperty().addListener((o, ov, nv) -> {
@@ -234,6 +260,13 @@ public class InicioController implements Initializable {
 		return view;
 	}
 
+	/**
+	 * Este método es ejecutado en la inicialización del controlador, y nos ayudará
+	 * a inicializar los valores de todos los flowpanes que contendrán los tiles que
+	 * representan cada entidad de la base de datos. Nos apoyamos en una clase
+	 * BarganizerTasks que nos brinda tareas de uso recurrente de la aplicación.
+	 * Cada tare
+	 **/
 	private void inicializarEnBackground() {
 
 		// BarganizerTasks nos ayudará con la ejecución de tareas en segundo plano
@@ -397,13 +430,18 @@ public class InicioController implements Initializable {
 		new HiloEjecutador(App.semaforo, tareas.getObtenerPostresTask()).start();
 	}
 
+	/**
+	 * Este método se encarga de generar los tickets y de guardarlos por defecto en
+	 * el perfil del usuario. El nombre de cada ticket corresponde a su fecha y hora
+	 * en el que fue generado. El modelo del ticket se genera gracias a la plantilla
+	 * de JasperReports.
+	 **/
 	@FXML
 	void onGenerarTicketAction(ActionEvent event) {
 
 		// Sólo Windows. Los tickets se guardarán en el directorio del usuario, en la
 		// carpeta tickets.
 		String rutaUsuario = System.getenv("USERPROFILE");
-		System.out.println(rutaUsuario);
 		File directorioReportes = new File(rutaUsuario + "\\tickets");
 
 		// Si el directorio donde se generarán los reportes por defecto ya está
@@ -446,23 +484,22 @@ public class InicioController implements Initializable {
 					return FXCollections.observableArrayList(listaMesas);
 				}
 			};
-			
+
 			// Se limpia la comanda relacionada a esa mesa
 			eliminarComandasMesaTask.setOnSucceeded(e -> {
-				((Mesa)model.getTileMesaSeleccionada().getReferencia()).setActiva(false);
+				((Mesa) model.getTileMesaSeleccionada().getReferencia()).setActiva(false);
 			});
-			
+
 			modificarMesaTask.setOnSucceeded(e -> {
 				model.setTileMesaSeleccionada(null);
 				model.getComandasMesa().clear();
 			});
-			
+
 			obtenerMesasActivasTask.setOnSucceeded(e -> {
 				ObservableList<Mesa> res = obtenerMesasActivasTask.getValue();
 				mesasFlow.getChildren().clear();
 				model.setListaMesas(res);
 
-				
 				for (Mesa mesa : res) {
 					mesasFlow.getChildren().add(new ImageTile(mesa));
 				}
@@ -483,8 +520,6 @@ public class InicioController implements Initializable {
 			new HiloEjecutador(App.semaforo, eliminarComandasMesaTask).start();
 			new HiloEjecutador(App.semaforo, modificarMesaTask).start();
 			new HiloEjecutador(App.semaforo, obtenerMesasActivasTask).start();
-			
-			
 
 		} catch (JRException e) {
 			App.error("Error", "Error Jasper",
@@ -493,28 +528,30 @@ public class InicioController implements Initializable {
 			App.error("Error", "Excepción", "Se ha producido una excepción. Detalles: " + e.getMessage());
 		}
 	}
-	
 
+	/**
+	 * Tarea que nos permite modificar la mesa seleccionada, a través de la
+	 * referencia a su objeto mesa en el tile de mesa seleccionada.
+	 **/
 	private Task<Void> modificarMesaTask = new Task<Void>() {
 
 		@Override
 		protected Void call() throws Exception {
 
-			FuncionesDB.modificarMesa(App.getBARGANIZERDB().getSes(), (Mesa)model.getTileMesaSeleccionada().getReferencia());
+			FuncionesDB.modificarMesa(App.getBARGANIZERDB().getSes(),
+					(Mesa) model.getTileMesaSeleccionada().getReferencia());
 			return null;
 		}
 	};
-	
-	
 
+	/**
+	 * Tarea que nos permite actualizar la lista de comandas, utilizando como
+	 * referencia la mesa seleccionada y el plato seleccionado
+	 **/
 	private Task<ObservableList<ComandaProp>> actualizarComandasMesaTask = new Task<ObservableList<ComandaProp>>() {
 
 		@Override
 		protected ObservableList<ComandaProp> call() throws Exception {
-
-			System.out.println("ACTUALIZACIÓN DE COMANDA MESA. VALORES: MESA Nº"
-					+ ((Mesa) model.getTileMesaSeleccionada().getReferencia()).getNumero()
-					+ ((Plato) model.getTilePlatoSeleccionado().getReferencia()).getNombre());
 
 			FuncionesDB.insertarComanda(App.getBARGANIZERDB().getSes(),
 					(Mesa) model.getTileMesaSeleccionada().getReferencia(),
@@ -533,6 +570,10 @@ public class InicioController implements Initializable {
 		}
 	};
 
+	/**
+	 * Este método se encarga de eliminar las comandas de una mesa, pasándole la
+	 * mesa seleccionada como parámetro.
+	 **/
 	private Task<Void> eliminarComandasMesaTask = new Task<Void>() {
 		protected Void call() throws Exception {
 			FuncionesDB.eliminarComandasMesa(App.getBARGANIZERDB().getSes(),
@@ -552,8 +593,11 @@ public class InicioController implements Initializable {
 			return null;
 		};
 	};
-	
 
+	/**
+	 * Este método ejecuta una tarea que elimina una comanda de una mesa, utilizando
+	 * como parámetro el indice de la comanda a eliminar
+	 **/
 	private Task<Void> eliminarComandaIndexTask = new Task<Void>() {
 		protected Void call() throws Exception {
 			FuncionesDB.eliminarComanda(App.getBARGANIZERDB().getSes(), model.getComandaIndex().getReferencia());
@@ -561,14 +605,21 @@ public class InicioController implements Initializable {
 		};
 	};
 
+	/**
+	 * Este método se encarga de redeclarar las tareas, ya que su uso al ser tan
+	 * recurrente en la aplicación, es esperable que cualquiera de ellas se
+	 * encuentre en estado de finalizada si repetimos su llamada, por lo que
+	 * requerimos de ejecutar la llamada de este método para reutilizar una tarea.
+	 **/
 	private void redeclararTasks() {
-		
+
 		modificarMesaTask = new Task<Void>() {
 
 			@Override
 			protected Void call() throws Exception {
 
-				FuncionesDB.modificarMesa(App.getBARGANIZERDB().getSes(), (Mesa)model.getTileMesaSeleccionada().getReferencia());
+				FuncionesDB.modificarMesa(App.getBARGANIZERDB().getSes(),
+						(Mesa) model.getTileMesaSeleccionada().getReferencia());
 				return null;
 			}
 		};
@@ -644,6 +695,11 @@ public class InicioController implements Initializable {
 
 	}
 
+	/**
+	 * Este método nos ayudará a añadir una columna en la tabla, y en sus celdas se
+	 * representará un botor que ayudará al usuario a restar cantidades de un
+	 * producto de la comanda o quitarlos de la misma.
+	 **/
 	private void addButtonColumn() {
 		Callback<TableColumn<ComandaProp, Void>, TableCell<ComandaProp, Void>> cellFactory = new Callback<TableColumn<ComandaProp, Void>, TableCell<ComandaProp, Void>>() {
 
@@ -663,8 +719,7 @@ public class InicioController implements Initializable {
 							ComandaProp comanda = getTableView().getItems().get(getIndex());
 							model.setComandaIndex(comanda);
 							// Acciones a realizar al clickear el botón
-//							FuncionesDB.eliminarComanda(App.getBARGANIZERDB().getSes(), comanda.getReferencia());
-							redeclararTasks();
+							redeclararTasks(); // Re-declaración de tareas, en caso de encontrarse en estado utilizado
 
 							new HiloEjecutador(App.semaforo, eliminarComandaIndexTask).start();
 							System.out.println("Ejecutando actualización de comandas desde botón de quitar");
@@ -690,6 +745,13 @@ public class InicioController implements Initializable {
 		accionesColumn.setCellFactory(cellFactory);
 	}
 
+	/**
+	 * Este método se encarga de listar los nodos almacenados en su flow y
+	 * establecer su método onMouseClicked, y así determinar con exactitud qué tipo
+	 * de tile de plato fue seleccionado. En la aplicación, definimos la lógica de
+	 * tal manera que el usuario deberá realizar un doble click sobre el tile para
+	 * añadirlo a la comanda. En este caso, se define el mostrado de bebidas
+	 **/
 	private void prepararNodosBebidas() {
 		ObservableList<Node> l = bebidasFlow.getChildren();
 		for (Node node : l) {
@@ -706,7 +768,6 @@ public class InicioController implements Initializable {
 						/* Actualizar la lista de comandas con la nueva comanda añadida */
 						redeclararTasks();
 						new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
-						System.out.println("Ejecutando actualización de comandas desde bebidas");
 						new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
 
 					}
@@ -716,6 +777,13 @@ public class InicioController implements Initializable {
 		}
 	}
 
+	/**
+	 * Este método se encarga de listar los nodos almacenados en su flow y
+	 * establecer su método onMouseClicked, y así determinar con exactitud qué tipo
+	 * de tile de plato fue seleccionado. En la aplicación, definimos la lógica de
+	 * tal manera que el usuario deberá realizar un doble click sobre el tile para
+	 * añadirlo a la comanda. En este caso, se define el mostrado de bebidas
+	 **/
 	private void prepararNodosEntrantes() {
 		ObservableList<Node> l = entrantesFlow.getChildren();
 		for (Node node : l) {
@@ -730,10 +798,8 @@ public class InicioController implements Initializable {
 								"Debe seleccionar una mesa antes de añadir un producto en la comanda");
 					} else {
 						/* Actualizar la lista de comandas con la nueva comanda añadida */
-
 						redeclararTasks();
 						new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
-						System.out.println("Ejecutando actualización de comandas desde entrantes");
 						new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
 
 					}
@@ -743,6 +809,13 @@ public class InicioController implements Initializable {
 		}
 	}
 
+	/**
+	 * Este método se encarga de listar los nodos almacenados en su flow y
+	 * establecer su método onMouseClicked, y así determinar con exactitud qué tipo
+	 * de tile de plato fue seleccionado. En la aplicación, definimos la lógica de
+	 * tal manera que el usuario deberá realizar un doble click sobre el tile para
+	 * añadirlo a la comanda. En este caso, se define el mostrado de bebidas
+	 **/
 	private void prepararNodosPostres() {
 		ObservableList<Node> l = postresFlow.getChildren();
 		for (Node node : l) {
@@ -759,7 +832,6 @@ public class InicioController implements Initializable {
 
 						redeclararTasks();
 						new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
-						System.out.println("Ejecutando actualización de comandas desde postres");
 						new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
 
 					}
@@ -769,6 +841,13 @@ public class InicioController implements Initializable {
 		}
 	}
 
+	/**
+	 * Este método se encarga de listar los nodos almacenados en su flow y
+	 * establecer su método onMouseClicked, y así determinar con exactitud qué tipo
+	 * de tile de plato fue seleccionado. En la aplicación, definimos la lógica de
+	 * tal manera que el usuario deberá realizar un doble click sobre el tile para
+	 * añadirlo a la comanda. En este caso, se define el mostrado de bebidas
+	 **/
 	private void prepararNodosPlatos() {
 		ObservableList<Node> l = platosFlow.getChildren();
 		for (Node node : l) {
@@ -783,10 +862,8 @@ public class InicioController implements Initializable {
 								"Debe seleccionar una mesa antes de añadir un producto en la comanda");
 					} else {
 						/* Actualizar la lista de comandas con la nueva comanda añadida */
-
 						redeclararTasks();
 						new HiloEjecutador(App.semaforo, insertarComandaMesa).start();
-						System.out.println("Ejecutando actualización de comandas desde platos");
 						new HiloEjecutador(App.semaforo, actualizarComandasMesaTask).start();
 
 					}

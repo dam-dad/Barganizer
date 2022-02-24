@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>eu.hansolo</groupId>
 			<artifactId>tilesfx</artifactId>
-			<version>16.0.2</version>
+			<version>11.48</version>
 		</dependency>
 
 		<!-- Dependencias JFoenix -->
@@ -79,7 +79,7 @@
 			<artifactId>jasperreports</artifactId>
 			<version>6.19.0</version>
 		</dependency>
-		
+
 	</dependencies>
 
 
@@ -102,6 +102,9 @@
 							<customizedJre>false</customizedJre>
 							<generateInstaller>true</generateInstaller>
 							<administratorRequired>true</administratorRequired>
+							<additionalResources>
+								<additionalResource>README.md</additionalResource>
+							</additionalResources>
 							<platform>windows</platform>
 							<winConfig>
 								<generateMsi>false</generateMsi>

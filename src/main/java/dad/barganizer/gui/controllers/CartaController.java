@@ -38,6 +38,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * CartaController brinda al usuario una interfaz de fácil uso e intuitiva para
+ * gestionar las cartas y los platos del negocio. Lista las cartas y nos permite
+ * añadir y borrar las mismas, junto a sus platos relacionados (en caso de que
+ * estos no se encuentren en una comanda activa).
+ **/
 public class CartaController implements Initializable {
 
 	private ModificarPlatoController modificarPlatoController;
@@ -97,6 +103,10 @@ public class CartaController implements Initializable {
 		loader.load();
 	}
 
+	/**
+	 * Al inicializarse el controlador, se prepara la lista de cartas y se muestra
+	 * al usuario
+	 **/
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -246,10 +256,12 @@ public class CartaController implements Initializable {
 		return view;
 	}
 
-	void onListarNodosAction(ActionEvent e) {
-		prepararNodosPlatos();
-	}
-
+	/**
+	 * Este método se encarga de preparar los nodos tiles que representan los platos
+	 * en el controlador, de forma similar a InicioController
+	 * 
+	 * @see InicioController
+	 **/
 	private void prepararNodosPlatos() {
 		ObservableList<Node> l = platosFlow.getChildren();
 		for (Node node : l) {
@@ -296,6 +308,10 @@ public class CartaController implements Initializable {
 		}
 	}
 
+	/**
+	 * Método utilizado para re-declarar las tareas, ya que podrían encontrarse en
+	 * estado utilizado en cualquier llamada.
+	 **/
 	private void redeclararTask() {
 		inicializarCartaTask = new Task<ObservableList<CartaProp>>() {
 
@@ -331,6 +347,11 @@ public class CartaController implements Initializable {
 		};
 	}
 
+	/**
+	 * Tarea encargada de obtener una lista de cartas de la base de datos y
+	 * convertirlas en sus correspondientes properties para ser tratadas en la
+	 * interfaz.
+	 **/
 	private Task<ObservableList<CartaProp>> inicializarCartaTask = new Task<ObservableList<CartaProp>>() {
 
 		@Override
@@ -344,6 +365,7 @@ public class CartaController implements Initializable {
 		}
 	};
 
+	/** Tarea encargada de eliminar un plato de la base de datos **/
 	private Task<Void> borrarPlatoTask = new Task<Void>() {
 
 		protected Void call() throws Exception {
@@ -354,6 +376,7 @@ public class CartaController implements Initializable {
 		};
 	};
 
+	/** Tarea encargada de borrar una carta de la base de datos **/
 	private Task<Void> borrarCartaTask = new Task<Void>() {
 		protected Void call() throws Exception {
 			FuncionesDB.eliminarPlatosCarta(App.getBARGANIZERDB().getSes(),
@@ -364,6 +387,12 @@ public class CartaController implements Initializable {
 		};
 	};
 
+	/**
+	 * Método encargado de añadir una carta cuando se pulsa sobre su correspondiente
+	 * botón. Llamará a su controlador encargado de tratar los datos de formulario y
+	 * realizar la propia acción de inserción. Una vez finalice la ejecución del
+	 * controlador, se refrescará de nuevo la lista.
+	 **/
 	@FXML
 	void onAddCartaAction(ActionEvent event) {
 
@@ -387,10 +416,6 @@ public class CartaController implements Initializable {
 				System.out.println("INICIALIZARCARTAPROPTASK: " + l);
 				model.setLista(l);
 			});
-//			redeclararTask();
-//			inicializarCartaTask.setOnSucceeded(e -> {
-//				model.setLista(inicializarCartaTask.getValue());
-//			});
 
 			new HiloEjecutador(App.semaforo, tareas.getInicializarCartaPropTask()).start();
 
@@ -400,6 +425,10 @@ public class CartaController implements Initializable {
 
 	}
 
+	/**
+	 * Método encargado de eliminar una carta en caso de que haya una seleccionada.
+	 * Se solicita confirmación para proceder.
+	 **/
 	@FXML
 	void onDelCartaAction(ActionEvent event) {
 		if (cartasList.getSelectionModel().getSelectedIndex() > -1 && model.getCartaSeleccionada() != null) {
@@ -431,6 +460,14 @@ public class CartaController implements Initializable {
 		}
 	}
 
+	/**
+	 * Este método se encarga de añadir un plato, llamando al controlador encargado
+	 * de recibir los datos de formulario del plato a añadir. Se mostrará el
+	 * formulario y se esperará a su resultado. El usuario desde el controlador de
+	 * añadir plato podrá decidir si añadir uno nuevo o cancelar la operación. En
+	 * ambos casos, el programa ejecuta la tarea de inicialización de carta y
+	 * refresca la lista.
+	 **/
 	@FXML
 	void onAddPlatoAction(ActionEvent event) {
 		try {
@@ -474,6 +511,12 @@ public class CartaController implements Initializable {
 
 	}
 
+	/**
+	 * Si el usuario ha seleccionado un plato, tendrá la posibilidad de pulsar el
+	 * botón de borrado y proceder al mismo. Se espera confirmación para proceder.
+	 * El borrado y actualizado de platos sobre la carta se realiza a través de la
+	 * ejecución de las tareas.
+	 **/
 	@FXML
 	void onDelPlatoAction(ActionEvent event) {
 

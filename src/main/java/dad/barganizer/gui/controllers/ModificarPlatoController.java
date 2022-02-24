@@ -37,6 +37,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
 
+/**
+ * ModificarPlatoController se encarga de tratar los datos de formulario de
+ * modificación del plato seleccionado previamente. Se podrá modificar el nombre
+ * del plato, la foto, su precio, su tipo y la carta a la que pertenece.
+ **/
 public class ModificarPlatoController implements Initializable {
 
 	private ModificarPlatoModel model = new ModificarPlatoModel();
@@ -74,6 +79,11 @@ public class ModificarPlatoController implements Initializable {
 		loader.load();
 	}
 
+	/**
+	 * Se inicializa el formulario de modificación, se vinculan las properties y se
+	 * añade el validador a los campos de precio y nombre en la inicialización del
+	 * controlador
+	 **/
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -109,12 +119,12 @@ public class ModificarPlatoController implements Initializable {
 		return model;
 	}
 
+	/** Método encargado de vincular todos los componentes a las properties del modelo, en caso de ser
+	 * necesario una nueva llamada a los mismos.**/
 	private void bindAll() {
 		nombrePlatoText.textProperty().bindBidirectional(model.getPlatoModificar().nombreProperty());
 
 		precioText.setText("" + model.getPlatoModificar().getPrecio());
-//		precioText.textProperty().bindBidirectional(model.getPlatoModificar().precioProperty(),
-//				new NumberStringConverter());
 
 		cartaCombo.valueProperty().bindBidirectional(model.getPlatoModificar().getCarta().referenciaProperty());
 		tipoCombo.valueProperty().bindBidirectional(model.getPlatoModificar().tipoProperty());
@@ -122,12 +132,15 @@ public class ModificarPlatoController implements Initializable {
 
 	}
 
+	/** Al invocar este método se cierra el controlador de modificación**/
 	@FXML
 	void onCancelAction(ActionEvent event) {
 		Stage stage = (Stage) cancelButton.getScene().getWindow();
 		stage.close();
 	}
 
+	/** Método encargado de gestionar el cambio de foto en la modificación.
+	 * Si no se selecciona una imagen, se establece una por defecto**/
 	@FXML
 	void onCambiarFotoAction(ActionEvent event) {
 
@@ -166,6 +179,7 @@ public class ModificarPlatoController implements Initializable {
 		}
 	}
 
+	/** Tarea encargada de actualizar el plato de la base de datos **/
 	private Task<Void> actualizarPlatoTask = new Task<Void>() {
 
 		@Override
@@ -187,6 +201,7 @@ public class ModificarPlatoController implements Initializable {
 		}
 	};
 
+	/** Método encargado de lanzar la tarea de modificación cuando se pulse el botón **/
 	@FXML
 	void onModificarPlatoAction(ActionEvent event) {
 
@@ -197,7 +212,6 @@ public class ModificarPlatoController implements Initializable {
 
 			Stage stage = (Stage) modificarButton.getScene().getWindow();
 			stage.close();
-//			onActualizarListaAction(null);
 
 		});
 
@@ -210,6 +224,8 @@ public class ModificarPlatoController implements Initializable {
 		new HiloEjecutador(App.semaforo, actualizarPlatoTask).start();
 	}
 
+	/** Método encargado de actualizar la lista a través de la ejecución de tareas declaradas
+	 * en un objeto BarganizerTasks**/
 	void onActualizarListaAction(ActionEvent event) {
 		BarganizerTasks tareas = new BarganizerTasks();
 

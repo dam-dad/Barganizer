@@ -45,7 +45,7 @@ public class ModificarReservaController implements Initializable {
 	public ObjectProperty<Reserva> seleccionado = new SimpleObjectProperty<>();
 
 	@FXML
-	private JFXButton añadirButton;
+	private JFXButton addButton;
 
 	@FXML
 	private JFXButton eliminarButton;
@@ -90,7 +90,7 @@ public class ModificarReservaController implements Initializable {
 		support.registerValidator(personasText, true, new IntegerValidator());
 		support.registerValidator(horaText, true, horaValidator);
 
-		añadirButton.disableProperty().bind(support.invalidProperty());
+		addButton.disableProperty().bind(support.invalidProperty());
 
 	}
 
@@ -99,7 +99,7 @@ public class ModificarReservaController implements Initializable {
 	 * @param event
 	 */
 	@FXML
-	void onAñadirAction(ActionEvent event) {
+	void onAddAction(ActionEvent event) {
 
 		try {
 
@@ -117,7 +117,7 @@ public class ModificarReservaController implements Initializable {
 
 			App.info("Completado", "Modificación completada", "Se ha completado la modificación con éxito");
 
-			Stage stage = (Stage) añadirButton.getScene().getWindow();
+			Stage stage = (Stage) addButton.getScene().getWindow();
 			stage.close();
 
 		} catch (Exception e) {

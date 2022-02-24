@@ -22,6 +22,8 @@ public class ComandasDataSource implements JRDataSource {
 		this.comandas = lista;
 	}
 
+	/** En el método next() definimos la forma de recorrer la colección de elementos, y devolvemos si existe un siguiente
+	 * elemento en la misma.**/
 	@Override
 	public boolean next() throws JRException {
 		index++;

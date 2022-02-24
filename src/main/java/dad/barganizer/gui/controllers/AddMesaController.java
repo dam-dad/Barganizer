@@ -24,7 +24,7 @@ import javafx.stage.Stage;
  *
  */
 
-public class AñadirMesaController implements Initializable {
+public class AddMesaController implements Initializable {
 
 	// VISTA
 
@@ -32,7 +32,7 @@ public class AñadirMesaController implements Initializable {
 	private JFXCheckBox activaCheck;
 
 	@FXML
-	private JFXButton añadirButton;
+	private JFXButton addButton;
 
 	@FXML
 	private JFXButton cancelarButton;
@@ -47,7 +47,7 @@ public class AñadirMesaController implements Initializable {
 		return root;
 	}
 
-	public AñadirMesaController() throws IOException {
+	public AddMesaController() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AñadirMesaView.fxml"));
 		loader.setController(this);
 		loader.load();
@@ -58,11 +58,11 @@ public class AñadirMesaController implements Initializable {
 
 		ValidationSupport support = new ValidationSupport();
 		support.registerValidator(cantidadText, true, new IntegerValidator());
-		añadirButton.disableProperty().bind(support.invalidProperty());
+		addButton.disableProperty().bind(support.invalidProperty());
 	}
 
 	@FXML
-	void onAñadirAction(ActionEvent event) {
+	void onAddAction(ActionEvent event) {
 
 		try {
 
@@ -71,7 +71,7 @@ public class AñadirMesaController implements Initializable {
 
 			App.info("Completado", "Inserción completado", "Se ha completado la inserción con éxito");
 
-			Stage stage = (Stage) añadirButton.getScene().getWindow();
+			Stage stage = (Stage) addButton.getScene().getWindow();
 			stage.close();
 
 		} catch (Exception e) {

@@ -17,7 +17,7 @@ import dad.barganizer.App;
 import dad.barganizer.db.FuncionesDB;
 import dad.barganizer.db.beans.Empleado;
 import dad.barganizer.db.beans.Mesa;
-import dad.barganizer.gui.models.AñadirReservaModel;
+import dad.barganizer.gui.models.AddReservaModel;
 import dad.barganizer.validators.IntegerValidator;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -35,12 +35,12 @@ import javafx.stage.Stage;
  * Controler que nos permite añadir reservas recogiendo los datos pasados por la vista.
  *
  */
-public class AñadirReservaController implements Initializable {
+public class AddReservaController implements Initializable {
 
-	AñadirReservaModel model = new AñadirReservaModel();
+	AddReservaModel model = new AddReservaModel();
 
 	@FXML
-	private JFXButton añadirButton;
+	private JFXButton addButton;
 
 	@FXML
 	private JFXButton eliminarButton;
@@ -73,7 +73,7 @@ public class AñadirReservaController implements Initializable {
 		return root;
 	}
 
-	public AñadirReservaController() throws IOException {
+	public AddReservaController() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AñadirReservaView.fxml"));
 		loader.setController(this);
 		loader.load();
@@ -91,7 +91,7 @@ public class AñadirReservaController implements Initializable {
 		support.registerValidator(personasText, true, new IntegerValidator());
 		support.registerValidator(horaText, true, horaValidator);
 
-		añadirButton.disableProperty().bind(support.invalidProperty());
+		addButton.disableProperty().bind(support.invalidProperty());
 
 		mesaCombo.setItems(FXCollections.observableArrayList(FuncionesDB.listarMesas(App.getBARGANIZERDB().getSes())));
 		empleadoCombo.setItems(
@@ -112,7 +112,7 @@ public class AñadirReservaController implements Initializable {
 	 * Botón que nos permite añadir los datos en la base de datos llamando a la función.
 	 */
 	@FXML
-	void onAñadirAction(ActionEvent event) {
+	void onAddAction(ActionEvent event) {
 
 		try {
 			String time = model.getHora();
@@ -124,7 +124,7 @@ public class AñadirReservaController implements Initializable {
 
 			App.info("Completado", "Inserción completado", "Se ha completado la inserción con éxito");
 
-			Stage stage = (Stage) añadirButton.getScene().getWindow();
+			Stage stage = (Stage) addButton.getScene().getWindow();
 			stage.close();
 
 		} catch (Exception e) {

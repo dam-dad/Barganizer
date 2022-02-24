@@ -48,13 +48,13 @@ public class ReservasController implements Initializable {
 	// MODEL
 
 	ReservasModel model = new ReservasModel();
-	AñadirReservaController añadirReservaController;
+	AddReservaController addReservaController;
 	ModificarReservaController modificarReservaController;
 
 	// VISTA
 
 	@FXML
-	private Button añadirReservaButton;
+	private Button addReservaButton;
 
 	@FXML
 	private Button eliminarReservaButton;
@@ -132,11 +132,11 @@ public class ReservasController implements Initializable {
 	}
 
 	@FXML
-	void onAñadirReservaAction(ActionEvent event) {
+	void onAddReservaAction(ActionEvent event) {
 
 		try {
 
-			añadirReservaController = new AñadirReservaController();
+			addReservaController = new AddReservaController();
 
 		} catch (Exception e) {
 
@@ -146,7 +146,7 @@ public class ReservasController implements Initializable {
 		Stage stage = new Stage();
 		stage.setTitle("Añadir reserva");
 		stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.PNG")));
-		stage.setScene(new Scene(añadirReservaController.getView()));
+		stage.setScene(new Scene(addReservaController.getView()));
 		stage.getScene().getStylesheets().setAll("/css/mainView.css");
 
 		// Lineas opcionales pero que permiten que al tener una ventana abierta, la otra

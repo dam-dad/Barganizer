@@ -1,7 +1,6 @@
 package dad.barganizer;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Optional;

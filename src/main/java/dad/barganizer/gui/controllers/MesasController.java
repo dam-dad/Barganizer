@@ -38,12 +38,12 @@ public class MesasController implements Initializable {
 	// MODEL
 
 	MesasModel model = new MesasModel();
-	AñadirMesaController añadirMesaController;
+	AddMesaController addMesaController;
 
 	// VISTA
 
 	@FXML
-	private JFXButton añadirButton;
+	private JFXButton addButton;
 
 	@FXML
 	private FlowPane mesasFlow;
@@ -114,11 +114,11 @@ public class MesasController implements Initializable {
 	 * @param event
 	 */
 	@FXML
-	void onAñadirAction(ActionEvent event) {
+	void onAddAction(ActionEvent event) {
 
 		try {
 
-			añadirMesaController = new AñadirMesaController();
+			addMesaController = new AddMesaController();
 
 		} catch (Exception e) {
 
@@ -128,7 +128,7 @@ public class MesasController implements Initializable {
 		Stage stage = new Stage();
 		stage.setTitle("Añadir mesa");
 		stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.PNG")));
-		stage.setScene(new Scene(añadirMesaController.getView()));
+		stage.setScene(new Scene(addMesaController.getView()));
 		stage.getScene().getStylesheets().setAll("/css/mainView.css");
 
 		// Lineas opcionales pero que permiten que al tener una ventana abierta, la otra
