@@ -7,7 +7,11 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
+/**
+ * Modelo de properties usadas para controlar la
+ * consulta del elemento "Reserva" en la base de datos.
+ *
+ */
 public class ReservasModel {
 
 	ListProperty<ReservaProp> lista = new SimpleListProperty<>(FXCollections.observableArrayList());

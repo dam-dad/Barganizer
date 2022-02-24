@@ -13,7 +13,12 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
-
+/**
+ * 
+ * Modelo de properties usadas para controlar la consulta, inserción, modificación y
+ * borrado del elemento "Empleado" en la base de datos.
+ *
+ */
 public class EmpleadoModel {
 
 	private StringProperty nombre;

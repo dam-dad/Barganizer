@@ -14,6 +14,12 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * 
+ * Clase Bean de properties que servirá de apoyo para trabajar con las cartas y representarlas en la interfaz gráfica.
+ *
+ */
+
 public class CartaProp {
 
 	private LongProperty id = new SimpleLongProperty();

@@ -13,6 +13,11 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * 
+ * Clase ImageTile que nos ayudará a generar nodos Tile de tipo imagen.
+ * La librería TilesFx nos permite el uso de estos nodos. 
+ */
 public class ImageTile extends Tile {
 
 	private static final int TILE_WIDTH = 125;

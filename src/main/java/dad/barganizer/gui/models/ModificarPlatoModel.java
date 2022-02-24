@@ -9,7 +9,11 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
+/**
+ * 
+ * Modelo de properties usadas para modificar una elemento "Plato" a la base de datos.
+ *
+ */
 public class ModificarPlatoModel {
 
 	private ObjectProperty<PlatoProp> platoModificar = new SimpleObjectProperty<PlatoProp>();

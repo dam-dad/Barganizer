@@ -11,7 +11,12 @@ import javafx.beans.property.SimpleObjectProperty;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
+/**
+ * 
+ * Modelo de properties usadas para controlar el listado
+ * del elemento "Mesa" en la base de datos.
+ *
+ */
 public class MesasModel {
 
 	private ListProperty<Mesa> listaMesas = new SimpleListProperty<Mesa>(FXCollections.observableArrayList());

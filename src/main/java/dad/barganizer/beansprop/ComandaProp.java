@@ -17,6 +17,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 
+/**
+ * 
+ * Clase Bean de properties que servirá de apoyo para trabajar con las comandas y representarlas en la interfaz gráfica.
+ *
+ */
 public class ComandaProp extends RecursiveTreeObject<ComandaProp> {
 
 	private LongProperty numMesa = new SimpleLongProperty();

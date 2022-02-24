@@ -18,6 +18,12 @@ import dad.barganizer.db.beans.Reserva;
 import dad.barganizer.db.beans.TipoPlato;
 
 @SuppressWarnings("all")
+/**
+ * 
+ * Clase con funciones estáticas que realizan tareas de consulta, inserción,
+ * borrado y modificación sobre la base de datos.
+ *
+ */
 public class FuncionesDB {
 
 	public static List<Plato> listarPlatos(Session ses) {

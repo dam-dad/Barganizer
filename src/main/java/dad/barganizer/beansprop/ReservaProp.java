@@ -8,6 +8,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * 
+ * Clase Bean de properties que servirá de apoyo para trabajar con las reservas y representarlas en la interfaz gráfica.
+ *
+ */
 public class ReservaProp {
 	
 	private StringProperty id = new SimpleStringProperty();
