@@ -1,6 +1,6 @@
 # Barganizer
 
-Aplicación de gestión de un negocio de restauración.
+Aplicación de gestión de un negocio de hostelería.
 
 ![Image text](https://github.com/dam-dad/Barganizer/blob/main/src/main/resources/images/barganizer.PNG)
 
@@ -16,7 +16,7 @@ Aplicación de gestión de un negocio de restauración.
 
 ## Introducción 
 
-:fork_and_knife: Barganizer es una aplicación destinada al entorno de la restauración.  En concreto, hemos orientado nuestra app a la gestión de un restaurante que pretenda controlar desde sus empleados hasta la gestión de las mesas del local, así como la carta con todos sus productos. :fork_and_knife:
+:fork_and_knife: Barganizer es una aplicación destinada al entorno de la hostelería.  En concreto, hemos orientado nuestra app a la gestión de un restaurante que pretenda controlar desde sus empleados hasta la gestión de las mesas del local, así como la carta con todos sus productos. :fork_and_knife:
 
 
 
