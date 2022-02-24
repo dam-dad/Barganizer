@@ -10,9 +10,7 @@ Aplicación de gestión de un negocio de restauración.
 
 ------
 
-Daniel Cabrera Cabrera
-
-Rubén Pablo Jorge Díaz
-
-Marvin N'gabu García
+- Daniel Cabrera Cabrera
+- Rubén Pablo Jorge Díaz
+- Marvin N'gabu García
 
