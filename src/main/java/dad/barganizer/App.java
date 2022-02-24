@@ -1,5 +1,9 @@
 package dad.barganizer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.Optional;
 import java.util.concurrent.Semaphore;
 
@@ -26,8 +30,18 @@ public class App extends Application {
 	
 	@SuppressWarnings("unused")
 	@Override
-	public void init() throws Exception {
+	public void init() throws Exception{
+		// Logeamos los errores de la aplicación en un fichero
+		PrintStream console = System.err;
+		File file = new File("errorInstall.log");
+		FileOutputStream fos;
+		
+		fos = new FileOutputStream(file);
+		PrintStream ps = new PrintStream(fos);
+		System.setErr(ps);
+		
 		super.init();
+		
 		loginController = new LoginController();
 		Font fuente = Font.loadFont(getClass().getResourceAsStream("/Styles/Merienda-Regular.ttf"), 16);
 		Font fuenteNegrita = Font.loadFont(getClass().getResourceAsStream("/Styles/Merienda-Bold.ttf"), 16);
@@ -45,7 +59,7 @@ public class App extends Application {
 		App.primaryStage = primaryStage;
 
 		primaryStage.setTitle("Barganizer");
-		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.png")));
+		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/barganizer.PNG")));
 		primaryStage.setScene(scene);
 		primaryStage.show();
 

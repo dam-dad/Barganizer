@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>dad.barganizer</groupId>
 	<artifactId>Barganizer</artifactId>
-	<version>0.0.1</version>
+	<version>1.0.0</version>
 	<properties>
 		<maven.compiler.target>11</maven.compiler.target>
 		<maven.compiler.source>11</maven.compiler.source>
@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>eu.hansolo</groupId>
 			<artifactId>tilesfx</artifactId>
-			<version>11.48</version>
+			<version>16.0.2</version>
 		</dependency>
 
 		<!-- Dependencias JFoenix -->
@@ -77,9 +77,12 @@
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
-			<version>6.11.0</version>
+			<version>6.19.0</version>
 		</dependency>
+		
 	</dependencies>
+
+
 
 	<build>
 		<plugins>
@@ -97,6 +100,15 @@
 							<mainClass>dad.barganizer.Main</mainClass>
 							<bundleJre>true</bundleJre>
 							<customizedJre>false</customizedJre>
+							<generateInstaller>true</generateInstaller>
+							<administratorRequired>true</administratorRequired>
+							<platform>windows</platform>
+							<winConfig>
+								<generateMsi>false</generateMsi>
+								<createDesktopIconTask>false</createDesktopIconTask>
+								<disableDirPage>false</disableDirPage>
+								<disableFinishedPage>false</disableFinishedPage>
+							</winConfig>
 						</configuration>
 					</execution>
 				</executions>

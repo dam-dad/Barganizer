@@ -423,7 +423,6 @@ public class InicioController implements Initializable {
 
 			parameters.put("logoizq", getClass().getResourceAsStream("/images/barganizer.png"));
 			parameters.put("logoder", getClass().getResourceAsStream("/images/plato/plato.png"));
-//			parameters.put(rutaUsuario, parameters)
 
 			// Generación del informe (combinamos el informe compilado con los datos)
 			JasperPrint print = JasperFillManager.fillReport(report, parameters,
@@ -436,14 +435,56 @@ public class InicioController implements Initializable {
 
 			// Abre el archivo PDF generado con el programa predeterminado del sistema
 			Desktop.getDesktop().open(new File(rutaGuardado));
+			redeclararTasks();
+			Task<ObservableList<Mesa>> obtenerMesasActivasTask = new Task<ObservableList<Mesa>>() {
 
+				@Override
+				protected ObservableList<Mesa> call() throws Exception {
+
+					List<Mesa> listaMesas = FuncionesDB.listarMesasActivas(App.getBARGANIZERDB().getSes());
+
+					return FXCollections.observableArrayList(listaMesas);
+				}
+			};
+			
 			// Se limpia la comanda relacionada a esa mesa
 			eliminarComandasMesaTask.setOnSucceeded(e -> {
+				((Mesa)model.getTileMesaSeleccionada().getReferencia()).setActiva(false);
+			});
+			
+			modificarMesaTask.setOnSucceeded(e -> {
 				model.setTileMesaSeleccionada(null);
 				model.getComandasMesa().clear();
 			});
+			
+			obtenerMesasActivasTask.setOnSucceeded(e -> {
+				ObservableList<Mesa> res = obtenerMesasActivasTask.getValue();
+				mesasFlow.getChildren().clear();
+				model.setListaMesas(res);
+
+				
+				for (Mesa mesa : res) {
+					mesasFlow.getChildren().add(new ImageTile(mesa));
+				}
+
+				/* Obtenemos los nodos del flowpane de mesas */
+				ObservableList<Node> l = mesasFlow.getChildren();
+				for (Node node : l) {
+					node.setOnMouseClicked(ev -> {
+						ImageTile imageTileClickeado = (ImageTile) ev.getSource();
+						Mesa seleccionada = (Mesa) imageTileClickeado.getReferencia();
+						System.out.println("Mesa seleccionada: " + seleccionada.getNumero());
+
+						model.setTileMesaSeleccionada(imageTileClickeado);
+					});
+				}
+			});
 
 			new HiloEjecutador(App.semaforo, eliminarComandasMesaTask).start();
+			new HiloEjecutador(App.semaforo, modificarMesaTask).start();
+			new HiloEjecutador(App.semaforo, obtenerMesasActivasTask).start();
+			
+			
 
 		} catch (JRException e) {
 			App.error("Error", "Error Jasper",
@@ -452,6 +493,19 @@ public class InicioController implements Initializable {
 			App.error("Error", "Excepción", "Se ha producido una excepción. Detalles: " + e.getMessage());
 		}
 	}
+	
+
+	private Task<Void> modificarMesaTask = new Task<Void>() {
+
+		@Override
+		protected Void call() throws Exception {
+
+			FuncionesDB.modificarMesa(App.getBARGANIZERDB().getSes(), (Mesa)model.getTileMesaSeleccionada().getReferencia());
+			return null;
+		}
+	};
+	
+	
 
 	private Task<ObservableList<ComandaProp>> actualizarComandasMesaTask = new Task<ObservableList<ComandaProp>>() {
 
@@ -498,6 +552,7 @@ public class InicioController implements Initializable {
 			return null;
 		};
 	};
+	
 
 	private Task<Void> eliminarComandaIndexTask = new Task<Void>() {
 		protected Void call() throws Exception {
@@ -507,6 +562,16 @@ public class InicioController implements Initializable {
 	};
 
 	private void redeclararTasks() {
+		
+		modificarMesaTask = new Task<Void>() {
+
+			@Override
+			protected Void call() throws Exception {
+
+				FuncionesDB.modificarMesa(App.getBARGANIZERDB().getSes(), (Mesa)model.getTileMesaSeleccionada().getReferencia());
+				return null;
+			}
+		};
 		actualizarComandasMesaTask = new Task<ObservableList<ComandaProp>>() {
 
 			@Override

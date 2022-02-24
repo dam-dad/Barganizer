@@ -17,6 +17,7 @@ import dad.barganizer.db.beans.Plato;
 import dad.barganizer.db.beans.Reserva;
 import dad.barganizer.db.beans.TipoPlato;
 
+@SuppressWarnings("all")
 public class FuncionesDB {
 
 	public static List<Plato> listarPlatos(Session ses) {
