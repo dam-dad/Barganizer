@@ -26,6 +26,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * Controlador que gestiona la vista principal de las mesas, listándolas y
+ * llamando a los controladores encargados de modificar y añadir un nuevo
+ * elemento "Mesa".
+ *
+ */
 public class MesasController implements Initializable {
 
 	// MODEL
@@ -64,7 +71,9 @@ public class MesasController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		listarMesas();
-
+		/*
+		 * 
+		 */
 		model.mesaSeleccionadaProperty().addListener((o, ov, nv) -> {
 			if (ov != null && nv != null) {
 				if (((Mesa) ov.getReferencia()).isActiva()) {
@@ -97,6 +106,13 @@ public class MesasController implements Initializable {
 
 	}
 
+	/**
+	 * 
+	 * Botón encargado de llamar al controlador que gestiona la modificación de
+	 * mesas.
+	 * 
+	 * @param event
+	 */
 	@FXML
 	void onAñadirAction(ActionEvent event) {
 
@@ -128,6 +144,12 @@ public class MesasController implements Initializable {
 
 	}
 
+	/**
+	 * Botón encargado de llamar al controlador que gestiona la modificación de
+	 * mesas.
+	 * 
+	 * @param event
+	 */
 	@FXML
 	void onModificarAction(ActionEvent event) {
 
@@ -166,6 +188,12 @@ public class MesasController implements Initializable {
 
 	}
 
+	/**
+	 * Botón encargado de gestionar el borrado de mesas, llamando a la función
+	 * correspondiente para dicha tarea y pidiendo confirmación.
+	 * 
+	 * @param event
+	 */
 	@FXML
 	void onQuitarAction(ActionEvent event) {
 
@@ -196,6 +224,12 @@ public class MesasController implements Initializable {
 
 	}
 
+	/**
+	 * Método encargado de recoger la lista de mesas desde la base de datos, crear
+	 * los nodos "Tiles" y vincularlos a una lista que será mostrada en el FlowPane
+	 * de la aplicación. Según la mesa esté activa o no se establecerá el fondo del
+	 * "Tile" de un color u otro.
+	 */
 	public void listarMesas() {
 
 		BarganizerTasks tareas = new BarganizerTasks();

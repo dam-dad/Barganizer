@@ -33,7 +33,13 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+/**
+ * 
+ * Controlador encargado de llevar a cabo las modificaciones de los elementos
+ * "Reserva" sobre la base de datos. Recogerá los datos de un formulario y 
+ * llamará a la fucnión encargada de la modificación.
+ *
+ */
 public class ModificarReservaController implements Initializable {
 
 	public ObjectProperty<Reserva> seleccionado = new SimpleObjectProperty<>();
@@ -88,6 +94,10 @@ public class ModificarReservaController implements Initializable {
 
 	}
 
+	/**
+	 * Botón encargado de confirmar la tarea de modificación
+	 * @param event
+	 */
 	@FXML
 	void onAñadirAction(ActionEvent event) {
 
@@ -116,7 +126,10 @@ public class ModificarReservaController implements Initializable {
 		}
 
 	}
-
+	/**
+	 * Botón que cancela la modificación y cierra la ventana
+	 * @param event
+	 */
 	@FXML
 	void onCancelarAction(ActionEvent event) {
 
