@@ -11,7 +11,13 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
+/**
+ * 
+ * Modelo de properties usadas para controlar la consulta, inserción, modificación y
+ * borrado del elementos "Comanda" en la base de datos.
+ * Contiene properties para el listado de "Platos", "Mesa" y "Carta".
+ *
+ */
 public class InicioModel {
 
 	private ListProperty<Plato> listaBebidas = new SimpleListProperty<Plato>(FXCollections.observableArrayList());

@@ -7,7 +7,11 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
+/**
+ * 
+ * Modelo de properties usadas para añadir un elemento "Reserva" a la base de datos.
+ *
+ */
 public class AñadirReservaModel {
 
 	ObjectProperty<Mesa> mesaSeleccionada = new SimpleObjectProperty<>();

@@ -2,7 +2,10 @@ package dad.barganizer.gui.models;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
+/**
+ * Modelo de properties usadas para añadir un elemento "Carta" a la base de datos.
+ *
+ */
 public class AddCartaModel {
 
 	private StringProperty nombre = new SimpleStringProperty();

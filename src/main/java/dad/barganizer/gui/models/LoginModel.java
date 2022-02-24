@@ -5,7 +5,11 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
+/**
+ * 
+ *  Modelo de properties usadas para controlar el acceso a la base de datos 
+ * por parte de los empleados.
+ */
 public class LoginModel {
 
 	StringProperty nombre = new SimpleStringProperty();

@@ -13,6 +13,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 
+/**
+ * 
+ * Clase Bean de properties que servirá de apoyo para trabajar con los empleados y representarlos en la interfaz gráfica.
+ *
+ */
 public class EmpleadoProp {
 	
 	private IntegerProperty id = new SimpleIntegerProperty();

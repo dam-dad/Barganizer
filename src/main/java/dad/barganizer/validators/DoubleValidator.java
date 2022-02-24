@@ -5,7 +5,11 @@ import org.controlsfx.validation.ValidationResult;
 import org.controlsfx.validation.Validator;
 
 import javafx.scene.control.Control;
-
+/**
+ * 
+ * Validador encargado de controlar el uso estricto de datos de tipo "double".
+ *
+ */
 public class DoubleValidator implements Validator<String>{
 
 	

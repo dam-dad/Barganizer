@@ -12,7 +12,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
-
+/**
+ * 
+ * Modelo de properties usadas para añadir un elemento "Plato" a la base de datos.
+ *
+ */
 public class AddPlatoModel {
 
 	private StringProperty nombre = new SimpleStringProperty();

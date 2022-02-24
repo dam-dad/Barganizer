@@ -14,7 +14,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
+/**
+ * 
+ * Clase Bean de properties que servirá de apoyo para trabajar los tipos de plato y representarlos en la interfaz gráfica.
+ *
+ */
 public class TipoPlatoProp {
 
 	private LongProperty id = new SimpleLongProperty();

@@ -13,7 +13,12 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
+/**
+ * 
+ * Modelo de properties usadas para controlar la
+ * consulta del elemento "Carta" en la base de datos.
+ *
+ */
 public class CartaModel {
 
 	private ListProperty<CartaProp> lista = new SimpleListProperty<CartaProp>(FXCollections.observableArrayList());

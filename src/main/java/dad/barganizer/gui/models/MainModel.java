@@ -6,7 +6,12 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
-
+/**
+ * 
+ * Model de properties usadas para visualizar el usuario conectado a la aplicación
+ * mediante el login.
+ *
+ */
 public class MainModel {
 
 	ObjectProperty<Empleado> empleado = new SimpleObjectProperty<>();

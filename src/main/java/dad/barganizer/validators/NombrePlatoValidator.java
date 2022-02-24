@@ -5,7 +5,11 @@ import org.controlsfx.validation.ValidationResult;
 import org.controlsfx.validation.Validator;
 
 import javafx.scene.control.Control;
-
+/**
+ * 
+ * Validador encargado de controlar el uso estricto de un dato que no sea "null" y cuya longitud sea mayor de cero.
+ *
+ */
 public class NombrePlatoValidator implements Validator<String> {
 
 	@Override
